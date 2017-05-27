@@ -9,3 +9,4 @@ class HTML_QuickForm2_Element_InputEmail extends HTML_QuickForm2_Element_Input
     protected $attributes = array('type' => 'email');
 }
 ?>
+
