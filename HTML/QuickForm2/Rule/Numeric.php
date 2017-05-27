@@ -12,3 +12,4 @@ class HTML_QuickForm2_Rule_Numeric extends HTML_QuickForm2_Rule
     }
 }
 ?>
+

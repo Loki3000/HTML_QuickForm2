@@ -210,8 +210,16 @@ class HTML_QuickForm2_Renderer_Array extends HTML_QuickForm2_Renderer
     {
         $ary = array(
             'id'     => $element->getId(),
-            'frozen' => $element->toggleFrozen()
+            'frozen' => $element->toggleFrozen(),
+            'name'   => $element->getName()
         );
+        if ($element->getAttribute('class')) {
+            $ary['class'] = $element->getAttribute('class');
+        }
+        if ($element->getType() != 'form') {
+            $ary['attributes'] = $element->getAttributes();
+        }
+        
         if ($labels = $element->getLabel()) {
             if (!is_array($labels) || !$this->options['static_labels']) {
                 $ary['label'] = $labels;
