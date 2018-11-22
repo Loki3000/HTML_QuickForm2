@@ -68,7 +68,7 @@ class HTML_QuickForm2_Renderer_ArrayTest extends PHPUnit_Framework_TestCase
 
         $this->_assertHasKeys(
             $array,
-            array('id', 'html', 'value', 'type', 'required', 'frozen')
+            array('id', 'html', 'value', 'type', 'required', 'frozen', 'attributes', 'name')
         );
 
         $element->setLabel('Foo label:');
@@ -89,7 +89,7 @@ class HTML_QuickForm2_Renderer_ArrayTest extends PHPUnit_Framework_TestCase
         $array = $hidden->render($renderer)->toArray();
         $this->_assertHasKeys(
             $array,
-            array('id', 'html', 'value', 'type', 'required', 'frozen')
+            array('id', 'html', 'value', 'type', 'required', 'frozen', 'attributes', 'name')
         );
 
         $array = $hidden->render(
@@ -109,7 +109,7 @@ class HTML_QuickForm2_Renderer_ArrayTest extends PHPUnit_Framework_TestCase
         $array = $fieldset->render($renderer)->toArray();
         $this->_assertHasKeys(
             $array,
-            array('id', 'type', 'required', 'frozen', 'elements', 'attributes')
+            array('id', 'type', 'required', 'frozen', 'elements', 'attributes', 'name')
         );
         $this->assertEquals(array(), $array['elements']);
 
