@@ -42,21 +42,6 @@
  * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 
-/**
- * Base class for HTML_QuickForm2 groups
- */
-require_once 'HTML/QuickForm2/Container/Group.php';
-
-/**
- * Classes for <select> elements
- */
-require_once 'HTML/QuickForm2/Element/Select.php';
-
-/**
- * Class for adding inline javascript to the form
- */
-require_once 'HTML/QuickForm2/Element/Script.php';
-
 
 /**
  * Hierarchical select element
@@ -189,12 +174,12 @@ class HTML_QuickForm2_Element_Hierselect extends HTML_QuickForm2_Container_Group
      *      array of keys and should return {'values': [...], 'texts': [...]}
      *
      * @return  $this
-     * @throws  HTML_QuickForm2_InvalidArgumentException
+     * @throws  HTML_QuickForm2_Exception_InvalidArgument
      */
     public function loadOptions(array $options, $callback = null, $jsCallback = null)
     {
         if (null !== $callback && !is_callable($callback, false, $callbackName)) {
-            throw new HTML_QuickForm2_InvalidArgumentException(
+            throw new HTML_QuickForm2_Exception_InvalidArgument(
                 'Hierselect expects a valid callback for loading options, \'' .
                 $callbackName . '\' was given'
             );
@@ -270,7 +255,7 @@ class HTML_QuickForm2_Element_Hierselect extends HTML_QuickForm2_Container_Group
     */
     public function setValue($value)
     {
-        $this->size = max($this->size, count($value));
+        $this->size = max($this->size, is_array($value)?count($value):0);
         $this->_createSelects();
         parent::setValue($value);
         $this->_loadChildOptions();

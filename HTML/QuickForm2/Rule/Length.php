@@ -43,11 +43,6 @@
  */
 
 /**
- * Base class for HTML_QuickForm2 rules
- */
-require_once 'HTML/QuickForm2/Rule.php';
-
-/**
  * Rule checking the value's length
  *
  * The rule needs an "allowed length" parameter for its work, it can be either
@@ -78,6 +73,25 @@ require_once 'HTML/QuickForm2/Rule.php';
  */
 class HTML_QuickForm2_Rule_Length extends HTML_QuickForm2_Rule
 {
+    /**
+     * Set maxlength html attribute
+     */
+    public function __construct(HTML_QuickForm2_Node $owner, $message = '', $config = null)
+    {
+        parent::__construct($owner, $message, $config);
+        $allowedLength = $this->getConfig();
+
+        if (is_scalar($allowedLength)) {
+            $l['max']=$l['min']=$allowedLength;
+        } else {
+            $l=$allowedLength;
+        }
+
+        if ($l['max']) {
+            $this->owner->setAttribute('maxlength', $l['max']);
+        }
+        //if ($l['min']) $this->owner->setAttribute('pattern', '.{'.$l['min'].',}');
+    }
    /**
     * Validates the owner element
     *
@@ -85,7 +99,7 @@ class HTML_QuickForm2_Rule_Length extends HTML_QuickForm2_Rule
     */
     protected function validateOwner()
     {
-        if (0 == ($valueLength = strlen($this->owner->getValue()))) {
+        if (0 == ($valueLength = mb_strlen($this->owner->getValue()))) {
             return true;
         }
 
@@ -202,7 +216,7 @@ class HTML_QuickForm2_Rule_Length extends HTML_QuickForm2_Rule
     * @param int|array $config Length limits
     *
     * @return   HTML_QuickForm2_Rule
-    * @throws   HTML_QuickForm2_InvalidArgumentException if bogus length limits
+    * @throws   HTML_QuickForm2_Exception_InvalidArgument if bogus length limits
     *           were provided
     */
     public function setConfig($config)
@@ -214,7 +228,7 @@ class HTML_QuickForm2_Rule_Length extends HTML_QuickForm2_Rule
         if (is_array($config) && ($config['min'] < 0 || $config['max'] < 0)
             || !is_array($config) && $config < 0
         ) {
-            throw new HTML_QuickForm2_InvalidArgumentException(
+            throw new HTML_QuickForm2_Exception_InvalidArgument(
                 'Length Rule requires limits to be nonnegative, ' .
                 preg_replace('/\s+/', ' ', var_export($config, true)) . ' given'
             );
@@ -222,7 +236,7 @@ class HTML_QuickForm2_Rule_Length extends HTML_QuickForm2_Rule
         } elseif (is_array($config) && $config['min'] == 0 && $config['max'] == 0
                   || !is_array($config) && 0 == $config
         ) {
-            throw new HTML_QuickForm2_InvalidArgumentException(
+            throw new HTML_QuickForm2_Exception_InvalidArgument(
                 'Length Rule requires at least one non-zero limit, ' .
                 preg_replace('/\s+/', ' ', var_export($config, true)) . ' given'
             );

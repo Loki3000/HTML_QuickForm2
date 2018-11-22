@@ -43,11 +43,6 @@
  */
 
 /**
- * Base class for HTML_QuickForm2 rules
- */
-require_once 'HTML/QuickForm2/Rule.php';
-
-/**
  * Validates values using regular expressions
  *
  * The Rule needs one configuration parameter for its work: a Perl-compatible
@@ -81,10 +76,12 @@ class HTML_QuickForm2_Rule_Regex extends HTML_QuickForm2_Rule
     {
         $value = $this->owner->getValue();
         if ($this->owner instanceof HTML_QuickForm2_Element_InputFile) {
-            if (!isset($value['error']) || UPLOAD_ERR_NO_FILE == $value['error']) {
-                return true;
+            foreach ($this->owner->getValueArray() as $value) {
+                if (!preg_match($this->getConfig() . 'D', $value['name'])) {
+                    return false;
+                }
             }
-            $value = $value['name'];
+            return true;
         } elseif (!strlen($value)) {
             return true;
         }
@@ -97,12 +94,12 @@ class HTML_QuickForm2_Rule_Regex extends HTML_QuickForm2_Rule
     * @param string $config Regular expression
     *
     * @return   HTML_QuickForm2_Rule
-    * @throws   HTML_QuickForm2_InvalidArgumentException    if $config is not a string
+    * @throws   HTML_QuickForm2_Exception_InvalidArgument    if $config is not a string
     */
     public function setConfig($config)
     {
         if (!is_string($config)) {
-            throw new HTML_QuickForm2_InvalidArgumentException(
+            throw new HTML_QuickForm2_Exception_InvalidArgument(
                 'Regex Rule requires a regular expression, ' .
                 preg_replace('/\s+/', ' ', var_export($config, true)) . ' given'
             );

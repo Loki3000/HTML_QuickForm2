@@ -43,11 +43,6 @@
  */
 
 /**
- * Base class for HTML_QuickForm2 rules
- */
-require_once 'HTML/QuickForm2/Rule.php';
-
-/**
  * Rule checking that the field is not empty
  *
  * Handles simple form fields, file uploads and Containers.
@@ -109,14 +104,14 @@ class HTML_QuickForm2_Rule_Nonempty extends HTML_QuickForm2_Rule
     * @param int $config Minimum number of nonempty values
     *
     * @return   HTML_QuickForm2_Rule
-    * @throws   HTML_QuickForm2_InvalidArgumentException    if a bogus limit was provided
+    * @throws   HTML_QuickForm2_Exception_InvalidArgument    if a bogus limit was provided
     */
     public function setConfig($config)
     {
         if (is_null($config)) {
             $config = 1;
         } elseif (1 > intval($config)) {
-            throw new HTML_QuickForm2_InvalidArgumentException(
+            throw new HTML_QuickForm2_Exception_InvalidArgument(
                 'Nonempty Rule accepts a positive count of nonempty values, ' .
                 preg_replace('/\s+/', ' ', var_export($config, true)) . ' given'
             );

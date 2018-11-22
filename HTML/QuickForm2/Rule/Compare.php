@@ -43,11 +43,6 @@
  */
 
 /**
- * Base class for HTML_QuickForm2 rules
- */
-require_once 'HTML/QuickForm2/Rule.php';
-
-/**
  * Rule comparing the value of the field with some other value
  *
  * The Rule needs two configuration parameters for its work
@@ -79,29 +74,31 @@ require_once 'HTML/QuickForm2/Rule.php';
  */
 class HTML_QuickForm2_Rule_Compare extends HTML_QuickForm2_Rule
 {
-   /**
-    * Possible comparison operators
-    * @var array
-    */
+    /**
+     * Possible comparison operators
+     * @var array
+     */
     protected $operators = array('==', '!=', '===', '!==', '<', '<=', '>', '>=');
 
 
-   /**
-    * Validates the owner element
-    *
-    * @return   bool    whether (element_value operator operand) expression is true
-    */
+    /**
+     * Validates the owner element
+     *
+     * @return   bool    whether (element_value operator operand) expression is true
+     */
     protected function validateOwner()
     {
         $value  = $this->owner->getValue();
         $config = $this->getConfig();
         if (!in_array($config['operator'], array('===', '!=='))) {
             $compareFn = create_function(
-                '$a, $b', 'return floatval($a) ' . $config['operator'] . ' floatval($b);'
+                '$a, $b',
+                'return floatval($a) ' . $config['operator'] . ' floatval($b);'
             );
         } else {
             $compareFn = create_function(
-                '$a, $b', 'return strval($a) ' . $config['operator'] . ' strval($b);'
+                '$a, $b',
+                'return strval($a) ' . $config['operator'] . ' strval($b);'
             );
         }
         return $compareFn($value, $config['operand'] instanceof HTML_QuickForm2_Node
@@ -137,87 +134,84 @@ class HTML_QuickForm2_Rule_Compare extends HTML_QuickForm2_Rule
         return $triggers;
     }
 
-   /**
-    * Merges local configuration with that provided for registerRule()
-    *
-    * "Global" configuration may be passed to
-    * {@link HTML_QuickForm2_Factory::registerRule()} in
-    * either of the following formats
-    *  - operator
-    *  - array(operator[, operand])
-    *  - array(['operator' => operator, ]['operand' => operand])
+    /**
+     * Merges local configuration with that provided for registerRule()
+     *
+     * "Global" configuration may be passed to
+     * {@link HTML_QuickForm2_Factory::registerRule()} in
+     * either of the following formats
+     *  - operator
+     *  - array(operator[, operand])
+     *  - array(['operator' => operator, ]['operand' => operand])
 
-    * "Local" configuration may be passed to the constructor in either of
-    * the following formats
-    *  - operand
-    *  - array([operator, ]operand)
-    *  - array(['operator' => operator, ]['operand' => operand])
-    *
-    * As usual, global configuration overrides local one.
-    *
-    * @param mixed $localConfig  Local configuration
-    * @param mixed $globalConfig Global configuration
-    *
-    * @return   mixed   Merged configuration
-    */
+     * "Local" configuration may be passed to the constructor in either of
+     * the following formats
+     *  - operand
+     *  - array([operator, ]operand)
+     *  - array(['operator' => operator, ]['operand' => operand])
+     *
+     * As usual, global configuration overrides local one.
+     *
+     * @param mixed $localConfig  Local configuration
+     * @param mixed $globalConfig Global configuration
+     *
+     * @return   mixed   Merged configuration
+     */
     public static function mergeConfig($localConfig, $globalConfig)
     {
         $config = null;
-        if (0 < count($globalConfig)) {
+        if (!empty($globalConfig)) {
             $config = self::toCanonicalForm($globalConfig, 'operator');
         }
-        if (0 < count($localConfig)) {
+        if (!empty($localConfig)) {
             $config = (isset($config)? $config: array())
                       + self::toCanonicalForm($localConfig);
         }
         return $config;
     }
 
-   /**
-    * Converts configuration data to a canonical associative array form
-    *
-    * @param mixed  $config Configuration data
-    * @param string $key    Array key to assign $config to if it is scalar
-    *
-    * @return   array   Associative array that may contain 'operand' and 'operator' keys
-    */
+    /**
+     * Converts configuration data to a canonical associative array form
+     *
+     * @param mixed  $config Configuration data
+     * @param string $key    Array key to assign $config to if it is scalar
+     *
+     * @return   array   Associative array that may contain 'operand' and 'operator' keys
+     */
     protected static function toCanonicalForm($config, $key = 'operand')
     {
         if (!is_array($config)) {
             return array($key => $config);
-
         } elseif (array_key_exists('operator', $config)
                   || array_key_exists('operand', $config)
         ) {
             return $config;
-
         } elseif (1 == count($config)) {
             return array($key => end($config));
-
         } else {
             return array('operator' => reset($config), 'operand' => end($config));
         }
     }
 
-   /**
-    * Sets the comparison operator and operand to compare to
-    *
-    * $config can be either of the following
-    *  - operand
-    *  - array([operator, ]operand)
-    *  - array(['operator' => operator, ]['operand' => operand])
-    * If operator is missing it will default to '==='
-    *
-    * @param mixed $config Configuration data
-    *
-    * @return   HTML_QuickForm2_Rule
-    * @throws   HTML_QuickForm2_InvalidArgumentException if a bogus comparison
-    *           operator is used for configuration, if an operand is missing
-    */
+    /**
+     * Sets the comparison operator and operand to compare to
+     *
+     * $config can be either of the following
+     *  - operand
+     *  - array([operator, ]operand)
+     *  - array(['operator' => operator, ]['operand' => operand])
+     * If operator is missing it will default to '==='
+     *
+     * @param mixed $config Configuration data
+     *
+     * @return   HTML_QuickForm2_Rule
+     * @throws   HTML_QuickForm2_Exception_InvalidArgument if a bogus comparison
+     *           operator is used for configuration, if an operand is missing
+     */
     public function setConfig($config)
     {
-        if (0 == count($config)) {
-            throw new HTML_QuickForm2_InvalidArgumentException(
+        if (empty($config)) {
+            throw new HTML_QuickForm2_Exception_InvalidArgument(
                 'Compare Rule requires an argument to compare with'
             );
         }
@@ -225,7 +219,7 @@ class HTML_QuickForm2_Rule_Compare extends HTML_QuickForm2_Rule
 
         $config += array('operator' => '===');
         if (!in_array($config['operator'], $this->operators)) {
-            throw new HTML_QuickForm2_InvalidArgumentException(
+            throw new HTML_QuickForm2_Exception_InvalidArgument(
                 'Compare Rule requires a valid comparison operator, ' .
                 preg_replace('/\s+/', ' ', var_export($config['operator'], true)) . ' given'
             );
@@ -237,4 +231,3 @@ class HTML_QuickForm2_Rule_Compare extends HTML_QuickForm2_Rule
         return parent::setConfig($config);
     }
 }
-?>

@@ -43,11 +43,6 @@
  */
 
 /**
- * Rule checking that the form field is not empty
- */
-require_once 'HTML/QuickForm2/Rule/Nonempty.php';
-
-/**
  * Rule for required elements
  *
  * The main difference from "nonempty" Rule is that
@@ -67,6 +62,15 @@ require_once 'HTML/QuickForm2/Rule/Nonempty.php';
  */
 class HTML_QuickForm2_Rule_Required extends HTML_QuickForm2_Rule_Nonempty
 {
+    /**
+     * Set html5 attribute 'required' for element
+     */
+    public function __construct(HTML_QuickForm2_Node $owner, $message = '', $config = null)
+    {
+        parent::__construct($owner, $message, $config);
+        $this->owner->setAttribute('required');
+    }
+
    /**
     * Disallows adding a rule to the chain with an "or" operator
     *
@@ -97,12 +101,12 @@ class HTML_QuickForm2_Rule_Required extends HTML_QuickForm2_Rule_Nonempty
     * @param string $message Error message to display if validation fails
     *
     * @return   HTML_QuickForm2_Rule
-    * @throws   HTML_QuickForm2_InvalidArgumentException
+    * @throws   HTML_QuickForm2_Exception_InvalidArgument
     */
     public function setMessage($message)
     {
         if (!strlen($message)) {
-            throw new HTML_QuickForm2_InvalidArgumentException(
+            throw new HTML_QuickForm2_Exception_InvalidArgument(
                 '"required" rule cannot have an empty error message'
             );
         }

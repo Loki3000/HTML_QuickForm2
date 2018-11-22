@@ -43,11 +43,6 @@
  */
 
 /**
- * Validates values using regular expressions
- */
-require_once 'HTML/QuickForm2/Rule/Regex.php';
-
-/**
  * Checks that the element's value does not match a regular expression
  *
  * The Rule behaves like Regex Rule, but it considers the element valid if its
@@ -72,10 +67,12 @@ class HTML_QuickForm2_Rule_NotRegex extends HTML_QuickForm2_Rule_Regex
     {
         $value = $this->owner->getValue();
         if ($this->owner instanceof HTML_QuickForm2_Element_InputFile) {
-            if (!isset($value['error']) || UPLOAD_ERR_NO_FILE == $value['error']) {
-                return true;
+            foreach ($this->owner->getValueArray() as $value) {
+                if (preg_match($this->getConfig() . 'D', $value['name'])) {
+                    return false;
+                }
             }
-            $value = $value['name'];
+            return true;
         } elseif (!strlen($value)) {
             return true;
         }

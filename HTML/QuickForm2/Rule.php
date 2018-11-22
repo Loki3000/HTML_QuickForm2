@@ -154,7 +154,7 @@ abstract class HTML_QuickForm2_Rule
     * @param mixed $config Rule configuration data (specific for a Rule)
     *
     * @return   $this
-    * @throws   HTML_QuickForm2_InvalidArgumentException    in case of invalid
+    * @throws   HTML_QuickForm2_Exception_InvalidArgument    in case of invalid
     *               configuration data
     */
     public function setConfig($config)
@@ -179,7 +179,7 @@ abstract class HTML_QuickForm2_Rule
     * @param string $message Error message to display if validation fails
     *
     * @return $this
-    * @throws HTML_QuickForm2_InvalidArgumentException if trying to validate
+    * @throws HTML_QuickForm2_Exception_InvalidArgument if trying to validate
     *       HTML_QuickForm2_Element_InputHidden with a non-empty error message
     *       (e.g. not in Rule chain)
     */
@@ -188,7 +188,7 @@ abstract class HTML_QuickForm2_Rule
         if ($this->owner instanceof HTML_QuickForm2_Element_InputHidden
             && strlen($message)
         ) {
-            throw new HTML_QuickForm2_InvalidArgumentException(
+            throw new HTML_QuickForm2_Exception_InvalidArgument(
                 "Hidden elements cannot have validation errors"
             );
         }
@@ -211,7 +211,7 @@ abstract class HTML_QuickForm2_Rule
     *
     * @param HTML_QuickForm2_Node $owner Element to validate
     *
-    * @throws   HTML_QuickForm2_InvalidArgumentException    if trying to set
+    * @throws   HTML_QuickForm2_Exception_InvalidArgument    if trying to set
     *       an instance of HTML_QuickForm2_Element_Static as rule owner; if
     *       trying to validate HTML_QuickForm2_Element_InputHidden with a
     *       non-empty error message (e.g. not in Rule chain)
@@ -222,14 +222,14 @@ abstract class HTML_QuickForm2_Rule
         // If someone comes up with a validation rule for these, he can override
         // setOwner() there...
         if ($owner instanceof HTML_QuickForm2_Element_Static) {
-            throw new HTML_QuickForm2_InvalidArgumentException(
+            throw new HTML_QuickForm2_Exception_InvalidArgument(
                 get_class($this) . ' cannot validate Static elements'
             );
         }
         if ($owner instanceof HTML_QuickForm2_Element_InputHidden
             && strlen($this->getMessage())
         ) {
-            throw new HTML_QuickForm2_InvalidArgumentException(
+            throw new HTML_QuickForm2_Exception_InvalidArgument(
                 "Hidden elements cannot have validation errors"
             );
         }
@@ -249,13 +249,13 @@ abstract class HTML_QuickForm2_Rule
     * @param HTML_QuickForm2_Rule $next
     *
     * @return   $this    first rule in the chain (i.e. $this)
-    * @throws   HTML_QuickForm2_InvalidArgumentException    when trying to add
+    * @throws   HTML_QuickForm2_Exception_InvalidArgument    when trying to add
     *           a "required" rule to the chain
     */
     public function and_(HTML_QuickForm2_Rule $next)
     {
         if ($next instanceof HTML_QuickForm2_Rule_Required) {
-            throw new HTML_QuickForm2_InvalidArgumentException(
+            throw new HTML_QuickForm2_Exception_InvalidArgument(
                 'and_(): Cannot add a "required" rule'
             );
         }
@@ -273,13 +273,13 @@ abstract class HTML_QuickForm2_Rule
     * @param HTML_QuickForm2_Rule $next
     *
     * @return   $this    first rule in the chain (i.e. $this)
-    * @throws   HTML_QuickForm2_InvalidArgumentException    when trying to add
+    * @throws   HTML_QuickForm2_Exception_InvalidArgument    when trying to add
     *           a "required" rule to the chain
     */
     public function or_(HTML_QuickForm2_Rule $next)
     {
         if ($next instanceof HTML_QuickForm2_Rule_Required) {
-            throw new HTML_QuickForm2_InvalidArgumentException(
+            throw new HTML_QuickForm2_Exception_InvalidArgument(
                 'or_(): Cannot add a "required" rule'
             );
         }

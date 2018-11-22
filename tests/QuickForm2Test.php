@@ -72,6 +72,8 @@ class HTML_QuickForm2Test extends PHPUnit\Framework\TestCase
             'key' => 'value'
         );
         $_POST = array();
+        
+        $_FILES = array();
     }
 
     public function testTrackSubmit()

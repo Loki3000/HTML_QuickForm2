@@ -5,12 +5,12 @@
       <directory>tests</directory>
     </testsuite>
   </testsuites>
-  <filter>
+  <!--filter>
     <whitelist processUncoveredFilesFromWhitelist="true">
       <directory suffix=".php">HTML</directory>
     </whitelist>
   </filter>
-  <!--logging>
+  <logging>
     <log type="coverage-html" target="/tmp/report" lowUpperBound="35" highLowerBound="70" />
   </logging-->
 </phpunit>

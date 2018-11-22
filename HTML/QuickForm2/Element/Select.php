@@ -43,12 +43,6 @@
  */
 
 /**
- * Base class for simple HTML_QuickForm2 elements
- */
-require_once 'HTML/QuickForm2/Element.php';
-
-
-/**
  * Collection of <option>s and <optgroup>s
  *
  * This class handles the output of <option> tags. The class is not intended to
@@ -130,23 +124,6 @@ class HTML_QuickForm2_Element_Select_OptionContainer extends HTML_Common2
             $this->possibleValues[(string)$value] = true;
         }
         $this->options[] = array('text' => $text, 'attr' => $attributes);
-    }
-    
-    /**
-     * Like addOption, but prepends the option to the beginning of the stack.
-     *
-     * @param string $text
-     * @param string $value
-     * @param array $attributes
-     */
-    public function prependOption($text, $value, $attributes = null)
-    {
-        // let the original method do its thing
-        $this->addOption($text, $value, $attributes);
-        
-        // and now remove it from the end and prepend it to the collection
-        $last = array_pop($this->options);
-        array_unshift($this->options, $last);
     }
 
    /**
@@ -363,7 +340,7 @@ class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
     * @param string|array $attributes Attributes (either a string or an array)
     * @param array        $data       Additional element data
     *
-    * @throws   HTML_QuickForm2_InvalidArgumentException    if junk is given in $options
+    * @throws   HTML_QuickForm2_Exception_InvalidArgument    if junk is given in $options
     */
     public function __construct($name = null, $attributes = null, array $data = array())
     {
@@ -517,7 +494,7 @@ class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
     *
     * @param array $options
     *
-    * @throws   HTML_QuickForm2_InvalidArgumentException    if junk is given in $options
+    * @throws   HTML_QuickForm2_Exception_InvalidArgument    if junk is given in $options
     * @return   $this
     */
     public function loadOptions(array $options)
@@ -568,18 +545,6 @@ class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
         $this->optionContainer->addOption($text, $value, $attributes);
     }
 
-    /**
-     * Prepends an option to the beginning of the options collection.
-     *
-     * @param string $text
-     * @param string $value
-     * @param array $attributes
-     */
-    public function prependOption($text, $value, $attributes = null)
-    {
-        $this->optionContainer->prependOption($text, $value, $attributes);
-    }
-    
    /**
     * Adds a new optgroup
     *

@@ -43,11 +43,6 @@
  */
 
 /**
- * Interface for data sources used by HTML_QuickForm2 objects
- */
-require_once 'HTML/QuickForm2/DataSource/NullAware.php';
-
-/**
  * Array-based data source for HTML_QuickForm2 objects
  *
  * @category HTML
@@ -95,8 +90,8 @@ class HTML_QuickForm2_DataSource_Array implements HTML_QuickForm2_DataSource_Nul
             return $value;
         } elseif (isset($this->values[$name])) {
             return $this->values[$name];
-        } 
-        
+        }
+
         return null;
     }
 
@@ -121,15 +116,5 @@ class HTML_QuickForm2_DataSource_Array implements HTML_QuickForm2_DataSource_Nul
             return true;
         }
     }
-    
-   /**
-    * Sets the values by merging them with the existing
-    * values, if any. 
-    * 
-    * @param array $values
-    */
-    public function setValues($values)
-    {
-        $this->values = array_merge($this->values, $values);
-    }
 }
+?>

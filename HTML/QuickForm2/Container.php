@@ -43,11 +43,6 @@
  */
 
 /**
- * Base class for all HTML_QuickForm2 elements
- */
-require_once 'HTML/QuickForm2/Node.php';
-
-/**
  * Abstract base class for simple QuickForm2 containers
  *
  * @category HTML
@@ -160,10 +155,14 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
                         if ('' != $tokens[0]) {
                             $valueAry[$tokens[0]] = $value;
                         } else {
-                            if (!isset($forceKeys[$name])) {
-                                $forceKeys[$name] = 0;
+                            if ('file'==$child->getType()) {
+                                $valueAry = $value;
+                            } else {
+                                if (!isset($forceKeys[$name])) {
+                                    $forceKeys[$name] = 0;
+                                }
+                                $valueAry[$forceKeys[$name]++] = $value;
                             }
-                            $valueAry[$forceKeys[$name]++] = $value;
                         }
                     }
                 }
@@ -243,7 +242,7 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
     * @param HTML_QuickForm2_Node $element Element to add
     *
     * @return   HTML_QuickForm2_Node     Added element
-    * @throws   HTML_QuickForm2_InvalidArgumentException
+    * @throws   HTML_QuickForm2_Exception_InvalidArgument
     */
     public function appendChild(HTML_QuickForm2_Node $element)
     {
@@ -252,28 +251,9 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
         }
         $element->setContainer($this);
         $this->elements[] = $element;
-        
-        $this->invalidateLookup();
-        
         return $element;
     }
-    
-   /**
-    * Invalidates (clears) the internal elements lookup
-    * table, which is used to keep track of all elements
-    * available in the container.
-    * 
-    * @see HTML_QuickForm2_Container::getLookup()
-    */
-    public function invalidateLookup()
-    {
-        $this->lookup = null;
-        
-        if($this->container) {
-            $this->container->invalidateLookup();
-        }
-    }
-    
+
    /**
     * Appends an element to the container (possibly creating it first)
     *
@@ -291,8 +271,8 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
     * @param array                       $data          Element-specific data
     *
     * @return   HTML_QuickForm2_Node     Added element
-    * @throws   HTML_QuickForm2_InvalidArgumentException
-    * @throws   HTML_QuickForm2_NotFoundException
+    * @throws   HTML_QuickForm2_Exception_InvalidArgument
+    * @throws   HTML_QuickForm2_Exception_NotFound
     */
     public function addElement(
         $elementOrType, $name = null, $attributes = null, array $data = array()
@@ -312,13 +292,13 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
     * @param HTML_QuickForm2_Node $element Element to remove
     *
     * @return   HTML_QuickForm2_Node     Removed object
-    * @throws   HTML_QuickForm2_NotFoundException
+    * @throws   HTML_QuickForm2_Exception_NotFound
     */
     public function removeChild(HTML_QuickForm2_Node $element)
     {
 
         if ($element->getContainer() !== $this) {
-            throw new HTML_QuickForm2_NotFoundException(
+            throw new HTML_QuickForm2_Exception_NotFound(
                 "Element with name '".$element->getName()."' was not found"
             );
         }
@@ -347,66 +327,14 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
     */
     public function getElementById($id)
     {
-        // Replaced the recursive iterator implementation
-        // with a lookup table that indexes the container's
-        // own elements as well as all subelements. It is reset
-        // when an element is added to the container, or one of
-        // its sub-containers.
-        
-        if(!isset($this->lookup)) {
-            $this->getLookup();
-        }
-        
-        if(isset($this->lookup[$id])) {
-            return $this->lookup[$id];
-        }
-        
-        return null;
-    }
-    
-   /**
-    * Stores the elements lookup table.
-    * @var HTML_QuickForm2_Node[]
-    * @see HTML_QuickForm2_Container::getLookup()
-    */
-    protected $lookup;
-    
-   /**
-    * Retrieves the elements lookup table, which
-    * keeps track of all elements in the container.
-    * It is used cache element instances by their
-    * ID to be able to access them easily without
-    * recursively traversing all childen each time.
-    * 
-    * @see HTML_QuickForm2_Container::getElementById()
-    * @see HTML_QuickForm2_Container::invalidateLookup()
-    */
-    public function getLookup()
-    {
-        if(isset($this->lookup)) {
-            return $this->lookup;
-        }
-        
-        $this->lookup = array();
-        
-        $total = count($this->elements);
-        for($i=0; $i < $total; $i++) 
-        {
-            $element = $this->elements[$i];
-            
-            $this->lookup[$element->getId()] = $element;
-            
-            if($element instanceof HTML_QuickForm2_Container) {
-                $els = $element->getLookup();
-                foreach($els as $id => $el) {
-                    $this->lookup[$id] = $el;
-                }
+        foreach ($this->getRecursiveIterator() as $element) {
+            if ($id == $element->getId()) {
+                return $element;
             }
         }
-        
-        return $this->lookup;
+        return null;
     }
-    
+
    /**
     * Returns an array of elements which name corresponds to element
     *
@@ -452,7 +380,7 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
             }
             $offset++;
         }
-        throw new HTML_QuickForm2_NotFoundException(
+        throw new HTML_QuickForm2_Exception_NotFound(
             "Reference element with name '".$reference->getName()."' was not found"
         );
     }
@@ -543,8 +471,8 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
     * @param array  $a Method arguments
     *
     * @return   HTML_QuickForm2_Node     Added element
-    * @throws   HTML_QuickForm2_InvalidArgumentException
-    * @throws   HTML_QuickForm2_NotFoundException
+    * @throws   HTML_QuickForm2_Exception_InvalidArgument
+    * @throws   HTML_QuickForm2_Exception_NotFound
     */
     public function __call($m, $a)
     {
@@ -615,39 +543,6 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
             }
         }
         return array_keys($triggers);
-    }
-
-   /**
-    * Makes the container itself and all its child elements non-required
-    * by removing any required rules that may have been added.
-    *
-    * @see HTML_QuickForm2_Node::makeOptional()
-    */
-    public function makeOptional()
-    {
-        parent::makeOptional();
-        foreach ($this as $child) {
-            $child->makeOptional();
-        }
-    }
-    
-   /**
-    * Whether the element or any of its children have errors.
-    * @see HTML_QuickForm2_Node::hasErrors()
-    */
-    public function hasErrors()
-    {
-        if (parent::hasErrors()) {
-            return true;
-        }
-        
-        foreach ($this as $child) {
-            if ($child->hasErrors()) {
-                return true;
-            }
-        }
-        
-        return false;
     }
 }
 

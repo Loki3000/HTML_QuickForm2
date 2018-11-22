@@ -43,11 +43,6 @@
  */
 
 /**
- * Base class for simple HTML_QuickForm2 elements
- */
-require_once 'HTML/QuickForm2/Element.php';
-
-/**
  * Class for <textarea> elements
  *
  * @category HTML
@@ -106,28 +101,6 @@ class HTML_QuickForm2_Element_Textarea extends HTML_QuickForm2_Element
             $html = nl2br($value) . self::getOption('linebreak');
         }
         return $html . $this->getPersistentContent();
-    }
-    
-   /**
-    * Sets the columns attribute of the textarea.
-    * @param int $cols
-    * @return HTML_QuickForm2_Element_Textarea
-    */
-    public function setColumns($cols)
-    {
-        $this->setAttribute('cols', $cols);
-        return $this;
-    }
-
-   /**
-    * Sets the rows attribute of the textarea.
-    * @param int $rows
-    * @return HTML_QuickForm2_Element_Textarea
-    */
-    public function setRows($rows)
-    {
-        $this->setAttribute('rows', $rows);
-        return $this;
     }
 }
 ?>

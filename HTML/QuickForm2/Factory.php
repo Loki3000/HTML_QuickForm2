@@ -82,7 +82,9 @@ class HTML_QuickForm2_Factory
         'static'        => array('HTML_QuickForm2_Element_Static', null),
         'submit'        => array('HTML_QuickForm2_Element_InputSubmit', null),
         'text'          => array('HTML_QuickForm2_Element_InputText', null),
-        'textarea'      => array('HTML_QuickForm2_Element_Textarea', null)
+        'textarea'      => array('HTML_QuickForm2_Element_Textarea', null),
+        'email'         => array('HTML_QuickForm2_Element_InputEmail', null),
+        'tel'           => array('HTML_QuickForm2_Element_InputTel', null),
     );
 
    /**

@@ -43,11 +43,6 @@
  */
 
 /**
- * Base class for HTML_QuickForm2 rules
- */
-require_once 'HTML/QuickForm2/Rule.php';
-
-/**
  * Rule checking that the field is empty
  *
  * Handles both simple form fields and file uploads, the latter are considered
@@ -75,7 +70,7 @@ class HTML_QuickForm2_Rule_Empty extends HTML_QuickForm2_Rule
     {
         $value = $this->owner->getValue();
         if ($this->owner instanceof HTML_QuickForm2_Element_InputFile) {
-            return isset($value['error']) && UPLOAD_ERR_NO_FILE == $value['error'];
+            return empty($this->owner->getValueArray());
         } elseif (is_array($value)) {
             return 0 == count(array_filter($value, 'strlen'));
         } else {

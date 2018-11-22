@@ -43,11 +43,6 @@
  */
 
 /**
- * Abstract base class for QuickForm2 renderers
- */
-require_once 'HTML/QuickForm2/Renderer.php';
-
-/**
  * Callback renderer for QuickForm2
  *
  * This renderer uses PHP callbacks to render form elements
@@ -533,7 +528,7 @@ class HTML_QuickForm2_Renderer_Callback extends HTML_QuickForm2_Renderer
         if (is_callable($callback) || is_null($callback)) {
             return true;
         }
-        throw new HTML_QuickForm2_InvalidArgumentException(
+        throw new HTML_QuickForm2_Exception_InvalidArgument(
             "Renderer callback is invalid"
         );
     }

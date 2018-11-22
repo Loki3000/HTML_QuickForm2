@@ -43,11 +43,6 @@
  */
 
 /**
- * Abstract base class for QuickForm2 renderers
- */
-require_once 'HTML/QuickForm2/Renderer.php';
-
-/**
  * Proxy class for HTML_QuickForm2 renderers and their plugins
  *
  * This class serves two purposes:
@@ -177,7 +172,7 @@ class HTML_QuickForm2_Renderer_Proxy extends HTML_QuickForm2_Renderer
     * the list. Plugins' methods are imported and can be later called as
     * this object's own.
     *
-    * @throws   HTML_QuickForm2_InvalidArgumentException if a plugin has already
+    * @throws   HTML_QuickForm2_Exception_InvalidArgument if a plugin has already
     *                   imported name
     */
     protected function updatePlugins()
@@ -198,7 +193,7 @@ class HTML_QuickForm2_Renderer_Proxy extends HTML_QuickForm2_Renderer
                 ) {
                     $methods[$lower] = $i;
                 } else {
-                    throw new HTML_QuickForm2_InvalidArgumentException(
+                    throw new HTML_QuickForm2_Exception_InvalidArgument(
                         'Duplicate method name: name ' . $method->getName() . ' in plugin ' .
                         get_class($plugin) . ' already taken by ' .
                         (isset($this->_rendererMethods[$lower])?
