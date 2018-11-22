@@ -43,12 +43,18 @@
  */
 
 /**
- * Base class for exceptions in HTML_QuickForm2 package
+ * Exception that denotes some resource was not found
  *
- * Such a base class is required by the Exception RFC:
- * http://pear.php.net/pepr/pepr-proposal-show.php?id=132
- * It will rarely be thrown directly, its specialized subclasses will be
- * thrown most of the time.
+ * One example is trying to instantiate a nonexistent class in Factory
+ * <code>
+ * try {
+ *     HTML_QuickForm2_Factory::registerElement('missing', 'NonExistent');
+ *     $el = HTML_QuickForm2_Factory::createElement('missing');
+ * } catch (HTML_QuickForm2_Exception_NotFound $e) {
+ *     echo $e->getMessage();
+ * }
+ * </code>
+ * This code fill output "Class 'NonExistent' does not exist and no file to load"
  *
  * @category HTML
  * @package  HTML_QuickForm2
@@ -58,6 +64,6 @@
  * @version  Release: @package_version@
  * @link     http://pear.php.net/package/HTML_QuickForm2
  */
-class HTML_QuickForm2_Exception extends PEAR_Exception
+class HTML_QuickForm2_Exception_NotFound extends HTML_QuickForm2_Exception
 {
 }

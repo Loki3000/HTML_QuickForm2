@@ -43,21 +43,26 @@
  */
 
 /**
- * Base class for exceptions in HTML_QuickForm2 package
+ * Exception that denotes invalid arguments were passed
  *
- * Such a base class is required by the Exception RFC:
- * http://pear.php.net/pepr/pepr-proposal-show.php?id=132
- * It will rarely be thrown directly, its specialized subclasses will be
- * thrown most of the time.
+ * One example is trying to create an element of type which is unknown to Factory
+ * <code>
+ * try {
+ *     $el = HTML_QuickForm2_Factory::createElement('unknown');
+ * } catch (HTML_QuickForm2_Exception_InvalidArgument $e) {
+ *     echo $e->getMessage();
+ * }
+ * </code>
+ * This code will output "Element type 'unknown' is not known"
  *
  * @category HTML
  * @package  HTML_QuickForm2
  * @author   Alexey Borzov <avb@php.net>
  * @author   Bertrand Mansion <golgote@mamasam.com>
  * @license  http://opensource.org/licenses/bsd-license.php New BSD License
- * @version  Release: @package_version@
+s * @version  Release: @package_version@
  * @link     http://pear.php.net/package/HTML_QuickForm2
  */
-class HTML_QuickForm2_Exception extends PEAR_Exception
+class HTML_QuickForm2_Exception_InvalidArgument extends HTML_QuickForm2_Exception
 {
 }
