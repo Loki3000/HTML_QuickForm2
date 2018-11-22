@@ -42,9 +42,6 @@
  * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 
-/** Class for <input type="image" /> elements */
-require_once 'HTML/QuickForm2/Element/InputImage.php';
-
 /**
  * A hidden button used to submit the form when the user presses Enter
  *
@@ -78,7 +75,7 @@ class HTML_QuickForm2_Controller_DefaultAction
     protected function onAttributeChange($name, $value = null)
     {
         if ('id' == $name) {
-            throw new HTML_QuickForm2_InvalidArgumentException(
+            throw new HTML_QuickForm2_Exception_InvalidArgument(
                 "Attribute 'id' is read-only"
             );
         }

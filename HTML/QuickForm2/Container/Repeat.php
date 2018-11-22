@@ -42,11 +42,6 @@
  * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 
-/** Base class for all HTML_QuickForm2 containers */
-require_once 'HTML/QuickForm2/Container.php';
-/** Javascript aggregator and builder class */
-require_once 'HTML/QuickForm2/JavascriptBuilder.php';
-
 /**
  * Javascript builder used when rendering a repeat prototype
  *
@@ -250,12 +245,12 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
      * Returns the prototype Container
      *
      * @return HTML_QuickForm2_Container prototype
-     * @throws HTML_QuickForm2_NotFoundException if prototype was not set
+     * @throws HTML_QuickForm2_Exception_NotFound if prototype was not set
      */
     protected function getPrototype()
     {
         if (empty($this->elements[0])) {
-            throw new HTML_QuickForm2_NotFoundException(
+            throw new HTML_QuickForm2_Exception_NotFound(
                 "Repeat element needs a prototype, use setPrototype()"
             );
         }
@@ -270,7 +265,7 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
      * @param HTML_QuickForm2_Node $element Element to add
      *
      * @return   HTML_QuickForm2_Node     Added element
-     * @throws   HTML_QuickForm2_InvalidArgumentException
+     * @throws   HTML_QuickForm2_Exception_InvalidArgument
      */
     public function appendChild(HTML_QuickForm2_Node $element)
     {
@@ -285,7 +280,7 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
      * @param HTML_QuickForm2_Node $element Element to remove
      *
      * @return   HTML_QuickForm2_Node     Removed object
-     * @throws   HTML_QuickForm2_NotFoundException
+     * @throws   HTML_QuickForm2_Exception_NotFound
      */
     public function removeChild(HTML_QuickForm2_Node $element)
     {

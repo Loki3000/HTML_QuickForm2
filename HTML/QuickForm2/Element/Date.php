@@ -43,15 +43,6 @@
  */
 
 /**
- * Base class for HTML_QuickForm2 group of elements
- */
-require_once 'HTML/QuickForm2/Container/Group.php';
-/**
- * Base class for HTML_QuickForm2 select element
- */
-require_once 'HTML/QuickForm2/Element/Select.php';
-
-/**
  * Class for a group of elements used to input dates (and times).
  *
  * @category HTML
@@ -145,7 +136,7 @@ class HTML_QuickForm2_Element_Date extends HTML_QuickForm2_Container_Group
     * @param string|array $attributes Attributes (either a string or an array)
     * @param array        $data       Element data (label, options and data used for element creation)
     *
-    * @throws HTML_QuickForm2_InvalidArgumentException
+    * @throws HTML_QuickForm2_Exception_InvalidArgument
     */
     public function __construct($name = null, $attributes = null, array $data = array())
     {
@@ -153,7 +144,7 @@ class HTML_QuickForm2_Element_Date extends HTML_QuickForm2_Container_Group
             if (!is_callable($data['messageProvider'])
                 && !$data['messageProvider'] instanceof HTML_QuickForm2_MessageProvider
             ) {
-                throw new HTML_QuickForm2_InvalidArgumentException(
+                throw new HTML_QuickForm2_Exception_InvalidArgument(
                     "messageProvider: expecting a callback or an implementation"
                     . " of HTML_QuickForm2_MessageProvider"
                 );

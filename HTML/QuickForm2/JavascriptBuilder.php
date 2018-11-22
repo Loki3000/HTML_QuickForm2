@@ -43,11 +43,6 @@
  */
 
 /**
- * Exception classes for HTML_QuickForm2
- */
-require_once 'HTML/QuickForm2/Exception.php';
-
-/**
  * Javascript aggregator and builder class
  *
  * @category HTML
@@ -173,7 +168,7 @@ class HTML_QuickForm2_JavascriptBuilder
                     $path .= DIRECTORY_SEPARATOR;
                 }
                 if (false === ($file = @file_get_contents($path . $library['file']))) {
-                    throw new HTML_QuickForm2_NotFoundException(
+                    throw new HTML_QuickForm2_Exception_NotFound(
                         "File '{$library['file']}' for JS library '{$name}' not found at '{$path}'"
                     );
                 }
@@ -370,7 +365,7 @@ class HTML_QuickForm2_JavascriptBuilder
             )) . '}';
 
         } else {
-            throw new HTML_QuickForm2_InvalidArgumentException(
+            throw new HTML_QuickForm2_Exception_InvalidArgument(
                 'Cannot encode ' . gettype($value) . ' as Javascript value'
             );
         }

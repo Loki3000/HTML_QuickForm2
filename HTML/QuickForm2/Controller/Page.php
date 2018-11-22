@@ -148,7 +148,7 @@ abstract class HTML_QuickForm2_Controller_Page
     * @param string $actionName Name of the action
     *
     * @return   mixed Return value of action handler
-    * @throws   HTML_QuickForm2_NotFoundException   if handler for an action is missing
+    * @throws   HTML_QuickForm2_Exception_NotFound   if handler for an action is missing
     */
     public function handle($actionName)
     {
@@ -187,8 +187,6 @@ abstract class HTML_QuickForm2_Controller_Page
         $actionName,
         $imageSrc = 'data:image/gif;base64,R0lGODlhAQABAID/AMDAwAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=='
     ) {
-        require_once 'HTML/QuickForm2/Controller/DefaultAction.php';
-
         if (0 == count($this->form)) {
             $image = $this->form->appendChild(
                 new HTML_QuickForm2_Controller_DefaultAction(

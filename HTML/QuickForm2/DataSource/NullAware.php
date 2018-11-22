@@ -43,11 +43,6 @@
  */
 
 /**
- * Interface for data sources used by HTML_QuickForm2 objects
- */
-require_once 'HTML/QuickForm2/DataSource.php';
-
-/**
  * Interface for data sources that may contain explicit null values
  *
  * getValue() was designed to return null for missing values, unfortunately that

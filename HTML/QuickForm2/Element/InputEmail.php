@@ -1,6 +1,7 @@
 <?php
-
-require_once 'HTML/QuickForm2/Element/Input.php';
+/**
+ * Base class for <input> elements
+ */
 
 class HTML_QuickForm2_Element_InputEmail extends HTML_QuickForm2_Element_Input
 {
@@ -8,5 +9,3 @@ class HTML_QuickForm2_Element_InputEmail extends HTML_QuickForm2_Element_Input
 
     protected $attributes = array('type' => 'email');
 }
-?>
-
