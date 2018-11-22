@@ -47,7 +47,7 @@ require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
 /**
  * Unit test for HTML_QuickForm2_Element_InputFile class
  */
-class HTML_QuickForm2_Element_InputFileTest extends PHPUnit_Framework_TestCase
+class HTML_QuickForm2_Element_InputFileTest extends PHPUnit\Framework\TestCase
 {
     public function setUp()
     {
@@ -72,6 +72,23 @@ class HTML_QuickForm2_Element_InputFileTest extends PHPUnit_Framework_TestCase
                 'type'      => '',
                 'size'      => 0,
                 'error'     => UPLOAD_ERR_CANT_WRITE
+            ),
+            'multi' => array(
+                'name' => array(
+                    0       => 'file.doc'
+                ),
+                'tmp_name' => array(
+                    0       => '/tmp/nothing'
+                ),
+                'type' => array(
+                    0       => 'text/plain'
+                ),
+                'size' => array(
+                    0       => 1234
+                ),
+                'error' => array(
+                    0       => UPLOAD_ERR_FORM_SIZE
+                ),
             )
         );
         $_POST = array(
@@ -91,6 +108,7 @@ class HTML_QuickForm2_Element_InputFileTest extends PHPUnit_Framework_TestCase
         $form = new HTML_QuickForm2('upload', 'post', null, false);
         $foo = $form->appendChild(new HTML_QuickForm2_Element_InputFile('foo'));
         $bar = $form->appendChild(new HTML_QuickForm2_Element_InputFile('bar'));
+        $multi = $form->appendChild(new HTML_QuickForm2_Element_InputFile('multi[]'));
 
         $this->assertNull($bar->getValue());
         $this->assertEquals(array(
@@ -100,6 +118,14 @@ class HTML_QuickForm2_Element_InputFileTest extends PHPUnit_Framework_TestCase
             'size'      => 1234,
             'error'     => UPLOAD_ERR_OK
         ), $foo->getValue());
+
+        $this->assertEquals(array(array(
+            'name'      => 'file.doc',
+            'tmp_name'  => '/tmp/nothing',
+            'type'      => 'text/plain',
+            'size'      => 1234,
+            'error'     => UPLOAD_ERR_FORM_SIZE
+        )), $multi->getValue());
     }
 
     public function testBuiltinValidation()
@@ -111,13 +137,16 @@ class HTML_QuickForm2_Element_InputFileTest extends PHPUnit_Framework_TestCase
         $toobig = $form->appendChild(new HTML_QuickForm2_Element_InputFile('toobig'));
         $this->assertFalse($form->validate());
         $this->assertContains('987654', $toobig->getError());
+
+        $toobig2 = $form->appendChild(new HTML_QuickForm2_Element_InputFile('multi[]'));
+        $this->assertFalse($form->validate());
+        $this->assertContains('987654', $toobig2->getError());
+
     }
 
-   /**
-    * @expectedException HTML_QuickForm2_InvalidArgumentException
-    */
     public function testInvalidMessageProvider()
     {
+        $this->expectException('HTML_QuickForm2_Exception_InvalidArgument');
         $invalid = new HTML_QuickForm2_Element_InputFile('invalid', null, array('messageProvider' => array()));
     }
 
@@ -133,8 +162,10 @@ class HTML_QuickForm2_Element_InputFileTest extends PHPUnit_Framework_TestCase
 
     public function testObjectMessageProvider()
     {
-        $mockProvider = $this->getMock('HTML_QuickForm2_MessageProvider',
-                                       array('get'));
+        $mockProvider = $this->getMockBuilder('HTML_QuickForm2_MessageProvider')
+        ->setMethods(array('get'))
+        ->getMock();
+        
         $mockProvider->expects($this->once())->method('get')
                      ->will($this->returnValue('A nasty error happened!'));
 
@@ -153,18 +184,15 @@ class HTML_QuickForm2_Element_InputFileTest extends PHPUnit_Framework_TestCase
     public function testRequest16807()
     {
         $form = new HTML_QuickForm2('broken', 'get');
-
-        try {
-            $form->addFile('upload', array('id' => 'upload'));
-            $this->fail('Expected HTML_QuickForm2_InvalidArgumentException was not thrown');
-        } catch (HTML_QuickForm2_InvalidArgumentException $e) {}
+        $this->expectException('HTML_QuickForm2_Exception_InvalidArgument');
+        $form->addFile('upload', array('id' => 'upload'));
+        $this->fail('Expected HTML_QuickForm2_Exception_InvalidArgument was not thrown');
 
         $group = HTML_QuickForm2_Factory::createElement('group', 'fileGroup');
         $group->addFile('upload', array('id' => 'upload'));
-        try {
-            $form->appendChild($group);
-            $this->fail('Expected HTML_QuickForm2_InvalidArgumentException was not thrown');
-        } catch (HTML_QuickForm2_InvalidArgumentException $e) {}
+        $this->expectException('HTML_QuickForm2_Exception_InvalidArgument');
+        $form->appendChild($group);
+        $this->fail('Expected HTML_QuickForm2_Exception_InvalidArgument was not thrown');
 
         $post = new HTML_QuickForm2('okform', 'post');
         $this->assertNull($post->getAttribute('enctype'));

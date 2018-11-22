@@ -47,7 +47,7 @@ require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
 /**
  * Unit test for HTML_QuickForm2_Element_InputCheckbox class
  */
-class HTML_QuickForm2_Element_InputCheckboxTest extends PHPUnit_Framework_TestCase
+class HTML_QuickForm2_Element_InputCheckboxTest extends PHPUnit\Framework\TestCase
 {
     public function setUp()
     {
@@ -111,10 +111,13 @@ class HTML_QuickForm2_Element_InputCheckboxTest extends PHPUnit_Framework_TestCa
     */
     public function testBug16816()
     {
+        //exception must be  is not thrown
         $box = new HTML_QuickForm2_Element_InputCheckbox(
-            'vegetable[1]', array('value' => 2, 'checked' => 1), array('label' => 'pea')
+            'vegetable[1]',
+            array('value' => 2, 'checked' => 1), array('label' => 'pea')
         );
         $boxHtml = $box->__toString();
+        $this->assertTrue(true);
     }
 
    /**

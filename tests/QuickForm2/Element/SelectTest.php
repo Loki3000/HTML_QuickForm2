@@ -58,7 +58,7 @@ abstract class HTML_QuickForm2_Element_SelectTest_AttributeParser extends HTML_C
 /**
  * Unit test for HTML_QuickForm2_Element_Select class
  */
-class HTML_QuickForm2_Element_SelectTest extends PHPUnit_Framework_TestCase
+class HTML_QuickForm2_Element_SelectTest extends PHPUnit\Framework\TestCase
 {
     public function setUp()
     {

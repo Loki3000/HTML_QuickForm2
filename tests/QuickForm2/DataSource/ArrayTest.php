@@ -47,7 +47,7 @@ require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
 /**
  * Unit test for array-based data source
  */
-class HTML_QuickForm2_DataSource_ArrayTest extends PHPUnit_Framework_TestCase
+class HTML_QuickForm2_DataSource_ArrayTest extends PHPUnit\Framework\TestCase
 {
    /**
     * data source being tested

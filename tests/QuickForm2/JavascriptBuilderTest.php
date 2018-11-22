@@ -48,7 +48,7 @@ require_once dirname(dirname(__FILE__)) . '/TestHelper.php';
 /**
  * Unit test for HTML_QuickForm2_JavascriptBuilder class
  */
-class HTML_QuickForm2_JavascriptBuilderTest extends PHPUnit_Framework_TestCase
+class HTML_QuickForm2_JavascriptBuilderTest extends PHPUnit\Framework\TestCase
 {
     public function testEncode()
     {
@@ -70,11 +70,9 @@ class HTML_QuickForm2_JavascriptBuilderTest extends PHPUnit_Framework_TestCase
         $obj->e = array('f', 'g');
         $this->assertEquals('{"a":"b","c":"d","e":["f","g"]}', HTML_QuickForm2_JavascriptBuilder::encode($obj));
 
-        try {
-            $fp = fopen(__FILE__, 'rb');
-            HTML_QuickForm2_JavascriptBuilder::encode($fp);
-            $this->fail('Expected HTML_QuickForm2_InvalidArgumentException was not thrown');
-        } catch (HTML_QuickForm2_InvalidArgumentException $e) {}
+        $this->expectException('HTML_QuickForm2_Exception_InvalidArgument');
+        $fp = fopen(__FILE__, 'rb');
+        HTML_QuickForm2_JavascriptBuilder::encode($fp);
         fclose($fp);
     }
 
@@ -103,10 +101,8 @@ class HTML_QuickForm2_JavascriptBuilderTest extends PHPUnit_Framework_TestCase
         $builder = new HTML_QuickForm2_JavascriptBuilder();
         $builder->addLibrary('missing', 'missing.js');
 
-        try {
-            $libraries = $builder->getLibraries(true);
-            $this->fail('Expected HTML_QuickForm2_NotFoundException was not thrown');
-        } catch (HTML_QuickForm2_NotFoundException $e) { }
+        $this->expectException('HTML_QuickForm2_Exception_NotFound');
+        $libraries = $builder->getLibraries(true);
     }
 
     public function testFormJavascript()
@@ -114,17 +110,17 @@ class HTML_QuickForm2_JavascriptBuilderTest extends PHPUnit_Framework_TestCase
         $builder = new HTML_QuickForm2_JavascriptBuilder();
         $element = new HTML_QuickForm2_Element_InputText();
 
-        $mockRuleOne = $this->getMock(
-            'HTML_QuickForm2_Rule', array('validateOwner', 'getJavascriptCallback'),
-            array($element)
-        );
+        $mockRuleOne = $this->getMockBuilder('HTML_QuickForm2_Rule')
+        ->setMethods(array('validateOwner', 'getJavascriptCallback'))
+        ->setConstructorArgs(array($element))
+        ->getMock();
         $mockRuleOne->expects($this->once())->method('getJavascriptCallback')
             ->will($this->returnValue('jsRuleOne'));
 
-        $mockRuleTwo = $this->getMock(
-            'HTML_QuickForm2_Rule', array('validateOwner', 'getJavascriptCallback'),
-            array($element)
-        );
+        $mockRuleTwo = $this->getMockBuilder('HTML_QuickForm2_Rule')
+        ->setMethods(array('validateOwner', 'getJavascriptCallback'))
+        ->setConstructorArgs(array($element))
+        ->getMock();
         $mockRuleTwo->expects($this->once())->method('getJavascriptCallback')
             ->will($this->returnValue('jsRuleTwo'));
 
@@ -157,4 +153,3 @@ class HTML_QuickForm2_JavascriptBuilderTest extends PHPUnit_Framework_TestCase
         $this->assertContains('setupCodeTwo', $scriptBoth);
     }
 }
-?>

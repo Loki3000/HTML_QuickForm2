@@ -47,7 +47,7 @@ require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
 /**
  * Unit test for HTML_QuickForm2_Element_InputSubmit class
  */
-class HTML_QuickForm2_Element_InputSubmitTest extends PHPUnit_Framework_TestCase
+class HTML_QuickForm2_Element_InputSubmitTest extends PHPUnit\Framework\TestCase
 {
     public function setUp()
     {

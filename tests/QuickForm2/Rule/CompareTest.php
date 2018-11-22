@@ -47,30 +47,26 @@ require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
 /**
  * Unit test for HTML_QuickForm2_Rule_Compare class
  */
-class HTML_QuickForm2_Rule_CompareTest extends PHPUnit_Framework_TestCase
+class HTML_QuickForm2_Rule_CompareTest extends PHPUnit\Framework\TestCase
 {
     public function testOperandRequired()
     {
-        $mockEl  = $this->getMock('HTML_QuickForm2_Element', array('getType',
-                                  'getRawValue', 'setValue', '__toString'));
-        try {
-            $compare = new HTML_QuickForm2_Rule_Compare($mockEl, 'some error');
-            $this->fail('Expected HTML_QuickForm2_InvalidArgumentException was not thrown');
-        } catch (HTML_QuickForm2_InvalidArgumentException $e) {
-            $this->assertRegexp('/Compare Rule requires an argument to compare with/', $e->getMessage());
-        }
-        try {
-            $compare2 = new HTML_QuickForm2_Rule_Compare($mockEl, 'some error', array());
-            $this->fail('Expected HTML_QuickForm2_InvalidArgumentException was not thrown');
-        } catch (HTML_QuickForm2_InvalidArgumentException $e2) {
-            $this->assertRegexp('/Compare Rule requires an argument to compare with/', $e2->getMessage(), 'Wrong exception');
-        }
+        $mockEl  = $this->getMockBuilder('HTML_QuickForm2_Element')
+        ->setMethods(array('getType','getRawValue', 'setValue', '__toString'))
+        ->getMock();
+
+        $this->expectException('HTML_QuickForm2_Exception_InvalidArgument');
+        $compare = new HTML_QuickForm2_Rule_Compare($mockEl, 'some error');
+
+        $this->expectException('HTML_QuickForm2_Exception_InvalidArgument');
+        $compare2 = new HTML_QuickForm2_Rule_Compare($mockEl, 'some error', array());
     }
 
     public function testDefaultOperatorIsEqual()
     {
-        $mockEl  = $this->getMock('HTML_QuickForm2_Element', array('getType',
-                                  'getRawValue', 'setValue', '__toString'));
+        $mockEl  = $this->getMockBuilder('HTML_QuickForm2_Element')
+        ->setMethods(array('getType','getRawValue', 'setValue', '__toString'))
+        ->getMock();
         $mockEl->expects($this->exactly(2))->method('getRawValue')
                ->will($this->returnValue('foo'));
 
@@ -83,12 +79,14 @@ class HTML_QuickForm2_Rule_CompareTest extends PHPUnit_Framework_TestCase
 
     public function testCompareToOtherElement()
     {
-        $mockFirst = $this->getMock('HTML_QuickForm2_Element', array('getType',
-                                  'getRawValue', 'setValue', '__toString'));
+        $mockFirst = $this->getMockBuilder('HTML_QuickForm2_Element')
+        ->setMethods(array('getType','getRawValue', 'setValue', '__toString'))
+        ->getMock();
         $mockFirst->expects($this->once())->method('getRawValue')
                   ->will($this->returnValue('foo'));
-        $mockSecond = $this->getMock('HTML_QuickForm2_Element', array('getType',
-                                  'getRawValue', 'setValue', '__toString'));
+        $mockSecond = $this->getMockBuilder('HTML_QuickForm2_Element')
+        ->setMethods(array('getType','getRawValue', 'setValue', '__toString'))
+        ->getMock();
         $mockSecond->expects($this->once())->method('getRawValue')
                    ->will($this->returnValue('bar'));
 
@@ -99,20 +97,18 @@ class HTML_QuickForm2_Rule_CompareTest extends PHPUnit_Framework_TestCase
 
     public function testDisallowBogusOperators()
     {
-        $mockEl  = $this->getMock('HTML_QuickForm2_Element', array('getType',
-                                  'getRawValue', 'setValue', '__toString'));
-        try {
-            $bogus = new HTML_QuickForm2_Rule_Compare($mockEl, 'bogus error', array('foo', 'bar'));
-            $this->fail('Expected HTML_QuickForm2_InvalidArgumentException was not thrown');
-        } catch (HTML_QuickForm2_InvalidArgumentException $e) {
-            $this->assertRegexp('/Compare Rule requires a valid comparison operator/', $e->getMessage());
-        }
+        $mockEl  = $this->getMockBuilder('HTML_QuickForm2_Element')
+        ->setMethods(array('getType','getRawValue', 'setValue', '__toString'))
+        ->getMock();
+        $this->expectException('HTML_QuickForm2_Exception_InvalidArgument');
+        $bogus = new HTML_QuickForm2_Rule_Compare($mockEl, 'bogus error', array('foo', 'bar'));
     }
 
     public function testOptionsHandling()
     {
-        $mockEl  = $this->getMock('HTML_QuickForm2_Element', array('getType',
-                                  'getRawValue', 'setValue', '__toString'));
+        $mockEl  = $this->getMockBuilder('HTML_QuickForm2_Element')
+        ->setMethods(array('getType','getRawValue', 'setValue', '__toString'))
+        ->getMock();
         $mockEl->expects($this->atLeastOnce())
                ->method('getRawValue')->will($this->returnValue('foo'));
 
@@ -125,15 +121,19 @@ class HTML_QuickForm2_Rule_CompareTest extends PHPUnit_Framework_TestCase
         $arrayNumeric = new HTML_QuickForm2_Rule_Compare($mockEl, '...', array('!==', 'bar'));
         $this->assertTrue($arrayNumeric->validate());
 
-        $arrayAssoc = new HTML_QuickForm2_Rule_Compare($mockEl, '...',
-                            array('operator' => '!==', 'operand' => 'bar'));
+        $arrayAssoc = new HTML_QuickForm2_Rule_Compare(
+            $mockEl,
+            '...',
+            array('operator' => '!==', 'operand' => 'bar')
+        );
         $this->assertTrue($arrayAssoc->validate());
     }
 
     public function testConfigHandling()
     {
-        $mockEl  = $this->getMock('HTML_QuickForm2_Element', array('getType',
-                                  'getRawValue', 'setValue', '__toString'));
+        $mockEl  = $this->getMockBuilder('HTML_QuickForm2_Element')
+        ->setMethods(array('getType','getRawValue', 'setValue', '__toString'))
+        ->getMock();
         $mockEl->expects($this->atLeastOnce())
                ->method('getRawValue')->will($this->returnValue('foo'));
 
@@ -149,41 +149,61 @@ class HTML_QuickForm2_Rule_CompareTest extends PHPUnit_Framework_TestCase
         $arrayNumeric = HTML_QuickForm2_Factory::createRule('compare-numeric', $mockEl, '...');
         $this->assertTrue($arrayNumeric->validate());
 
-        HTML_QuickForm2_Factory::registerRule('compare-assoc', 'HTML_QuickForm2_Rule_Compare', null,
-                                              array('operator' => '!==', 'operand' => 'bar'));
+        HTML_QuickForm2_Factory::registerRule(
+            'compare-assoc',
+            'HTML_QuickForm2_Rule_Compare',
+            null,
+            array('operator' => '!==', 'operand' => 'bar')
+        );
         $arrayAssoc = HTML_QuickForm2_Factory::createRule('compare-assoc', $mockEl, '...');
         $this->assertTrue($arrayAssoc->validate());
     }
 
     public function testConfigOverridesOptions()
     {
-        $mockEl  = $this->getMock('HTML_QuickForm2_Element', array('getType',
-                                  'getRawValue', 'setValue', '__toString'));
+        $mockEl  = $this->getMockBuilder('HTML_QuickForm2_Element')
+        ->setMethods(array('getType','getRawValue', 'setValue', '__toString'))
+        ->getMock();
         $mockEl->expects($this->atLeastOnce())
                ->method('getRawValue')->will($this->returnValue('foo'));
-        HTML_QuickForm2_Factory::registerRule('compare-override', 'HTML_QuickForm2_Rule_Compare', null,
-                                              array('operator' => '===', 'operand' => 'foo'));
-        $rule1 = HTML_QuickForm2_Factory::createRule('compare-override', $mockEl, '...',
-                                                     array('operator' => '===', 'operand' => 'bar'));
-        $rule2 = HTML_QuickForm2_Factory::createRule('compare-override', $mockEl, '...',
-                                                     array('operator' => '!==', 'operand' => 'foo'));
+        HTML_QuickForm2_Factory::registerRule(
+            'compare-override',
+            'HTML_QuickForm2_Rule_Compare',
+            null,
+            array('operator' => '===', 'operand' => 'foo')
+        );
+        $rule1 = HTML_QuickForm2_Factory::createRule(
+            'compare-override',
+            $mockEl,
+            '...',
+            array('operator' => '===', 'operand' => 'bar')
+        );
+        $rule2 = HTML_QuickForm2_Factory::createRule(
+            'compare-override',
+            $mockEl,
+            '...',
+            array('operator' => '!==', 'operand' => 'foo')
+        );
         $this->assertTrue($rule1->validate());
         $this->assertTrue($rule2->validate());
     }
 
     public function testBug10754()
     {
-        $mockFrom = $this->getMock('HTML_QuickForm2_Element', array('getType',
-                                   'getRawValue', 'setValue', '__toString'));
+        $mockFrom = $this->getMockBuilder('HTML_QuickForm2_Element')
+        ->setMethods(array('getType','getRawValue', 'setValue', '__toString'))
+        ->getMock();
         $mockFrom->expects($this->once())->method('getRawValue')
                  ->will($this->returnValue('00080002310000114151'));
-        $mockTo   = $this->getMock('HTML_QuickForm2_Element', array('getType',
-                                   'getRawValue', 'setValue', '__toString'));
+        $mockTo   = $this->getMockBuilder('HTML_QuickForm2_Element')
+        ->setMethods(array('getType','getRawValue', 'setValue', '__toString'))
+        ->getMock();
         $mockTo->expects($this->once())->method('getRawValue')
                ->will($this->returnValue('00080002310000114152'));
 
         $ruleAccounts = new HTML_QuickForm2_Rule_Compare(
-            $mockFrom, 'You cannot transfer money to and from same account',
+            $mockFrom,
+            'You cannot transfer money to and from same account',
             array('!=', $mockTo)
         );
         $this->assertTrue($ruleAccounts->validate());
@@ -191,18 +211,15 @@ class HTML_QuickForm2_Rule_CompareTest extends PHPUnit_Framework_TestCase
 
     public function testValidationTriggers()
     {
-        $foo = $this->getMock(
-            'HTML_QuickForm2_Element',
-            array('getType', 'getRawValue', 'setValue', '__toString'),
-            array('foo', array('id' => 'foo'))
-        );
-        $bar = $this->getMock(
-            'HTML_QuickForm2_Element',
-            array('getType', 'getRawValue', 'setValue', '__toString'),
-            array('bar', array('id' => 'bar'))
-        );
+        $foo = $this->getMockBuilder('HTML_QuickForm2_Element')
+        ->setMethods(array('getType', 'getRawValue', 'setValue', '__toString'))
+        ->setConstructorArgs(array('foo', array('id' => 'foo')))
+        ->getMock();
+        $bar = $this->getMockBuilder('HTML_QuickForm2_Element')
+        ->setMethods(array('getType', 'getRawValue', 'setValue', '__toString'))
+        ->setConstructorArgs(array('bar', array('id' => 'bar')))
+        ->getMock();
         $compare = new HTML_QuickForm2_Rule_Compare($foo, '...', $bar);
         $this->assertContains('["foo","bar"]', $compare->getJavascript());
     }
 }
-?>

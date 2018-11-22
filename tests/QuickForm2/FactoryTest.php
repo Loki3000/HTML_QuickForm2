@@ -48,7 +48,7 @@ require_once dirname(dirname(__FILE__)) . '/TestHelper.php';
 /**
  * Unit test for HTML_QuickForm2_Factory class
  */
-class HTML_QuickForm2_FactoryTest extends PHPUnit_Framework_TestCase
+class HTML_QuickForm2_FactoryTest extends PHPUnit\Framework\TestCase
 {
     protected $phpError;
     protected $errorHandler;
@@ -97,61 +97,43 @@ class HTML_QuickForm2_FactoryTest extends PHPUnit_Framework_TestCase
 
     public function testCreateNotRegisteredElement()
     {
-        try {
-            $el = HTML_QuickForm2_Factory::createElement('foo2');
-        } catch (HTML_QuickForm2_InvalidArgumentException $e) {
-            $this->assertRegexp('/Element type(.*)is not known/', $e->getMessage());
-            return;
-        }
-        $this->fail('Expected HTML_QuickForm2_InvalidArgumentException was not thrown');
+        $this->expectException('HTML_QuickForm2_Exception_InvalidArgument');
+        $el = HTML_QuickForm2_Factory::createElement('foo2');
     }
 
     public function testCreateElementNonExistingClass()
     {
         HTML_QuickForm2_Factory::registerElement('foo3', 'NonexistentClass');
-        try {
-            $this->setErrorHandler();
-            $el = HTML_QuickForm2_Factory::createElement('foo3');
-        } catch (HTML_QuickForm2_NotFoundException $e) {
-            $this->assertRegexp('/File(.*)was not found/', $e->getMessage());
-            $this->assertContains('NonexistentClass.php', $this->phpError);
-            return;
-        }
-        $this->fail('Expected HTML_QuickForm2_NotFoundException was not thrown');
+        $this->expectException('HTML_QuickForm2_Exception_NotFound');
+        $this->setErrorHandler();
+        $el = HTML_QuickForm2_Factory::createElement('foo3');
     }
 
     public function testCreateElementNonExistingFile()
     {
         HTML_QuickForm2_Factory::registerElement('foo4', 'NonexistentClass', 'NonexistentFile.php');
-        try {
-            $this->setErrorHandler();
-            $el = HTML_QuickForm2_Factory::createElement('foo4');
-        } catch (HTML_QuickForm2_NotFoundException $e) {
-            $this->assertRegexp('/File(.*)was not found/', $e->getMessage());
-            $this->assertContains('NonexistentFile.php', $this->phpError);
-            return;
-        }
-        $this->fail('Expected HTML_QuickForm2_NotFoundException was not thrown');
+        $this->expectException('HTML_QuickForm2_Exception_NotFound');
+        $this->setErrorHandler();
+        $el = HTML_QuickForm2_Factory::createElement('foo4');
     }
 
     public function testCreateElementInvalidFile()
     {
         HTML_QuickForm2_Factory::registerElement('foo5', 'NonexistentClass', dirname(__FILE__) . '/_files/InvalidFile.php');
-        try {
-            $el = HTML_QuickForm2_Factory::createElement('foo5');
-        } catch (HTML_QuickForm2_NotFoundException $e) {
-            $this->assertRegexp('/Class(.*)was not found within file(.*)/', $e->getMessage());
-            return;
-        }
-        $this->fail('Expected HTML_QuickForm2_NotFoundException was not thrown');
+        $this->expectException('HTML_QuickForm2_Exception_NotFound');
+        $el = HTML_QuickForm2_Factory::createElement('foo5');
     }
 
     public function testCreateElementValid()
     {
         HTML_QuickForm2_Factory::registerElement('fakeelement', 'FakeElement', dirname(__FILE__) . '/_files/FakeElement.php');
         /* @var $el FakeElement */
-        $el = HTML_QuickForm2_Factory::createElement('fakeelement',
-                'fake', 'attributes', array('options' => '', 'label' => 'fake label'));
+        $el = HTML_QuickForm2_Factory::createElement(
+            'fakeelement',
+                'fake',
+            'attributes',
+            array('options' => '', 'label' => 'fake label')
+        );
         $this->assertInstanceOf('FakeElement', $el);
         $this->assertEquals('fake', $el->name);
         $this->assertEquals(array('options' => '', 'label' => 'fake label'), $el->data);
@@ -172,68 +154,61 @@ class HTML_QuickForm2_FactoryTest extends PHPUnit_Framework_TestCase
 
     public function testCreateNotRegisteredRule()
     {
-        $mockNode = $this->getMock('HTML_QuickForm2_Node', $this->nodeAbstractMethods);
-        try {
-            $rule = HTML_QuickForm2_Factory::createRule('foo2', $mockNode);
-        } catch (HTML_QuickForm2_InvalidArgumentException $e) {
-            $this->assertRegexp('/Rule(.*)is not known/', $e->getMessage());
-            return;
-        }
-        $this->fail('Expected HTML_QuickForm2_InvalidArgumentException was not thrown');
+        $mockNode = $this->getMockBuilder('HTML_QuickForm2_Node')
+        ->setMethods($this->nodeAbstractMethods)
+        ->getMock();
+        $this->expectException('HTML_QuickForm2_Exception_InvalidArgument');
+        $rule = HTML_QuickForm2_Factory::createRule('foo2', $mockNode);
     }
 
     public function testCreateRuleNonExistingClass()
     {
-        $mockNode = $this->getMock('HTML_QuickForm2_Node', $this->nodeAbstractMethods);
+        $mockNode = $this->getMockBuilder('HTML_QuickForm2_Node')
+        ->setMethods($this->nodeAbstractMethods)
+        ->getMock();
         HTML_QuickForm2_Factory::registerRule('foo3', 'NonexistentClass');
-        try {
-            $this->setErrorHandler();
-            $rule = HTML_QuickForm2_Factory::createRule('foo3', $mockNode);
-        } catch (HTML_QuickForm2_NotFoundException $e) {
-            $this->assertRegexp('/File(.*)was not found/', $e->getMessage());
-            $this->assertContains('NonexistentClass.php', $this->phpError);
-            return;
-        }
-        $this->fail('Expected HTML_QuickForm2_NotFoundException was not thrown');
+        $this->expectException('HTML_QuickForm2_Exception_NotFound');
+        $this->setErrorHandler();
+        $rule = HTML_QuickForm2_Factory::createRule('foo3', $mockNode);
     }
 
     public function testCreateRuleNonExistingFile()
     {
-        $mockNode = $this->getMock('HTML_QuickForm2_Node', $this->nodeAbstractMethods);
+        $mockNode = $this->getMockBuilder('HTML_QuickForm2_Node')
+        ->setMethods($this->nodeAbstractMethods)
+        ->getMock();
         HTML_QuickForm2_Factory::registerRule('foo4', 'NonexistentClass', 'NonexistentFile.php');
-        try {
-            $this->setErrorHandler();
-            $rule = HTML_QuickForm2_Factory::createRule('foo4', $mockNode);
-        } catch (HTML_QuickForm2_NotFoundException $e) {
-            $this->assertRegexp('/File(.*)was not found/', $e->getMessage());
-            $this->assertContains('NonexistentFile.php', $this->phpError);
-            return;
-        }
-        $this->fail('Expected HTML_QuickForm2_NotFoundException was not thrown');
+        $this->expectException('HTML_QuickForm2_Exception_NotFound');
+        $this->setErrorHandler();
+        $rule = HTML_QuickForm2_Factory::createRule('foo4', $mockNode);
     }
 
     public function testCreateRuleInvalidFile()
     {
-        $mockNode = $this->getMock('HTML_QuickForm2_Node', $this->nodeAbstractMethods);
+        $mockNode = $this->getMockBuilder('HTML_QuickForm2_Node')
+        ->setMethods($this->nodeAbstractMethods)
+        ->getMock();
         HTML_QuickForm2_Factory::registerRule('foo5', 'NonexistentClass', dirname(__FILE__) . '/_files/InvalidFile.php');
-        try {
-            $rule = HTML_QuickForm2_Factory::createRule('foo5', $mockNode);
-        } catch (HTML_QuickForm2_NotFoundException $e) {
-            $this->assertRegexp('/Class(.*)was not found within file(.*)/', $e->getMessage());
-            return;
-        }
-        $this->fail('Expected HTML_QuickForm2_NotFoundException was not thrown');
+        $this->expectException('HTML_QuickForm2_Exception_NotFound');
+        $rule = HTML_QuickForm2_Factory::createRule('foo5', $mockNode);
     }
 
     public function testCreateRuleValid()
     {
-        $mockNode = $this->getMock('HTML_QuickForm2_Node', $this->nodeAbstractMethods);
+        $mockNode = $this->getMockBuilder('HTML_QuickForm2_Node')
+        ->setMethods($this->nodeAbstractMethods)
+        ->getMock();
         HTML_QuickForm2_Factory::registerRule(
-            'fakerule', 'FakeRule', dirname(__FILE__) . '/_files/FakeRule.php'
+            'fakerule',
+            'FakeRule',
+            dirname(__FILE__) . '/_files/FakeRule.php'
         );
         /* @var $rule FakeRule */
         $rule = HTML_QuickForm2_Factory::createRule(
-            'fakerule', $mockNode, 'An error message', 'Some options'
+            'fakerule',
+            $mockNode,
+            'An error message',
+            'Some options'
         );
         $this->assertInstanceOf('FakeRule', $rule);
         $this->assertSame($mockNode, $rule->owner);
@@ -241,4 +216,3 @@ class HTML_QuickForm2_FactoryTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Some options', $rule->getConfig());
     }
 }
-?>

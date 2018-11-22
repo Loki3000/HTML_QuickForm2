@@ -47,70 +47,58 @@ require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
 /**
  * Unit test for HTML_QuickForm2_Rule_Length class
  */
-class HTML_QuickForm2_Rule_LengthTest extends PHPUnit_Framework_TestCase
+class HTML_QuickForm2_Rule_LengthTest extends PHPUnit\Framework\TestCase
 {
     public function testLimitsAreRequired()
     {
-        $mockEl = $this->getMock('HTML_QuickForm2_Element', array('getType',
-                                 'getRawValue', 'setValue', '__toString'));
-        try {
-            $length = new HTML_QuickForm2_Rule_Length($mockEl, 'an error');
-            $this->fail('Expected HTML_QuickForm2_InvalidArgumentException was not thrown');
-        } catch (HTML_QuickForm2_InvalidArgumentException $e) {
-            $this->assertRegexp('/Length Rule requires at least one non-zero limit/', $e->getMessage());
-        }
-        try {
-            $length2 = new HTML_QuickForm2_Rule_Length($mockEl, 'another error', array());
-            $this->fail('Expected HTML_QuickForm2_InvalidArgumentException was not thrown');
-        } catch (HTML_QuickForm2_InvalidArgumentException $e) {
-            $this->assertRegexp('/Length Rule requires at least one non-zero limit/', $e->getMessage());
-        }
+        $mockEl = $this->getMockBuilder('HTML_QuickForm2_Element')
+        ->setMethods(array('getType','getRawValue', 'setValue', '__toString'))
+        ->getMock();
+        $this->expectException('HTML_QuickForm2_Exception_InvalidArgument');
+        $length = new HTML_QuickForm2_Rule_Length($mockEl, 'an error');
+
+        $this->expectException('HTML_QuickForm2_Exception_InvalidArgument');
+        $length2 = new HTML_QuickForm2_Rule_Length($mockEl, 'another error', array());
     }
 
     public function testScalarLengthIsPositive()
     {
-        $mockEl = $this->getMock('HTML_QuickForm2_Element', array('getType',
-                                 'getRawValue', 'setValue', '__toString'));
-        try {
-            $lengthZero = new HTML_QuickForm2_Rule_Length($mockEl, 'an error', 0);
-            $this->fail('Expected HTML_QuickForm2_InvalidArgumentException was not thrown');
-        } catch (HTML_QuickForm2_InvalidArgumentException $e) {
-            $this->assertRegexp('/Length Rule requires at least one non-zero limit/', $e->getMessage());
-        }
-        try {
-            $lengthNegative = new HTML_QuickForm2_Rule_Length($mockEl, 'an error', -1);
-            $this->fail('Expected HTML_QuickForm2_InvalidArgumentException was not thrown');
-        } catch (HTML_QuickForm2_InvalidArgumentException $e) {
-            $this->assertRegexp('/Length Rule requires limits to be nonnegative/', $e->getMessage());
-            return;
-        }
+        $mockEl = $this->getMockBuilder('HTML_QuickForm2_Element')
+        ->setMethods(array('getType','getRawValue', 'setValue', '__toString'))
+        ->getMock();
+        $this->expectException('HTML_QuickForm2_Exception_InvalidArgument');
+        $lengthZero = new HTML_QuickForm2_Rule_Length($mockEl, 'an error', 0);
+        $this->expectException('HTML_QuickForm2_Exception_InvalidArgument');
+        $lengthNegative = new HTML_QuickForm2_Rule_Length($mockEl, 'an error', -1);
     }
 
     public function testMinMaxLengthIsNonnegative()
     {
-        $mockEl = $this->getMock('HTML_QuickForm2_Element', array('getType',
-                                 'getRawValue', 'setValue', '__toString'));
-        try {
-            $lengthZeros = new HTML_QuickForm2_Rule_Length($mockEl, 'an error',
-                                                           array('min' => 0, 'max' => 0));
-        } catch (HTML_QuickForm2_InvalidArgumentException $e) {
-            $this->assertRegexp('/Length Rule requires at least one non-zero limit/', $e->getMessage());
-        }
-        try {
-            $lengthNegative = new HTML_QuickForm2_Rule_Length($mockEl, 'an error',
-                                                              array('min' => -1, 'max' => 1));
-            $this->fail('Expected HTML_QuickForm2_InvalidArgumentException was not thrown');
-        } catch (HTML_QuickForm2_InvalidArgumentException $e) {
-            $this->assertRegexp('/Length Rule requires limits to be nonnegative/', $e->getMessage());
-        }
+        $mockEl = $this->getMockBuilder('HTML_QuickForm2_Element')
+        ->setMethods(array('getType','getRawValue', 'setValue', '__toString'))
+        ->getMock();
+        $this->expectException('HTML_QuickForm2_Exception_InvalidArgument');
+        $lengthZeros = new HTML_QuickForm2_Rule_Length(
+            $mockEl,
+            'an error',
+            array('min' => 0, 'max' => 0)
+        );
+
+        $this->expectException('HTML_QuickForm2_Exception_InvalidArgument');
+        $lengthNegative = new HTML_QuickForm2_Rule_Length(
+            $mockEl,
+            'an error',
+            array('min' => -1, 'max' => 1)
+        );
     }
 
     public function testLimitsHandling()
     {
-        $mockEl  = $this->getMock('HTML_QuickForm2_Element', array('getType',
-                                  'getRawValue', 'setValue', '__toString'));
+        $mockEl  = $this->getMockBuilder('HTML_QuickForm2_Element')
+        ->setMethods(array('getType','getValue','getRawValue', 'setValue', '__toString'))
+        ->getMock();
         $mockEl->expects($this->atLeastOnce())
-               ->method('getRawValue')->will($this->returnValue('foo'));
+               ->method('getValue')->will($this->returnValue('абв'));
 
         $length3 = new HTML_QuickForm2_Rule_Length($mockEl, 'an error', 3);
         $this->assertTrue($length3->validate());
@@ -121,23 +109,33 @@ class HTML_QuickForm2_Rule_LengthTest extends PHPUnit_Framework_TestCase
         $length2_4 = new HTML_QuickForm2_Rule_Length($mockEl, 'an error', array('min' => 2, 'max' => 4));
         $this->assertTrue($length2_4->validate());
 
-        $length5_6 = new HTML_QuickForm2_Rule_Length($mockEl, 'an error',
-                                                     array('min' => 5, 'max' => 6));
+        $length5_6 = new HTML_QuickForm2_Rule_Length(
+            $mockEl,
+            'an error',
+            array('min' => 5, 'max' => 6)
+        );
         $this->assertFalse($length5_6->validate());
 
-        $minLength2 = new HTML_QuickForm2_Rule_Length($mockEl, 'an error',
-                                                      array('min' => 2));
+        $minLength2 = new HTML_QuickForm2_Rule_Length(
+            $mockEl,
+            'an error',
+            array('min' => 2)
+        );
         $this->assertTrue($minLength2->validate());
 
-        $maxLength2 = new HTML_QuickForm2_Rule_Length($mockEl, 'an error',
-                                                      array('max' => 2));
+        $maxLength2 = new HTML_QuickForm2_Rule_Length(
+            $mockEl,
+            'an error',
+            array('max' => 2)
+        );
         $this->assertFalse($maxLength2->validate());
     }
 
     public function testConfigCanonicalForm()
     {
-        $mockEl = $this->getMock('HTML_QuickForm2_Element', array('getType',
-                                 'getRawValue', 'setValue', '__toString'));
+        $mockEl = $this->getMockBuilder('HTML_QuickForm2_Element')
+        ->setMethods(array('getType','getRawValue', 'setValue', '__toString'))
+        ->getMock();
         $length = new HTML_QuickForm2_Rule_Length($mockEl, 'an error', array('min' => 4, 'max' => 2));
         $this->assertEquals(array('min' => 2, 'max' => 4), $length->getConfig());
 
@@ -153,30 +151,37 @@ class HTML_QuickForm2_Rule_LengthTest extends PHPUnit_Framework_TestCase
 
     public function testGlobalConfigOverrides()
     {
-        $mockEl = $this->getMock('HTML_QuickForm2_Element', array('getType',
-                                 'getRawValue', 'setValue', '__toString'));
+        $mockEl = $this->getMockBuilder('HTML_QuickForm2_Element')
+        ->setMethods(array('getType','getRawValue', 'setValue', '__toString'))
+        ->getMock();
 
         $scalar = new HTML_QuickForm2_Rule_Length(
-            $mockEl, 'an error',
+            $mockEl,
+            'an error',
             HTML_QuickForm2_Rule_Length::mergeConfig(3, 4)
         );
         $this->assertEquals(4, $scalar->getConfig());
 
         $scalar2 = new HTML_QuickForm2_Rule_Length(
-            $mockEl, 'an error',
+            $mockEl,
+            'an error',
             HTML_QuickForm2_Rule_Length::mergeConfig(array('min' => 1, 'max' => 2), 3)
         );
         $this->assertEquals(3, $scalar2->getConfig());
 
         $array = new HTML_QuickForm2_Rule_Length(
-            $mockEl, 'an error',
-            HTML_QuickForm2_Rule_Length::mergeConfig(array('min' => 1, 'max' => 2),
-                                                     array('min' => 3, 'max' => 4))
+            $mockEl,
+            'an error',
+            HTML_QuickForm2_Rule_Length::mergeConfig(
+                array('min' => 1, 'max' => 2),
+                array('min' => 3, 'max' => 4)
+            )
         );
         $this->assertEquals(array('min' => 3, 'max' => 4), $array->getConfig());
 
         $array2 = new HTML_QuickForm2_Rule_Length(
-            $mockEl, 'an error',
+            $mockEl,
+            'an error',
             HTML_QuickForm2_Rule_Length::mergeConfig(123, array('min' => 3, 'max' => 4))
         );
         $this->assertEquals(array('min' => 3, 'max' => 4), $array2->getConfig());
@@ -196,19 +201,21 @@ class HTML_QuickForm2_Rule_LengthTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             array('min' => 1, 'max' => 0),
-            HTML_QuickForm2_Rule_Length::mergeConfig(array('min' => 1, 'max' => 5),
-                                                     array('max' => 0))
+            HTML_QuickForm2_Rule_Length::mergeConfig(
+                array('min' => 1, 'max' => 5),
+                array('max' => 0)
+            )
         );
     }
 
     public function testEmptyFieldsAreSkipped()
     {
-        $mockEmpty = $this->getMock('HTML_QuickForm2_Element', array('getType',
-                                    'getRawValue', 'setValue', '__toString'));
+        $mockEmpty = $this->getMockBuilder('HTML_QuickForm2_Element')
+        ->setMethods(array('getType','getRawValue', 'setValue', '__toString'))
+        ->getMock();
         $mockEmpty->expects($this->once())->method('getRawValue')
                   ->will($this->returnValue(''));
         $length = new HTML_QuickForm2_Rule_Length($mockEmpty, 'an error', array('min' => 5));
         $this->assertTrue($length->validate());
     }
 }
-?>

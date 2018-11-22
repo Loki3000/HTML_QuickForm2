@@ -47,7 +47,7 @@ require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
 /**
  * Unit test for HTML_QuickForm2_Renderer_Default class
  */
-class HTML_QuickForm2_Renderer_DefaultTest extends PHPUnit_Framework_TestCase
+class HTML_QuickForm2_Renderer_DefaultTest extends PHPUnit\Framework\TestCase
 {
     public function testRenderElementUsingMostAppropriateTemplate()
     {

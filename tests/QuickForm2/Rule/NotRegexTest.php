@@ -47,18 +47,21 @@ require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
 /**
  * Unit test for HTML_QuickForm2_Rule_NotRegex class
  */
-class HTML_QuickForm2_Rule_NotRegexTest extends PHPUnit_Framework_TestCase
+class HTML_QuickForm2_Rule_NotRegexTest extends PHPUnit\Framework\TestCase
 {
     public function testEmptyFieldsAreSkipped()
     {
-        $mockEmpty = $this->getMock('HTML_QuickForm2_Element', array('getType',
-                                    'getRawValue', 'setValue', '__toString'));
+        $mockEmpty = $this->getMockBuilder('HTML_QuickForm2_Element')
+        ->setMethods(array('getType','getRawValue', 'setValue', '__toString'))
+        ->getMock();
         $mockEmpty->expects($this->once())->method('getRawValue')
                   ->will($this->returnValue(''));
         $ruleSimple = new HTML_QuickForm2_Rule_NotRegex($mockEmpty, 'an error', '/^[a-zA-Z]+$/');
         $this->assertTrue($ruleSimple->validate());
 
-        $mockNoUpload = $this->getMock('HTML_QuickForm2_Element_InputFile', array('getValue'));
+        $mockNoUpload = $this->getMockBuilder('HTML_QuickForm2_Element_InputFile')
+        ->setMethods( array('getValue'))
+        ->getMock();
         $mockNoUpload->expects($this->once())->method('getValue')
                      ->will($this->returnValue(array(
                         'name'     => '',
@@ -73,14 +76,17 @@ class HTML_QuickForm2_Rule_NotRegexTest extends PHPUnit_Framework_TestCase
 
     public function testNegatesResult()
     {
-        $mockComment = $this->getMock('HTML_QuickForm2_Element', array('getType',
-                                      'getRawValue', 'setValue', '__toString'));
+        $mockComment = $this->getMockBuilder('HTML_QuickForm2_Element')
+        ->setMethods(array('getType','getRawValue', 'setValue', '__toString'))
+        ->getMock();
         $mockComment->expects($this->once())->method('getRawValue')
                     ->will($this->returnValue('Buy some cheap VIAGRA from our online pharmacy!!!'));
         $ruleNoSpam = new HTML_QuickForm2_Rule_NotRegex($mockComment, 'an error', '/viagra/i');
         $this->assertFalse($ruleNoSpam->validate());
 
-        $mockUpload = $this->getMock('HTML_QuickForm2_Element_InputFile', array('getValue'));
+        $mockUpload = $this->getMockBuilder('HTML_QuickForm2_Element_InputFile')
+        ->setMethods( array('getValue'))
+        ->getMock();
         $mockUpload->expects($this->once())->method('getValue')
                    ->will($this->returnValue(array(
                      'name'     => 'pr0n.jpg',

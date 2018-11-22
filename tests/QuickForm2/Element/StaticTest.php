@@ -47,7 +47,7 @@ require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
 /**
  * Unit test for HTML_QuickForm2_Element_Input class
  */
-class HTML_QuickForm2_Element_StaticTest extends PHPUnit_Framework_TestCase
+class HTML_QuickForm2_Element_StaticTest extends PHPUnit\Framework\TestCase
 {
     public function testSetContent()
     {
@@ -99,13 +99,11 @@ class HTML_QuickForm2_Element_StaticTest extends PHPUnit_Framework_TestCase
     public function testCannotValidate()
     {
         $static = new HTML_QuickForm2_Element_Static('novalidate');
-        try {
-            $rule = $this->getMock(
-                'HTML_QuickForm2_Rule', array('validateOwner'),
-                array($static, 'a message')
-            );
-            $this->fail('Expected HTML_QuickForm2_InvalidArgumentException was not thrown');
-        } catch (HTML_QuickForm2_InvalidArgumentException $e) { }
+        $this->expectException('HTML_QuickForm2_Exception_InvalidArgument');
+        $rule = $this->getMockBuilder('HTML_QuickForm2_Rule')
+        ->setMethods(array('validateOwner'))
+        ->setConstructorArgs(array($static, 'a message'))
+        ->getMock();
     }
 
     public function testCanRemoveName()
@@ -136,7 +134,7 @@ class HTML_QuickForm2_Element_StaticTest extends PHPUnit_Framework_TestCase
     }
 
    /**
-    * @expectedException HTML_QuickForm2_InvalidArgumentException
+    * @expectedException HTML_QuickForm2_Exception_InvalidArgument
     */
     public function testDisallowedTagNames()
     {

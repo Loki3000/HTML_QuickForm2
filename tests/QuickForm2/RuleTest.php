@@ -59,12 +59,14 @@ class HTML_QuickForm2_Rule_ImplConst extends HTML_QuickForm2_Rule
 /**
  * Unit test for HTML_QuickForm2_Rule class
  */
-class HTML_QuickForm2_RuleTest extends PHPUnit_Framework_TestCase
+class HTML_QuickForm2_RuleTest extends PHPUnit\Framework\TestCase
 {
     public function testSetAndGetOptions()
     {
         $rule = new HTML_QuickForm2_Rule_ImplConst(
-            new HTML_QuickForm2_Element_InputText('foo'), 'a message', 'bar'
+            new HTML_QuickForm2_Element_InputText('foo'),
+            'a message',
+            'bar'
         );
         $this->assertEquals('bar', $rule->getConfig());
 
@@ -75,7 +77,9 @@ class HTML_QuickForm2_RuleTest extends PHPUnit_Framework_TestCase
     public function testSetAndGetMessage()
     {
         $rule = new HTML_QuickForm2_Rule_ImplConst(
-            new HTML_QuickForm2_Element_InputText('foo'), 'a message', 'bar'
+            new HTML_QuickForm2_Element_InputText('foo'),
+            'a message',
+            'bar'
         );
         $this->assertEquals('a message', $rule->getMessage());
 
@@ -86,12 +90,16 @@ class HTML_QuickForm2_RuleTest extends PHPUnit_Framework_TestCase
     public function testValidateSingle()
     {
         $ruleTrue = new HTML_QuickForm2_Rule_ImplConst(
-            new HTML_QuickForm2_Element_InputText('ruleTrue'), 'a message', true
+            new HTML_QuickForm2_Element_InputText('ruleTrue'),
+            'a message',
+            true
         );
         $this->assertTrue($ruleTrue->validate());
 
         $ruleFalse = new HTML_QuickForm2_Rule_ImplConst(
-            new HTML_QuickForm2_Element_InputText('ruleFalse'), 'a message', false
+            new HTML_QuickForm2_Element_InputText('ruleFalse'),
+            'a message',
+            false
         );
         $this->assertFalse($ruleFalse->validate());
     }
@@ -125,18 +133,20 @@ class HTML_QuickForm2_RuleTest extends PHPUnit_Framework_TestCase
         $ruleTrue = new HTML_QuickForm2_Rule_ImplConst($elTest, '...', true);
         $ruleFalse = new HTML_QuickForm2_Rule_ImplConst($elTest, '...', false);
 
-        $ruleAndTrue = $this->getMock(
-            'HTML_QuickForm2_Rule', array('validateOwner'),
-            array($elTest)
-        );
+        $ruleAndTrue = $this->getMockBuilder('HTML_QuickForm2_Rule')
+        ->setMethods(['validateOwner'])
+        ->setConstructorArgs(array($elTest))
+        ->getMock();
+        
         $ruleAndTrue->expects($this->once())->method('validateOwner');
         $ruleTrue->and_($ruleAndTrue);
         $ruleTrue->validate();
 
-        $ruleAndFalse = $this->getMock(
-            'HTML_QuickForm2_Rule', array('validateOwner'),
-            array($elTest)
-        );
+        $ruleAndFalse = $this->getMockBuilder('HTML_QuickForm2_Rule')
+        ->setMethods(['validateOwner'])
+        ->setConstructorArgs(array($elTest))
+        ->getMock();
+
         $ruleAndFalse->expects($this->never())->method('validateOwner');
         $ruleFalse->and_($ruleAndFalse);
         $ruleFalse->validate();
@@ -148,18 +158,20 @@ class HTML_QuickForm2_RuleTest extends PHPUnit_Framework_TestCase
         $ruleTrue = new HTML_QuickForm2_Rule_ImplConst($elTest, '...', true);
         $ruleFalse = new HTML_QuickForm2_Rule_ImplConst($elTest, '...', false);
 
-        $ruleOrTrue = $this->getMock(
-            'HTML_QuickForm2_Rule', array('validateOwner'),
-            array($elTest)
-        );
+        $ruleOrTrue = $this->getMockBuilder('HTML_QuickForm2_Rule')
+        ->setMethods(['validateOwner'])
+        ->setConstructorArgs(array($elTest))
+        ->getMock();
+
         $ruleOrTrue->expects($this->never())->method('validateOwner');
         $ruleTrue->or_($ruleOrTrue);
         $ruleTrue->validate();
 
-        $ruleOrFalse = $this->getMock(
-            'HTML_QuickForm2_Rule', array('validateOwner'),
-            array($elTest)
-        );
+        $ruleOrFalse = $this->getMockBuilder('HTML_QuickForm2_Rule')
+        ->setMethods(['validateOwner'])
+        ->setConstructorArgs(array($elTest))
+        ->getMock();
+
         $ruleOrFalse->expects($this->once())->method('validateOwner');
         $ruleFalse->or_($ruleOrFalse);
         $ruleFalse->validate();
@@ -187,8 +199,12 @@ class HTML_QuickForm2_RuleTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('bar', HTML_QuickForm2_Rule::mergeConfig('foo', 'bar'));
 
         HTML_QuickForm2_Factory::registerRule('no-config', 'HTML_QuickForm2_Rule_ImplConst');
-        HTML_QuickForm2_Factory::registerRule('with-config', 'HTML_QuickForm2_Rule_ImplConst',
-                                              null, 'bar');
+        HTML_QuickForm2_Factory::registerRule(
+            'with-config',
+            'HTML_QuickForm2_Rule_ImplConst',
+            null,
+            'bar'
+        );
         $el = new HTML_QuickForm2_Element_InputText();
         $this->assertEquals('foo', $el->createRule('no-config', '', 'foo')->getConfig());
         $this->assertEquals('bar', $el->createRule('with-config', '', 'foo')->getConfig());
@@ -197,10 +213,10 @@ class HTML_QuickForm2_RuleTest extends PHPUnit_Framework_TestCase
     public function testValidationTriggers()
     {
         $el = new HTML_QuickForm2_Element_InputText('foo', array('id' => 'foo'));
-        $rule = $this->getMock(
-            'HTML_QuickForm2_Rule', array('validateOwner', 'getJavascriptCallback'),
-            array($el)
-        );
+        $rule = $this->getMockBuilder('HTML_QuickForm2_Rule')
+        ->setMethods(array('validateOwner', 'getJavascriptCallback'))
+        ->setConstructorArgs(array($el))
+        ->getMock();
         $rule->expects($this->any())->method('getJavascriptCallback')
              ->will($this->returnValue('a callback'));
 
@@ -215,18 +231,21 @@ class HTML_QuickForm2_RuleTest extends PHPUnit_Framework_TestCase
         $bar = new HTML_QuickForm2_Element_InputText('bar', array('id' => 'bar'));
         $baz = new HTML_QuickForm2_Element_InputText('baz', array('id' => 'baz'));
 
-        $ruleFoo = $this->getMock(
-            'HTML_QuickForm2_Rule', array('validateOwner', 'getJavascriptCallback'),
-            array($foo)
-        );
-        $ruleBar = $this->getMock(
-            'HTML_QuickForm2_Rule', array('validateOwner', 'getJavascriptCallback'),
-            array($bar)
-        );
-        $ruleBaz = $this->getMock(
-            'HTML_QuickForm2_Rule', array('validateOwner', 'getJavascriptCallback'),
-            array($baz)
-        );
+        $ruleFoo = $this->getMockBuilder('HTML_QuickForm2_Rule')
+        ->setMethods(['validateOwner', 'getJavascriptCallback'])
+        ->setConstructorArgs(array($foo))
+        ->getMock();
+
+        $ruleBar = $this->getMockBuilder('HTML_QuickForm2_Rule')
+        ->setMethods(['validateOwner', 'getJavascriptCallback'])
+        ->setConstructorArgs(array($bar))
+        ->getMock();
+
+        $ruleBaz = $this->getMockBuilder('HTML_QuickForm2_Rule')
+        ->setMethods(['validateOwner', 'getJavascriptCallback'])
+        ->setConstructorArgs(array($baz))
+        ->getMock();
+
         $ruleFoo->expects($this->once())->method('getJavascriptCallback')
                 ->will($this->returnValue('a callback'));
         $ruleBar->expects($this->once())->method('getJavascriptCallback')
@@ -246,22 +265,18 @@ class HTML_QuickForm2_RuleTest extends PHPUnit_Framework_TestCase
         $hidden = new HTML_QuickForm2_Element_InputHidden('noError');
         $text   = new HTML_QuickForm2_Element_InputText('canHaveError');
 
-        try {
-            $rule = $this->getMock(
-                'HTML_QuickForm2_Rule', array('validateOwner'),
-                array($hidden, 'an error message')
-            );
-            $this->fail('Expected HTML_QuickForm2_InvalidArgumentException was not thrown');
-        } catch (HTML_QuickForm2_InvalidArgumentException $e) {}
+        $this->expectException('HTML_QuickForm2_Exception_InvalidArgument');
+        $rule = $this->getMockBuilder('HTML_QuickForm2_Rule')
+            ->setMethods(['validateOwner'])
+            ->setConstructorArgs(array($hidden, 'an error message'))
+            ->getMock();
 
-        try {
-            $rule = $this->getMock(
-                'HTML_QuickForm2_Rule', array('validateOwner'),
-                array($text, 'an error message')
-            );
-            $rule->setOwner($hidden);
-            $this->fail('Expected HTML_QuickForm2_InvalidArgumentException was not thrown');
-        } catch (HTML_QuickForm2_InvalidArgumentException $e) {}
+        $this->expectException('HTML_QuickForm2_Exception_InvalidArgument');
+        $rule = $this->getMockBuilder('HTML_QuickForm2_Rule')
+            ->setMethods(['validateOwner'])
+            ->setConstructorArgs(array($text, 'an error message'))
+            ->getMock();
+
+        $rule->setOwner($hidden);
     }
 }
-?>

@@ -54,13 +54,15 @@ if ('@' . 'package_version@' == '@package_version@') {
     }
 }
 
+require_once 'PEAR/Exception.php';
+require_once 'HTML/Common2.php';
 require_once 'HTML/QuickForm2/Loader.php';
 spl_autoload_register(array('HTML_QuickForm2_Loader', 'autoload'));
 
 if (strpos($_SERVER['argv'][0], 'phpunit') === false) {
     /** Include PHPUnit dependencies based on version */
     require_once 'PHPUnit/Runner/Version.php';
-    if (version_compare(PHPUnit_Runner_Version::id(), '3.5.0', '>=')) {
+    if (version_compare(PHPUnit\Runner\Version::id(), '3.5.0', '>=')) {
         require_once 'PHPUnit/Autoload.php';
     } else {
         require_once 'PHPUnit/Framework.php';

@@ -47,7 +47,7 @@ require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
 /**
  * Unit test for HTML_QuickForm2_Renderer_Callback class
  */
-class HTML_QuickForm2_Renderer_CallbackTest extends PHPUnit_Framework_TestCase
+class HTML_QuickForm2_Renderer_CallbackTest extends PHPUnit\Framework\TestCase
 {
     public static function _renderInputText($renderer, $element)
     {

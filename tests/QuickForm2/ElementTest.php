@@ -72,7 +72,7 @@ class HTML_QuickForm2_ElementImpl extends HTML_QuickForm2_Element
 /**
  * Unit test for HTML_QuickForm2_Element class,
  */
-class HTML_QuickForm2_ElementTest extends PHPUnit_Framework_TestCase
+class HTML_QuickForm2_ElementTest extends PHPUnit\Framework\TestCase
 {
     public function setUp()
     {
@@ -120,21 +120,18 @@ class HTML_QuickForm2_ElementTest extends PHPUnit_Framework_TestCase
     }
 
 
-    public function testCanNotRemoveNameOrId()
+    public function testCanNotRemoveName()
     {
         $obj = new HTML_QuickForm2_ElementImpl('somename', array(), array('id' => 'someid'));
-        try {
-            $obj->removeAttribute('name');
-        } catch (HTML_QuickForm2_InvalidArgumentException $e) {
-            $this->assertRegExp('/Required attribute(.*)can not be removed/', $e->getMessage());
-            try {
-                $obj->removeAttribute('id');
-            } catch (HTML_QuickForm2_InvalidArgumentException $e) {
-                $this->assertRegExp('/Required attribute(.*)can not be removed/', $e->getMessage());
-                return;
-            }
-        }
-        $this->fail('Expected HTML_QuickForm2_InvalidArgumentException was not thrown');
+        $this->expectException('HTML_QuickForm2_Exception_InvalidArgument');
+        $obj->removeAttribute('name');
+    }
+
+    public function testCanNotRemoveId()
+    {
+        $obj = new HTML_QuickForm2_ElementImpl('somename', array(), array('id' => 'someid'));
+        $this->expectException('HTML_QuickForm2_Exception_InvalidArgument');
+        $obj->removeAttribute('id');
     }
 
 

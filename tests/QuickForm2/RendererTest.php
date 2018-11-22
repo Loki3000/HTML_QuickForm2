@@ -101,7 +101,7 @@ class HTML_QuickForm2_FakeRenderer_AnotherHelloPlugin
 /**
  * Unit test for HTML_QuickForm2_Renderer class
  */
-class HTML_QuickForm2_RendererTest extends PHPUnit_Framework_TestCase
+class HTML_QuickForm2_RendererTest extends PHPUnit\Framework\TestCase
 {
     public function testRegisterRenderer()
     {
@@ -135,13 +135,8 @@ class HTML_QuickForm2_RendererTest extends PHPUnit_Framework_TestCase
         HTML_QuickForm2_Renderer::register($type, 'HTML_QuickForm2_FakeRenderer');
         HTML_QuickForm2_Renderer::registerPlugin($type, 'HTML_QuickForm2_FakeRenderer_HelloPlugin');
 
-        try {
-            HTML_QuickForm2_Renderer::registerPlugin($type, 'HTML_QuickForm2_FakeRenderer_HelloPlugin');
-        } catch (HTML_QuickForm2_InvalidArgumentException $e) {
-            $this->assertRegexp('/already registered/', $e->getMessage());
-            return;
-        }
-        $this->fail('Expected HTML_QuickForm2_InvalidArgumentException was not thrown');
+        $this->expectException('HTML_QuickForm2_Exception_InvalidArgument');
+        HTML_QuickForm2_Renderer::registerPlugin($type, 'HTML_QuickForm2_FakeRenderer_HelloPlugin');
     }
 
     public function testDuplicateMethodNamesDisallowed()
@@ -151,14 +146,9 @@ class HTML_QuickForm2_RendererTest extends PHPUnit_Framework_TestCase
         HTML_QuickForm2_Renderer::registerPlugin($type, 'HTML_QuickForm2_FakeRenderer_HelloPlugin');
         HTML_QuickForm2_Renderer::registerPlugin($type, 'HTML_QuickForm2_FakeRenderer_AnotherHelloPlugin');
 
-        try {
-            $renderer = HTML_Quickform2_Renderer::factory($type);
-            $renderer->sayHello();
-        } catch (HTML_QuickForm2_InvalidArgumentException $e) {
-            $this->assertRegexp('/^Duplicate method name/', $e->getMessage());
-            return;
-        }
-        $this->fail('Expected HTML_QuickForm2_InvalidArgumentException was not thrown');
+        $this->expectException('HTML_QuickForm2_Exception_InvalidArgument');
+        $renderer = HTML_Quickform2_Renderer::factory($type);
+        $renderer->sayHello();
     }
 }
 ?>

@@ -47,104 +47,116 @@ require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
 /**
  * Unit test for HTML_QuickForm2_Rule_MimeType class
  */
-class HTML_QuickForm2_Rule_MimeTypeTest extends PHPUnit_Framework_TestCase
+class HTML_QuickForm2_Rule_MimeTypeTest extends PHPUnit\Framework\TestCase
 {
     public function testMimeTypeIsRequired()
     {
         $file = new HTML_QuickForm2_Element_InputFile('foo');
-        try {
-            $mimeType = new HTML_QuickForm2_Rule_MimeType($file, 'an error');
-            $this->fail('The expected HTML_QuickForm2_InvalidArgumentException was not thrown');
-        } catch (HTML_QuickForm2_InvalidArgumentException $e) {
-            $this->assertRegexp('/MimeType Rule requires MIME type[(]s[)]/', $e->getMessage());
-        }
+        $this->expectException('HTML_QuickForm2_Exception_InvalidArgument');
+        $mimeType = new HTML_QuickForm2_Rule_MimeType($file, 'an error');
     }
 
     public function testCanOnlyValidateFileUploads()
     {
-        $mockEl  = $this->getMock('HTML_QuickForm2_Element', array('getType',
-                                  'getRawValue', 'setValue', '__toString'));
-        try {
-            $mimeType = new HTML_QuickForm2_Rule_MimeType($mockEl, 'an error', 'text/plain');
-            $this->fail('The expected HTML_QuickForm2_InvalidArgumentException was not thrown');
-        } catch (HTML_QuickForm2_InvalidArgumentException $e) {
-            $this->assertRegexp('/MimeType Rule can only validate file upload fields/', $e->getMessage());
-        }
+        $mockEl  = $this->getMockBuilder('HTML_QuickForm2_Element')
+        ->setMethods(array('getType','getRawValue', 'setValue', '__toString'))
+        ->getMock();
+        $this->expectException('HTML_QuickForm2_Exception_InvalidArgument');
+        $mimeType = new HTML_QuickForm2_Rule_MimeType($mockEl, 'an error', 'text/plain');
     }
 
     public function testMissingUploadsAreSkipped()
     {
-        $mockNoUpload = $this->getMock('HTML_QuickForm2_Element_InputFile', array('getValue'));
-        $mockNoUpload->expects($this->once())->method('getValue')
-                     ->will($this->returnValue(array(
-                        'name'     => '',
-                        'type'     => '',
-                        'tmp_name' => '',
-                        'error'    => UPLOAD_ERR_NO_FILE,
-                        'size'     => 0
-                     )));
+        $mockNoUpload = $this->getMockBuilder('HTML_QuickForm2_Element_InputFile')
+        ->setMethods(array('getValueArray'))
+        ->getMock();
+        $mockNoUpload->expects($this->once())->method('getValueArray')
+                     ->will($this->returnValue(array()));
         $mimeType = new HTML_QuickForm2_Rule_MimeType($mockNoUpload, 'an error', 'text/plain');
         $this->assertTrue($mimeType->validate());
     }
 
     public function testOptionsHandling()
     {
-        $mockFile = $this->getMock('HTML_QuickForm2_Element_InputFile', array('getValue'));
-        $mockFile->expects($this->exactly(2))->method('getValue')
-                 ->will($this->returnValue(array(
+        $mockFile = $this->getMockBuilder('HTML_QuickForm2_Element_InputFile')
+        ->setMethods(array('getValueArray'))
+        ->getMock();
+        $mockFile->expects($this->exactly(2))->method('getValueArray')
+                 ->will($this->returnValue(array(array(
                     'name'     => 'pr0n.jpg',
                     'type'     => 'image/jpeg',
                     'tmp_name' => '/tmp/foobar',
                     'error'    => UPLOAD_ERR_OK,
                     'size'     => 123456
-                 )));
+                 ))));
         $typeText = new HTML_QuickForm2_Rule_MimeType($mockFile, 'need text', 'text/plain');
         $this->assertFalse($typeText->validate());
 
-        $typeImage = new HTML_QuickForm2_Rule_MimeType($mockFile, 'need image',
-                                                       array('image/gif', 'image/jpeg'));
+        $typeImage = new HTML_QuickForm2_Rule_MimeType(
+            $mockFile,
+            'need image',
+            array('image/gif', 'image/jpeg')
+        );
         $this->assertTrue($typeImage->validate());
     }
 
     public function testConfigHandling()
     {
-        $mockFile = $this->getMock('HTML_QuickForm2_Element_InputFile', array('getValue'));
-        $mockFile->expects($this->exactly(2))->method('getValue')
-                 ->will($this->returnValue(array(
+        $mockFile = $this->getMockBuilder('HTML_QuickForm2_Element_InputFile')
+        ->setMethods(array('getValueArray'))
+        ->getMock();
+        $mockFile->expects($this->exactly(2))->method('getValueArray')
+                 ->will($this->returnValue(array(array(
                     'name'     => 'pr0n.jpg',
                     'type'     => 'image/jpeg',
                     'tmp_name' => '/tmp/foobar',
                     'error'    => UPLOAD_ERR_OK,
                     'size'     => 123456
-                 )));
+                 ))));
 
-        HTML_QuickForm2_Factory::registerRule('type-text', 'HTML_QuickForm2_Rule_MimeType',
-                                              null, 'text/plain');
+        HTML_QuickForm2_Factory::registerRule(
+            'type-text',
+            'HTML_QuickForm2_Rule_MimeType',
+                                              null,
+            'text/plain'
+        );
         $typeText = $mockFile->addRule('type-text', 'need text');
         $this->assertFalse($typeText->validate());
 
-        HTML_QuickForm2_Factory::registerRule('type-image', 'HTML_QuickForm2_Rule_MimeType',
-                                              null, array('image/gif', 'image/jpeg'));
+        HTML_QuickForm2_Factory::registerRule(
+            'type-image',
+            'HTML_QuickForm2_Rule_MimeType',
+                                              null,
+            array('image/gif', 'image/jpeg')
+        );
         $typeImage = $mockFile->addRule('type-image', 'need image');
         $this->assertTrue($typeImage->validate());
     }
 
     public function testConfigOverridesOptions()
     {
-        $mockFile = $this->getMock('HTML_QuickForm2_Element_InputFile', array('getValue'));
-        $mockFile->expects($this->once())->method('getValue')
-                 ->will($this->returnValue(array(
+        $mockFile = $this->getMockBuilder('HTML_QuickForm2_Element_InputFile')
+        ->setMethods(array('getValueArray'))
+        ->getMock();
+        $mockFile->expects($this->once())->method('getValueArray')
+                 ->will($this->returnValue(array(array(
                     'name'     => 'pr0n.jpg',
                     'type'     => 'image/jpeg',
                     'tmp_name' => '/tmp/foobar',
                     'error'    => UPLOAD_ERR_OK,
                     'size'     => 123456
-                 )));
-        HTML_QuickForm2_Factory::registerRule('type-override-text', 'HTML_QuickForm2_Rule_MimeType',
-                                              null, 'text/plain');
-        $mimeType = $mockFile->addRule('type-override-text', 'need image',
-                                       array('image/gif', 'image/jpeg'));
+                 ))));
+        HTML_QuickForm2_Factory::registerRule(
+            'type-override-text',
+            'HTML_QuickForm2_Rule_MimeType',
+                                              null,
+            'text/plain'
+        );
+        $mimeType = $mockFile->addRule(
+            'type-override-text',
+            'need image',
+                                       array('image/gif', 'image/jpeg')
+        );
         $this->assertFalse($mimeType->validate());
     }
 }
-?>

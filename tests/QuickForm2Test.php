@@ -61,7 +61,7 @@ class FormRule extends HTML_QuickForm2_Rule
 /**
  * Unit test for HTML_QuickForm2 class
  */
-class HTML_QuickForm2Test extends PHPUnit_Framework_TestCase
+class HTML_QuickForm2Test extends PHPUnit\Framework\TestCase
 {
     public function setUp()
     {
@@ -116,24 +116,26 @@ class HTML_QuickForm2Test extends PHPUnit_Framework_TestCase
         $this->assertEquals('/foobar.php', $form2->getAttribute('action'));
     }
 
-    public function testIdAndMethodAreReadonly()
+    public function testIdIsNotremovable()
     {
         $form = new HTML_QuickForm2('foo', 'get');
 
-        try {
-            $form->removeAttribute('id');
-        } catch (HTML_QuickForm2_InvalidArgumentException $e) {
-            try {
-                $form->setAttribute('method', 'post');
-            } catch (HTML_QuickForm2_InvalidArgumentException $e) {
-                try {
-                    $form->setId('newId');
-                } catch (HTML_QuickForm2_InvalidArgumentException $e) {
-                    return;
-                }
-            }
-        }
-        $this->fail('Expected HTML_QuickForm2_InvalidArgumentException was not thrown');
+        $this->expectException('HTML_QuickForm2_Exception_InvalidArgument');
+        $form->removeAttribute('id');
+    }
+    public function testMethodIsReadonly()
+    {
+        $form = new HTML_QuickForm2('foo', 'get');
+
+        $this->expectException('HTML_QuickForm2_Exception_InvalidArgument');
+        $form->setAttribute('method', 'post');
+    }
+    public function testIdIsReadonly()
+    {
+        $form = new HTML_QuickForm2('foo', 'get');
+
+        $this->expectException('HTML_QuickForm2_Exception_InvalidArgument');
+        $form->setId('newId');
     }
 
     public function testCannotAddToContainer()
@@ -141,12 +143,8 @@ class HTML_QuickForm2Test extends PHPUnit_Framework_TestCase
         $form1 = new HTML_QuickForm2('form1');
         $form2 = new HTML_QuickForm2('form2');
 
-        try {
-            $form1->appendChild($form2);
-        } catch (HTML_QuickForm2_Exception $e) {
-            return;
-        }
-        $this->fail('Expected HTML_QuickForm2_Exception was not thrown');
+        $this->expectException('HTML_QuickForm2_Exception');
+        $form1->appendChild($form2);
     }
 
     public function testSetDataSources()
@@ -162,12 +160,8 @@ class HTML_QuickForm2Test extends PHPUnit_Framework_TestCase
         $form->setDataSources(array($ds1, $ds2));
         $this->assertEquals(2, count($form->getDataSources()));
 
-        try {
-            $form->setDataSources(array($ds1, 'bogus', $ds2));
-        } catch (HTML_QuickForm2_InvalidArgumentException $e) {
-            return;
-        }
-        $this->fail('Expected HTML_QuickForm2_InvalidArgumentException was not thrown');
+        $this->expectException('HTML_QuickForm2_Exception_InvalidArgument');
+        $form->setDataSources(array($ds1, 'bogus', $ds2));
     }
 
     public function testValidateChecksWhetherFormIsSubmitted()

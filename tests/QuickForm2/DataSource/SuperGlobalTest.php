@@ -47,7 +47,7 @@ require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
 /**
  * Unit test for superglobal-based data source
  */
-class HTML_QuickForm2_DataSource_SuperGlobalTest extends PHPUnit_Framework_TestCase
+class HTML_QuickForm2_DataSource_SuperGlobalTest extends PHPUnit\Framework\TestCase
 {
     public function setUp()
     {
@@ -105,6 +105,23 @@ class HTML_QuickForm2_DataSource_SuperGlobalTest extends PHPUnit_Framework_TestC
                                 'two' => array('three' => UPLOAD_ERR_OK),
                                 'escape' => array('o\'really' => UPLOAD_ERR_OK)
                                )
+            ),
+            'multi' => array(
+                'name' => array(
+                    0       => 'file.doc'
+                ),
+                'tmp_name' => array(
+                    0       => '/tmp/nothing'
+                ),
+                'type' => array(
+                    0       => 'text/plain'
+                ),
+                'size' => array(
+                    0       => 1234
+                ),
+                'error' => array(
+                    0       => UPLOAD_ERR_OK
+                ),
             )
         );
     }
@@ -167,6 +184,14 @@ class HTML_QuickForm2_DataSource_SuperGlobalTest extends PHPUnit_Framework_TestC
             'size'      => 65536,
             'error'     => UPLOAD_ERR_OK
         ), $ds1->getUpload('baz[two][three]'));
+
+        $this->assertEquals(array(array(
+            'name'      => 'file.doc',
+            'tmp_name'  => '/tmp/nothing',
+            'type'      => 'text/plain',
+            'size'      => 1234,
+            'error'     => UPLOAD_ERR_OK
+        )), $ds1->getUpload('multi[]'));
 
         $ds2 = new HTML_QuickForm2_DataSource_SuperGlobal('POST', true);
         $this->assertEquals(array(

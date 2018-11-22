@@ -54,8 +54,14 @@ class HTML_QuickForm2_ElementImpl2 extends HTML_QuickForm2_Element
 {
     protected $value;
 
-    public function getType() { return 'concrete'; }
-    public function __toString() { return ''; }
+    public function getType()
+    {
+        return 'concrete';
+    }
+    public function __toString()
+    {
+        return '';
+    }
 
     public function getRawValue()
     {
@@ -76,11 +82,23 @@ class HTML_QuickForm2_ElementImpl2 extends HTML_QuickForm2_Element
  */
 class HTML_QuickForm2_ContainerImpl extends HTML_QuickForm2_Container
 {
-    public function getType() { return 'concrete'; }
-    public function setValue($value) { return ''; }
-    public function __toString() { return ''; }
+    public function getType()
+    {
+        return 'concrete';
+    }
+    public function setValue($value)
+    {
+        return '';
+    }
+    public function __toString()
+    {
+        return '';
+    }
 
-    public function validate() { return parent::validate(); }
+    public function validate()
+    {
+        return parent::validate();
+    }
 }
 
 /**
@@ -104,7 +122,7 @@ class RuleRequest17576 extends HTML_QuickForm2_Rule
 /**
  * Unit test for HTML_QuickForm2_Container class
  */
-class HTML_QuickForm2_ContainerTest extends PHPUnit_Framework_TestCase
+class HTML_QuickForm2_ContainerTest extends PHPUnit\Framework\TestCase
 {
     public function testCanSetName()
     {
@@ -119,7 +137,6 @@ class HTML_QuickForm2_ContainerTest extends PHPUnit_Framework_TestCase
 
         $obj->setAttribute('name', 'baz');
         $this->assertEquals('baz', $obj->getName());
-
     }
 
 
@@ -149,18 +166,12 @@ class HTML_QuickForm2_ContainerTest extends PHPUnit_Framework_TestCase
     public function testCanNotRemoveNameOrId()
     {
         $obj = new HTML_QuickForm2_ContainerImpl('somename', array(), array('id' => 'someid'));
-        try {
-            $obj->removeAttribute('name');
-        } catch (HTML_QuickForm2_InvalidArgumentException $e) {
-            $this->assertRegExp('/Required attribute(.*)can not be removed/', $e->getMessage());
-            try {
-                $obj->removeAttribute('id');
-            } catch (HTML_QuickForm2_InvalidArgumentException $e) {
-                $this->assertRegExp('/Required attribute(.*)can not be removed/', $e->getMessage());
-                return;
-            }
-        }
-        $this->fail('Expected HTML_QuickForm2_InvalidArgumentException was not thrown');
+        $this->expectException('HTML_QuickForm2_Exception_InvalidArgument');
+        $obj->removeAttribute('name');
+
+        $obj = new HTML_QuickForm2_ContainerImpl('somename', array(), array('id' => 'someid'));
+        $this->expectException('HTML_QuickForm2_Exception_InvalidArgument');
+        $obj->removeAttribute('id');
     }
 
 
@@ -205,20 +216,14 @@ class HTML_QuickForm2_ContainerTest extends PHPUnit_Framework_TestCase
         $c1 = new HTML_QuickForm2_ContainerImpl('f1');
         $c1->appendChild($e1);
         $c1->appendChild($e2);
-        try {
-            $c1->appendChild($c1);
-        } catch (HTML_QuickForm2_InvalidArgumentException $e) {
-            $this->assertEquals('Cannot set an element or its child as its own container', $e->getMessage());
-            $c2 = new HTML_QuickForm2_ContainerImpl('f2');
-            $c2->appendChild($c1);
-            try {
-                $c1->appendChild($c2);
-            } catch (HTML_QuickForm2_InvalidArgumentException $e) {
-                $this->assertEquals('Cannot set an element or its child as its own container', $e->getMessage());
-                return;
-            }
-        }
-        $this->fail('Expected HTML_QuickForm2_InvalidArgumentException was not thrown');
+
+        $this->expectException('HTML_QuickForm2_Exception_InvalidArgument');
+        $c1->appendChild($c1);
+
+        $c2 = new HTML_QuickForm2_ContainerImpl('f2');
+        $this->expectException('HTML_QuickForm2_Exception_InvalidArgument');
+        $c2->appendChild($c1);
+        $c1->appendChild($c2);
     }
 
 
@@ -279,18 +284,10 @@ class HTML_QuickForm2_ContainerTest extends PHPUnit_Framework_TestCase
         $c1->appendChild($c2);
         $c2->appendChild($e1);
 
-        try {
-            $c1->removeChild($e1);
-        } catch (HTML_QuickForm2_NotFoundException $e) {
-            $this->assertRegExp('/Element(.*)was not found/', $e->getMessage());
-            try {
-                $c1->removeChild($e2);
-            } catch (HTML_QuickForm2_NotFoundException $e) {
-                $this->assertRegExp('/Element(.*)was not found/', $e->getMessage());
-                return;
-            }
-        }
-        $this->fail('Expected HTML_QuickForm2_NotFoundException was not thrown');
+        $this->expectException('HTML_QuickForm2_Exception_NotFound');
+        $c1->removeChild($e1);
+        $this->expectException('HTML_QuickForm2_Exception_NotFound');
+        $c1->removeChild($e2);
     }
 
     public function testInsertBefore()
@@ -331,18 +328,10 @@ class HTML_QuickForm2_ContainerTest extends PHPUnit_Framework_TestCase
         $c1->appendChild($e1);
         $c2 = new HTML_QuickForm2_ContainerImpl('n2');
         $c2->appendChild($c1);
-        try {
-            $c1->insertBefore($e2, $e3);
-        } catch (HTML_QuickForm2_NotFoundException $e) {
-            $this->assertEquals("Reference element with name '".$e3->getName()."' was not found", $e->getMessage());
-            try {
-                $c2->insertBefore($e2, $e1);
-            } catch (HTML_QuickForm2_NotFoundException $e) {
-                $this->assertEquals("Reference element with name '".$e1->getName()."' was not found", $e->getMessage());
-                return;
-            }
-        }
-        $this->fail('Expected HTML_QuickForm2_NotFoundException was not thrown');
+        $this->expectException('HTML_QuickForm2_Exception_NotFound');
+        $c1->insertBefore($e2, $e3);
+        $this->expectException('HTML_QuickForm2_Exception_NotFound');
+        $c2->insertBefore($e2, $e1);
     }
 
     public function testGetElementsByName()
@@ -475,22 +464,25 @@ class HTML_QuickForm2_ContainerTest extends PHPUnit_Framework_TestCase
         $el1 = $cValidate->appendChild(new HTML_QuickForm2_ElementImpl2('foo'));
         $el2 = $cValidate->appendChild(new HTML_QuickForm2_ElementImpl2('bar'));
 
-        $ruleTrue1 = $this->getMock(
-            'HTML_QuickForm2_Rule', array('validateOwner'),
-            array($cValidate, 'irrelevant message')
-        );
+        $ruleTrue1 = $this->getMockBuilder('HTML_QuickForm2_Rule')
+        ->setMethods(array('validateOwner'))
+        ->setConstructorArgs(array($cValidate, 'irrelevant message'))
+        ->getMock();
+            
         $ruleTrue1->expects($this->once())->method('validateOwner')
                   ->will($this->returnValue(true));
-        $ruleFalse = $this->getMock(
-            'HTML_QuickForm2_Rule', array('validateOwner'),
-            array($el1, 'some error')
-        );
+        $ruleFalse = $this->getMockBuilder('HTML_QuickForm2_Rule')
+        ->setMethods(array('validateOwner'))
+        ->setConstructorArgs(array($el1, 'some error'))
+        ->getMock();
+            
         $ruleFalse->expects($this->once())->method('validateOwner')
                   ->will($this->returnValue(false));
-        $ruleTrue2 = $this->getMock(
-            'HTML_QuickForm2_Rule', array('validateOwner'),
-            array($el2, 'irrelevant message')
-        );
+        $ruleTrue2 = $this->getMockBuilder('HTML_QuickForm2_Rule')
+        ->setMethods(array('validateOwner'))
+        ->setConstructorArgs(array($el2, 'irrelevant message'))
+        ->getMock();
+            
         $ruleTrue2->expects($this->once())->method('validateOwner')
                   ->will($this->returnValue(true));
 
@@ -501,26 +493,28 @@ class HTML_QuickForm2_ContainerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('', $cValidate->getError());
     }
 
-   /**
-    * Container rules should be called after element rules
-    *
-    * @link http://pear.php.net/bugs/17576
-    */
+    /**
+     * Container rules should be called after element rules
+     *
+     * @link http://pear.php.net/bugs/17576
+     */
     public function testRequest17576()
     {
         $container = new HTML_QuickForm2_ContainerImpl('last');
         $element   = $container->appendChild(new HTML_QuickForm2_ElementImpl2('foo'));
 
-        $ruleChange = $this->getMock(
-            'HTML_QuickForm2_Rule', array('validateOwner'),
-            array($element, 'a message')
-        );
+        $ruleChange = $this->getMockBuilder('HTML_QuickForm2_Rule')
+        ->setMethods(array('validateOwner'))
+        ->setConstructorArgs(array($element, 'a message'))
+        ->getMock();
+            
         $ruleChange->expects($this->exactly(2))->method('validateOwner')
                    ->will($this->onConsecutiveCalls(true, false));
         $element->addRule($ruleChange);
 
         $container->addRule(new RuleRequest17576(
-            $container, 'a contained element is invalid'
+            $container,
+            'a contained element is invalid'
         ));
 
         // first call
@@ -530,24 +524,26 @@ class HTML_QuickForm2_ContainerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('a contained element is invalid', $container->getError());
     }
 
-   /**
-    * Checks that JS for container rules comes after js for rules on contained elements
-    */
+    /**
+     * Checks that JS for container rules comes after js for rules on contained elements
+     */
     public function testRequest17576Client()
     {
         $container = new HTML_QuickForm2_ContainerImpl('aContainer');
         $element   = $container->appendChild(new HTML_QuickForm2_ElementImpl2('anElement'));
 
-        $ruleContainer = $this->getMock(
-            'HTML_QuickForm2_Rule', array('validateOwner', 'getJavascriptCallback'),
-            array($container)
-        );
+        $ruleContainer = $this->getMockBuilder('HTML_QuickForm2_Rule')
+        ->setMethods(array('validateOwner', 'getJavascriptCallback'))
+        ->setConstructorArgs(array($container))
+        ->getMock();
+            
         $ruleContainer->expects($this->once())->method('getJavascriptCallback')
                       ->will($this->returnValue('containerCallback'));
-        $ruleElement = $this->getMock(
-            'HTML_QuickForm2_Rule', array('validateOwner', 'getJavascriptCallback'),
-            array($element)
-        );
+        $ruleElement = $this->getMockBuilder('HTML_QuickForm2_Rule')
+        ->setMethods(array('validateOwner', 'getJavascriptCallback'))
+        ->setConstructorArgs(array($element))
+        ->getMock();
+            
         $ruleElement->expects($this->once())->method('getJavascriptCallback')
                     ->will($this->returnValue('elementCallback'));
 
@@ -563,10 +559,11 @@ class HTML_QuickForm2_ContainerTest extends PHPUnit_Framework_TestCase
     public function testFrozenContainersHaveNoClientValidation()
     {
         $container = new HTML_QuickForm2_ContainerImpl('aContainer');
-        $ruleContainer = $this->getMock(
-            'HTML_QuickForm2_Rule', array('validateOwner', 'getJavascriptCallback'),
-            array($container)
-        );
+        $ruleContainer = $this->getMockBuilder('HTML_QuickForm2_Rule')
+        ->setMethods(array('validateOwner', 'getJavascriptCallback'))
+        ->setConstructorArgs(array($container))
+        ->getMock();
+            
         $ruleContainer->expects($this->never())->method('getJavascriptCallback');
 
         $container->addRule($ruleContainer, HTML_QuickForm2_Rule::CLIENT);
@@ -589,4 +586,3 @@ class HTML_QuickForm2_ContainerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(array('foo' => array('first', 'second')), $c->getValue());
     }
 }
-?>

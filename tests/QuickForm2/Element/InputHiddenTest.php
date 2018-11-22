@@ -47,7 +47,7 @@ require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
 /**
  * Unit test for HTML_QuickForm2_Element_InputHidden class
  */
-class HTML_QuickForm2_Element_InputHiddenTest extends PHPUnit_Framework_TestCase
+class HTML_QuickForm2_Element_InputHiddenTest extends PHPUnit\Framework\TestCase
 {
     public function testCannotBeFrozen()
     {
@@ -57,7 +57,7 @@ class HTML_QuickForm2_Element_InputHiddenTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException HTML_QuickForm2_InvalidArgumentException
+     * @expectedException HTML_QuickForm2_Exception_InvalidArgument
      */
     public function testCannotSetError()
     {

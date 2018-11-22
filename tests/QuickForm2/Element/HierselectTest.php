@@ -47,7 +47,7 @@ require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
 /**
  * Unit test for HTML_QuickForm2_Element_Hierselect class
  */
-class HTML_QuickForm2_Element_HierselectTest extends PHPUnit_Framework_TestCase
+class HTML_QuickForm2_Element_HierselectTest extends PHPUnit\Framework\TestCase
 {
     private $_primary   = array(1 => 'one', 2 => 'two');
     private $_secondary = array(

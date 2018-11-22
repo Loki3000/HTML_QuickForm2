@@ -47,10 +47,22 @@ require_once dirname(dirname(__FILE__)) . '/TestHelper.php';
 
 class HTML_QuickForm2_ContainerFilterImpl extends HTML_QuickForm2_Container
 {
-    public function getType() { return 'concrete'; }
-    public function setValue($value) { return ''; }
-    public function __toString() { return ''; }
-    public function validate() { return parent::validate(); }
+    public function getType()
+    {
+        return 'concrete';
+    }
+    public function setValue($value)
+    {
+        return '';
+    }
+    public function __toString()
+    {
+        return '';
+    }
+    public function validate()
+    {
+        return parent::validate();
+    }
 }
 
 /**
@@ -65,7 +77,7 @@ function repeatFilter($value)
 /**
  * Unit test for HTML_QuickForm2_Rule class
  */
-class HTML_QuickForm2_FilterTest extends PHPUnit_Framework_TestCase
+class HTML_QuickForm2_FilterTest extends PHPUnit\Framework\TestCase
 {
     public function setUp()
     {
@@ -80,16 +92,19 @@ class HTML_QuickForm2_FilterTest extends PHPUnit_Framework_TestCase
 
     public function testFiltersShouldPreserveNulls()
     {
-        $mockElement = $this->getMock('HTML_QuickForm2_Element', array('getType',
-                                      'getRawValue', 'setValue', '__toString'));
+        $mockElement = $this->getMockBuilder('HTML_QuickForm2_Element')
+        ->setMethods(array('getType','getRawValue', 'setValue', '__toString'))
+        ->getMock();
+        
         $mockElement->expects($this->atLeastOnce())
                     ->method('getRawValue')->will($this->returnValue(null));
         $mockElement->addFilter('trim');
         $this->assertNull($mockElement->getValue());
 
-        $mockContainer = $this->getMock(
-            'HTML_QuickForm2_Container', array('getType', 'setValue', '__toString')
-        );
+        $mockContainer = $this->getMockBuilder('HTML_QuickForm2_Container')
+        ->setMethods(array('getType', 'setValue', '__toString'))
+        ->getMock();
+            
         $mockContainer->appendChild($mockElement);
         $mockContainer->addRecursiveFilter('intval');
         $mockContainer->addFilter('count');
@@ -111,7 +126,8 @@ class HTML_QuickForm2_FilterTest extends PHPUnit_Framework_TestCase
     {
         $form = new HTML_QuickForm2('filters', 'post', null, false);
         $select = $form->addSelect('sel')->loadOptions(
-            array('VALUE1' => 'VALUE1', 'VALUE2' => 'VALUE2', 'VALUE3' => 'VALUE3'));
+            array('VALUE1' => 'VALUE1', 'VALUE2' => 'VALUE2', 'VALUE3' => 'VALUE3')
+        );
         $select->addFilter('strtolower');
         $this->assertEquals('value2', $select->getValue());
     }
@@ -120,15 +136,19 @@ class HTML_QuickForm2_FilterTest extends PHPUnit_Framework_TestCase
     {
         $form = new HTML_QuickForm2('filters', 'post', null, false);
         $select = $form->addSelect('baz', array('multiple' => 'multiple'))->loadOptions(
-            array('VALUE1' => 'VALUE1', 'VALUE2' => 'VALUE2', 'VALUE3' => 'VALUE3'));
+            array('VALUE1' => 'VALUE1', 'VALUE2' => 'VALUE2', 'VALUE3' => 'VALUE3')
+        );
         $select->addRecursiveFilter('strtolower');
         $this->assertEquals(array('value1', 'value2'), $select->getValue());
     }
 
     public function testSelectMultipleNonRecursive()
     {
-        $s = new HTML_QuickForm2_Element_Select('foo', array('multiple' => 'multiple'),
-                                                array('intrinsic_validation' => false));
+        $s = new HTML_QuickForm2_Element_Select(
+            'foo',
+            array('multiple' => 'multiple'),
+                                                array('intrinsic_validation' => false)
+        );
         $s->setValue(array('foo', 'bar'));
         $s->addFilter('count');
 
@@ -139,7 +159,8 @@ class HTML_QuickForm2_FilterTest extends PHPUnit_Framework_TestCase
     {
         $form = new HTML_QuickForm2('filters', 'post', null, false);
         $check = $form->appendChild(
-            new HTML_QuickForm2_Element_InputCheckable('bar'));
+            new HTML_QuickForm2_Element_InputCheckable('bar')
+        );
         $check->setAttribute('value', 'VALUE');
         $check->addFilter('strtolower');
         $this->assertEquals('value', $check->getValue());
@@ -204,19 +225,19 @@ class HTML_QuickForm2_FilterTest extends PHPUnit_Framework_TestCase
         $c1->addRecursiveFilter('strtolower');
 
         $this->assertEquals('aa', $el1->getValue());
-        $this->assertEquals('b',  $el2->getValue());
-        $this->assertEquals('c',  $el3->getValue());
+        $this->assertEquals('b', $el2->getValue());
+        $this->assertEquals('c', $el3->getValue());
 
         $c1->addRecursiveFilter('trim');
         $c1->addRecursiveFilter('repeatFilter');
 
         $this->assertEquals('aaa', $el1->getValue());
-        $this->assertEquals('bb',  $el2->getValue());
-        $this->assertEquals('cc',  $el3->getValue());
+        $this->assertEquals('bb', $el2->getValue());
+        $this->assertEquals('cc', $el3->getValue());
         // Second run, just to make sure...
         $this->assertEquals('aaa', $el1->getValue());
-        $this->assertEquals('bb',  $el2->getValue());
-        $this->assertEquals('cc',  $el3->getValue());
+        $this->assertEquals('bb', $el2->getValue());
+        $this->assertEquals('cc', $el3->getValue());
     }
 
     public function testGroup()
@@ -265,4 +286,3 @@ class HTML_QuickForm2_FilterTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('foo', $el1->getValue());
     }
 }
-?>

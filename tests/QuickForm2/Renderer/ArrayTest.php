@@ -47,7 +47,7 @@ require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
 /**
  * Unit test for HTML_QuickForm2_Renderer_Array class
  */
-class HTML_QuickForm2_Renderer_ArrayTest extends PHPUnit_Framework_TestCase
+class HTML_QuickForm2_Renderer_ArrayTest extends PHPUnit\Framework\TestCase
 {
     private function _assertHasKeys($array, $keys)
     {
