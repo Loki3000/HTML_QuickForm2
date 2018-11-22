@@ -7,3 +7,5 @@ vendor
 js/build.properties
 js/build/
 js/docs/
+
+.vscode
