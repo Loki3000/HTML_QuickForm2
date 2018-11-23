@@ -154,7 +154,9 @@ class HTML_QuickForm2_Element_InputFileTest extends PHPUnit\Framework\TestCase
     {
         $form   = new HTML_QuickForm2('upload', 'post', null, false);
         $upload = $form->addFile('local', array(), array(
-            'messageProvider' => create_function('$messageId, $langId', 'return "A nasty error happened!";')
+            'messageProvider' => function ($messageId, $langId) {
+                return "A nasty error happened!";
+            }
         ));
         $this->assertFalse($form->validate());
         $this->assertEquals('A nasty error happened!', $upload->getError());
