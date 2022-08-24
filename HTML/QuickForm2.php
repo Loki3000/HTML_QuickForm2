@@ -105,7 +105,7 @@ class HTML_QuickForm2 extends HTML_QuickForm2_Container
                               'post' == $method && (!empty($_POST) || !empty($_FILES)))
         ) {
             $this->addDataSource(new HTML_QuickForm2_DataSource_SuperGlobal(
-                $method, get_magic_quotes_gpc()
+                $method, (function_exists('get_magic_quotes_gpc')?get_magic_quotes_gpc():false)
             ));
         }
         if ($trackSubmit) {

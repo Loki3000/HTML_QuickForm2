@@ -1,6 +1,5 @@
 {
-    "authors": [
-        {
+    "authors": [{
             "email": "avb@php.net",
             "name": "Alexey Borzov",
             "role": "Lead"
@@ -15,6 +14,9 @@
         "psr-0": {
             "HTML": "./"
         }
+    },
+    "autoload-dev": {
+        "psr-0": { "HTML": "./tests" }
     },
     "description": "Provides methods to create, validate and render HTML forms in PHP.",
     "include-path": [
