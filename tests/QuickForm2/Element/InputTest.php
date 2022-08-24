@@ -97,7 +97,7 @@ class HTML_QuickForm2_Element_InputTest extends PHPUnit\Framework\TestCase
     public function testHtmlGeneration()
     {
         $obj = new HTML_QuickForm2_Element_InputImpl();
-        $this->assertRegExp('!<input[^>]*type="concrete"[^>]*/>!', $obj->__toString());
+        $this->assertMatchesRegularExpression('!<input[^>]*type="concrete"[^>]*/>!', $obj->__toString());
     }
 
     public function testFrozenHtmlGeneration()
@@ -107,15 +107,15 @@ class HTML_QuickForm2_Element_InputTest extends PHPUnit\Framework\TestCase
         $obj->toggleFrozen(true);
 
         $obj->persistentFreeze(false);
-        $this->assertNotRegExp('/[<>]/', $obj->__toString());
-        $this->assertRegExp('/bar/', $obj->__toString());
+        $this->assertDoesNotMatchRegularExpression('/[<>]/', $obj->__toString());
+        $this->assertMatchesRegularExpression('/bar/', $obj->__toString());
 
         $obj->persistentFreeze(true);
-        $this->assertRegExp('!<input[^>]*type="hidden"[^>]*/>!', $obj->__toString());
+        $this->assertMatchesRegularExpression('!<input[^>]*type="hidden"[^>]*/>!', $obj->__toString());
 
         $obj->setAttribute('disabled');
-        $this->assertRegExp('/bar/', $obj->__toString());
-        $this->assertNotRegExp('!<input[^>]*type="hidden"[^>]*/>!', $obj->__toString());
+        $this->assertMatchesRegularExpression('/bar/', $obj->__toString());
+        $this->assertDoesNotMatchRegularExpression('!<input[^>]*type="hidden"[^>]*/>!', $obj->__toString());
     }
 }
 ?>

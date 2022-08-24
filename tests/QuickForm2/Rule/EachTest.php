@@ -188,7 +188,7 @@ class HTML_QuickForm2_Rule_EachTest extends PHPUnit\Framework\TestCase
              ->will($this->returnValue('staticCallback'));
 
         $each = new HTML_QuickForm2_Rule_Each($mockContainer, 'an error', $rule);
-        $this->assertNotContains('staticCallback', $each->getJavascript());
+        $this->assertStringNotContainsString('staticCallback', $each->getJavascript());
     }
 
     public function testValidationTriggers()
@@ -206,7 +206,7 @@ class HTML_QuickForm2_Rule_EachTest extends PHPUnit\Framework\TestCase
         $rule->expects($this->any())->method('getJavascriptCallback')
              ->will($this->returnValue('a callback'));
         $each = new HTML_QuickForm2_Rule_Each($mockContainer, 'an error', $rule);
-        $this->assertContains('["foo","bar"]', $each->getJavascript());
+        $this->assertStringContainsString('["foo","bar"]', $each->getJavascript());
     }
 }
 ?>

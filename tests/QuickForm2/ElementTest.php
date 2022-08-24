@@ -74,7 +74,7 @@ class HTML_QuickForm2_ElementImpl extends HTML_QuickForm2_Element
  */
 class HTML_QuickForm2_ElementTest extends PHPUnit\Framework\TestCase
 {
-    public function setUp()
+    public function setUp() : void
     {
         $_REQUEST = array(
             '_qf__form1' => ''
@@ -86,7 +86,7 @@ class HTML_QuickForm2_ElementTest extends PHPUnit\Framework\TestCase
         );
     }
 
-    public function tearDown()
+    public function tearDown() : void
     {
         HTML_Common2::setOption('id_force_append_index', true);
     }
@@ -247,7 +247,7 @@ class HTML_QuickForm2_ElementTest extends PHPUnit\Framework\TestCase
     public function testGeneratedIdsShouldNotStartWithNumbers()
     {
         $el = new HTML_QuickForm2_ElementImpl('0');
-        $this->assertNotRegExp('/^\d/', $el->getId());
+        $this->assertDoesNotMatchRegularExpression('/^\d/', $el->getId());
     }
 
     /**

@@ -105,7 +105,7 @@ class HTML_QuickForm2_Controller_PageTest extends PHPUnit\Framework\TestCase
 
         ob_start();
         $mockPage->handle('display');
-        $this->assertContains($mockPage->getForm()->__toString(), ob_get_contents());
+        $this->assertStringContainsString($mockPage->getForm()->__toString(), ob_get_contents());
         ob_end_clean();
     }
 
@@ -125,7 +125,7 @@ class HTML_QuickForm2_Controller_PageTest extends PHPUnit\Framework\TestCase
 
         $mockPage->setDefaultAction('bar');
         $this->assertEquals($mockPage->getButtonName('bar'), $default->getName());
-        $this->assertContains('base64', $default->getAttribute('src'));
+        $this->assertStringContainsString('base64', $default->getAttribute('src'));
     }
 
     public function testDefaultActionIsFirstElement()

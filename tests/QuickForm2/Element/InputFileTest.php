@@ -49,7 +49,7 @@ require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
  */
 class HTML_QuickForm2_Element_InputFileTest extends PHPUnit\Framework\TestCase
 {
-    public function setUp()
+    public function setUp() : void
     {
         $_FILES = array(
             'foo' => array(
@@ -136,11 +136,11 @@ class HTML_QuickForm2_Element_InputFileTest extends PHPUnit\Framework\TestCase
 
         $toobig = $form->appendChild(new HTML_QuickForm2_Element_InputFile('toobig'));
         $this->assertFalse($form->validate());
-        $this->assertContains('987654', $toobig->getError());
+        $this->assertStringContainsString('987654', $toobig->getError());
 
         $toobig2 = $form->appendChild(new HTML_QuickForm2_Element_InputFile('multi[]'));
         $this->assertFalse($form->validate());
-        $this->assertContains('987654', $toobig2->getError());
+        $this->assertStringContainsString('987654', $toobig2->getError());
 
     }
 

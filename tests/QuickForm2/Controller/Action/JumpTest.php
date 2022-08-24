@@ -51,7 +51,7 @@ class HTML_QuickForm2_Controller_Action_JumpTest extends PHPUnit\Framework\TestC
 {
     protected $mockJump;
 
-    public function setUp()
+    public function setUp() : void
     {
         $this->mockJump = $this->getMockBuilder('HTML_QuickForm2_Controller_Action_Jump')
         ->setMethods(array('doRedirect'))
@@ -140,7 +140,7 @@ class HTML_QuickForm2_Controller_Action_JumpTest extends PHPUnit\Framework\TestC
         ->getMock());
         $controller->addHandler('jump', $this->mockJump);
 
-        $this->assertContains(
+        $this->assertStringContainsString(
             $controller->getPage('first')->getButtonName('display'),
             $controller->getPage('second')->handle('jump')
         );
@@ -155,7 +155,7 @@ class HTML_QuickForm2_Controller_Action_JumpTest extends PHPUnit\Framework\TestC
         $noPropController = new HTML_QuickForm2_Controller('foo', true, false);
         $noPropController->addPage($noPropPage);
         $noPropController->addHandler('jump', $this->mockJump);
-        $this->assertNotContains(
+        $this->assertStringNotContainsString(
             HTML_QuickForm2_Controller::KEY_ID . '=',
             $noPropPage->handle('jump')
         );
@@ -167,7 +167,7 @@ class HTML_QuickForm2_Controller_Action_JumpTest extends PHPUnit\Framework\TestC
         $propController = new HTML_QuickForm2_Controller('bar', true, true);
         $propController->addPage($propPage);
         $propController->addHandler('jump', $this->mockJump);
-        $this->assertContains(
+        $this->assertStringContainsString(
             HTML_QuickForm2_Controller::KEY_ID . '=bar',
             $propPage->handle('jump')
         );
@@ -219,7 +219,7 @@ class HTML_QuickForm2_Controller_Action_JumpTest extends PHPUnit\Framework\TestC
         $controller->addHandler('jump', $this->mockJump);
         $mockPage->getForm()->setAttribute('action', '/foo');
 
-        $this->assertNotRegexp('/^https:/i', $mockPage->handle('jump'));
+        $this->assertDoesNotMatchRegularExpression('/^https:/i', $mockPage->handle('jump'));
     }
 
     /**

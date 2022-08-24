@@ -49,7 +49,7 @@ require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
  */
 class HTML_QuickForm2_Element_InputCheckboxTest extends PHPUnit\Framework\TestCase
 {
-    public function setUp()
+    public function setUp() : void
     {
         $_POST = array(
             'box1'      => '1',
@@ -129,7 +129,7 @@ class HTML_QuickForm2_Element_InputCheckboxTest extends PHPUnit\Framework\TestCa
         $box = new HTML_QuickForm2_Element_InputCheckbox(
             'testBox', array('value' => 0)
         );
-        $this->assertContains('value="0"', $box->__toString());
+        $this->assertStringContainsString('value="0"', $box->__toString());
     }
 
     /**

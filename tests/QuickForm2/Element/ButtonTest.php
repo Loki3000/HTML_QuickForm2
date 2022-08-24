@@ -49,7 +49,7 @@ require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
  */
 class HTML_QuickForm2_Element_ButtonTest extends PHPUnit\Framework\TestCase
 {
-    public function setUp()
+    public function setUp() : void
     {
         $_POST = array(
             'foo' => 'A button clicked',
@@ -60,7 +60,7 @@ class HTML_QuickForm2_Element_ButtonTest extends PHPUnit\Framework\TestCase
     public function testConstructorSetsContent()
     {
         $button = new HTML_QuickForm2_Element_Button('foo', null, array('content' => 'Some string'));
-        $this->assertRegexp('!<button[^>]*>Some string</button>!', $button->__toString());
+        $this->assertMatchesRegularExpression('!<button[^>]*>Some string</button>!', $button->__toString());
     }
 
     public function testCannotBeFrozen()

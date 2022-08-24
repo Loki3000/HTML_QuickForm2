@@ -79,7 +79,7 @@ function repeatFilter($value)
  */
 class HTML_QuickForm2_FilterTest extends PHPUnit\Framework\TestCase
 {
-    public function setUp()
+    public function setUp() : void
     {
         $_REQUEST['_qf__filters'] = '';
         $_POST = array(

@@ -248,6 +248,7 @@ class HTML_QuickForm2_NodeTest extends PHPUnit\Framework\TestCase
     */
     public function testRequest18683($id)
     {
+        $this->expectException('HTML_QuickForm2_Exception_InvalidArgument');
         $node = new HTML_QuickForm2_NodeImpl();
         $node->setId($id);
     }

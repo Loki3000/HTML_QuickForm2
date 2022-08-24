@@ -179,7 +179,7 @@ class HTML_QuickForm2_Rule_RegexTest extends PHPUnit\Framework\TestCase
         $ruleCyr = new HTML_QuickForm2_Rule_Regex($mockEl, 'an error', '/\x{0445}\x{0443}\x{0439}/ui');
 
         $this->assertFalse($ruleCyr->validate());
-        $this->assertContains('/\\u0445\\u0443\\u0439/i.test(', $ruleCyr->getJavascript());
+        $this->assertStringContainsString('/\\u0445\\u0443\\u0439/i.test(', $ruleCyr->getJavascript());
     }
 }
 ?>

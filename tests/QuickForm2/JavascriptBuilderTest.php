@@ -82,18 +82,18 @@ class HTML_QuickForm2_JavascriptBuilderTest extends PHPUnit\Framework\TestCase
 
         $libraries = $builder->getLibraries(false, false);
         $this->assertArrayHasKey('base', $libraries);
-        $this->assertNotContains('<script', $libraries['base']);
+        $this->assertStringNotContainsString('<script', $libraries['base']);
 
         $libraries = $builder->getLibraries(false, true);
-        $this->assertContains('<script', $libraries['base']);
+        $this->assertStringContainsString('<script', $libraries['base']);
 
         $libraries = $builder->getLibraries(true, false);
-        $this->assertContains('qf.Validator', $libraries);
-        $this->assertNotContains('<script', $libraries);
+        $this->assertStringContainsString('qf.Validator', $libraries);
+        $this->assertStringNotContainsString('<script', $libraries);
 
         $libraries = $builder->getLibraries(true, true);
-        $this->assertContains('qf.Validator', $libraries);
-        $this->assertContains('<script', $libraries);
+        $this->assertStringContainsString('qf.Validator', $libraries);
+        $this->assertStringContainsString('<script', $libraries);
     }
 
     public function testInlineMissingLibrary()
@@ -135,21 +135,21 @@ class HTML_QuickForm2_JavascriptBuilderTest extends PHPUnit\Framework\TestCase
         $builder->addElementJavascript('setupCodeTwo');
 
         $scriptOne = $builder->getFormJavascript('formOne', false);
-        $this->assertContains('jsRuleOne', $scriptOne);
-        $this->assertContains('setupCodeOne', $scriptOne);
-        $this->assertNotContains('jsRuleTwo', $scriptOne);
-        $this->assertNotContains('setupCodeTwo', $scriptOne);
-        $this->assertNotContains('<script', $scriptOne);
+        $this->assertStringContainsString('jsRuleOne', $scriptOne);
+        $this->assertStringContainsString('setupCodeOne', $scriptOne);
+        $this->assertStringNotContainsString('jsRuleTwo', $scriptOne);
+        $this->assertStringNotContainsString('setupCodeTwo', $scriptOne);
+        $this->assertStringNotContainsString('<script', $scriptOne);
 
         $scriptTwo = $builder->getFormJavascript('formTwo', true);
-        $this->assertNotContains('jsRuleOne', $scriptTwo);
-        $this->assertNotContains('setupCodeOne', $scriptTwo);
-        $this->assertContains('jsRuleTwo', $scriptTwo);
-        $this->assertContains('setupCodeTwo', $scriptTwo);
-        $this->assertContains('<script', $scriptTwo);
+        $this->assertStringNotContainsString('jsRuleOne', $scriptTwo);
+        $this->assertStringNotContainsString('setupCodeOne', $scriptTwo);
+        $this->assertStringContainsString('jsRuleTwo', $scriptTwo);
+        $this->assertStringContainsString('setupCodeTwo', $scriptTwo);
+        $this->assertStringContainsString('<script', $scriptTwo);
 
         $scriptBoth = $builder->getFormJavascript();
-        $this->assertContains('jsRuleOne', $scriptBoth);
-        $this->assertContains('setupCodeTwo', $scriptBoth);
+        $this->assertStringContainsString('jsRuleOne', $scriptBoth);
+        $this->assertStringContainsString('setupCodeTwo', $scriptBoth);
     }
 }

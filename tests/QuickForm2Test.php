@@ -63,7 +63,7 @@ class FormRule extends HTML_QuickForm2_Rule
  */
 class HTML_QuickForm2Test extends PHPUnit\Framework\TestCase
 {
-    public function setUp()
+    public function setUp() : void
     {
         $_REQUEST = array(
             '_qf__track' => ''

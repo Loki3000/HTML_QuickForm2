@@ -49,7 +49,7 @@ require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
  */
 class HTML_QuickForm2_Element_InputSubmitTest extends PHPUnit\Framework\TestCase
 {
-    public function setUp()
+    public function setUp() : void
     {
         $_POST = array(
             'foo' => 'A button clicked'

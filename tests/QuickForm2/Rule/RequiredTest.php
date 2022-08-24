@@ -101,6 +101,7 @@ class HTML_QuickForm2_Rule_RequiredTest extends PHPUnit\Framework\TestCase
      */
     public function testCannotHaveEmptyMessage()
     {
+        $this->expectException('HTML_QuickForm2_Exception_InvalidArgument');
         $mockNode = $this->getMockBuilder('HTML_QuickForm2_Node')
         ->setMethods($this->nodeAbstractMethods)
         ->getMock();

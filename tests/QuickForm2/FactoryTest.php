@@ -59,13 +59,13 @@ class HTML_QuickForm2_FactoryTest extends PHPUnit\Framework\TestCase
         'getJavascriptTriggers', 'render'
     );
 
-    protected function setUp()
+    protected function setUp() : void
     {
         $this->phpError     = null;
         $this->errorHandler = false;
     }
 
-    protected function tearDown()
+    protected function tearDown() : void
     {
         if ($this->errorHandler) {
             restore_error_handler();

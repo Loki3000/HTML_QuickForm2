@@ -549,7 +549,7 @@ class HTML_QuickForm2_ContainerTest extends PHPUnit\Framework\TestCase
 
         $container->addRule($ruleContainer, HTML_QuickForm2_Rule::CLIENT);
         $element->addRule($ruleElement, HTML_QuickForm2_Rule::CLIENT);
-        $this->assertRegexp(
+        $this->assertMatchesRegularExpression(
             '/elementCallback.*containerCallback/s',
             $container->render(HTML_QuickForm2_Renderer::factory('default'))
                       ->getJavascriptBuilder()->getFormJavascript()

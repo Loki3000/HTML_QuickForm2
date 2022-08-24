@@ -51,6 +51,7 @@ class HTML_QuickForm2_Element_DateTest extends PHPUnit\Framework\TestCase
     */
     public function testInvalidMessageProvider()
     {
+        $this->expectException('HTML_QuickForm2_Exception_InvalidArgument');
         $invalid = new HTML_QuickForm2_Element_Date('invalid', null, array('messageProvider' => array()));
     }
 
@@ -62,7 +63,7 @@ class HTML_QuickForm2_Element_DateTest extends PHPUnit\Framework\TestCase
                 return array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Caturday');
             }
         ));
-        $this->assertContains('<option value="6">Caturday</option>', $date->__toString());
+        $this->assertStringContainsString('<option value="6">Caturday</option>', $date->__toString());
     }
 
     public function testObjectMessageProvider()
@@ -76,7 +77,7 @@ class HTML_QuickForm2_Element_DateTest extends PHPUnit\Framework\TestCase
             'format'          => 'l',
             'messageProvider' => $mockProvider
         ));
-        $this->assertContains('<option value="6">Caturday</option>', $date->__toString());
+        $this->assertStringContainsString('<option value="6">Caturday</option>', $date->__toString());
     }
 
    /**
@@ -88,11 +89,11 @@ class HTML_QuickForm2_Element_DateTest extends PHPUnit\Framework\TestCase
         $date = new HTML_QuickForm2_Element_Date('MaxMinHour', null, array(
             'format' => 'H', 'minHour' => 22, 'maxHour' => 6
         ));
-        $this->assertRegexp(
+        $this->assertMatchesRegularExpression(
             '!<option value="22">22</option>.+<option value="6">06</option>!is',
             $date->__toString()
         );
-        $this->assertNotContains(
+        $this->assertStringNotContainsString(
             '<option value="5">05</option>',
             $date->__toString()
         );
@@ -107,8 +108,8 @@ class HTML_QuickForm2_Element_DateTest extends PHPUnit\Framework\TestCase
         $date = new HTML_QuickForm2_Element_Date('MaxMinMonth', null, array(
             'format' => 'F', 'minMonth' => 10, 'maxMonth' => 3
         ));
-        $this->assertRegexp('!October.+March!is', $date->__toString());
-        $this->assertNotContains('January', $date->__toString());
+        $this->assertMatchesRegularExpression('!October.+March!is', $date->__toString());
+        $this->assertStringNotContainsString('January', $date->__toString());
     }
 
     public function testSetValueAcceptsDateTime()

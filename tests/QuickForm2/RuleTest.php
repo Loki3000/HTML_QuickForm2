@@ -220,9 +220,9 @@ class HTML_QuickForm2_RuleTest extends PHPUnit\Framework\TestCase
         $rule->expects($this->any())->method('getJavascriptCallback')
              ->will($this->returnValue('a callback'));
 
-        $this->assertContains('qf.LiveRule', $rule->getJavascript());
-        $this->assertContains('["foo"]', $rule->getJavascript());
-        $this->assertNotContains('qf.LiveRule', $rule->getJavascript(false));
+        $this->assertStringContainsString('qf.LiveRule', $rule->getJavascript());
+        $this->assertStringContainsString('["foo"]', $rule->getJavascript());
+        $this->assertStringNotContainsString('qf.LiveRule', $rule->getJavascript(false));
     }
 
     public function testChainedValidationTriggers()
@@ -255,9 +255,9 @@ class HTML_QuickForm2_RuleTest extends PHPUnit\Framework\TestCase
 
         $script = $ruleFoo->and_($ruleBar->and_($ruleBaz))->getJavascript();
         preg_match('/\[\S+\]/', $script, $m);
-        $this->assertContains('foo', $m[0]);
-        $this->assertContains('bar', $m[0]);
-        $this->assertContains('baz', $m[0]);
+        $this->assertStringContainsString('foo', $m[0]);
+        $this->assertStringContainsString('bar', $m[0]);
+        $this->assertStringContainsString('baz', $m[0]);
     }
 
     public function testCannotSetErrorsOnHiddenElements()

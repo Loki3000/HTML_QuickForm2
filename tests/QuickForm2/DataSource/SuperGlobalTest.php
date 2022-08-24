@@ -49,7 +49,7 @@ require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
  */
 class HTML_QuickForm2_DataSource_SuperGlobalTest extends PHPUnit\Framework\TestCase
 {
-    public function setUp()
+    public function setUp() : void
     {
         $_GET = array(
             'foo' => 'some value',

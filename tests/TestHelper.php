@@ -54,8 +54,8 @@ if ('@' . 'package_version@' == '@package_version@') {
     }
 }
 
-require_once 'vendor/autoload.php';
 require_once 'PEAR/Exception.php';
+require_once 'HTML/Common2.php';
 require_once 'HTML/QuickForm2/Loader.php';
 spl_autoload_register(array('HTML_QuickForm2_Loader', 'autoload'));
 

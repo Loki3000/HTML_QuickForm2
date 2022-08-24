@@ -198,7 +198,7 @@ class HTML_QuickForm2_Container_RepeatTest extends PHPUnit\Framework\TestCase
         $repeat->setPrototype(new HTML_QuickForm2_Container_Fieldset());
         $repeat->toggleFrozen(true);
 
-        $this->assertNotContains('<script', $repeat->__toString());
+        $this->assertStringNotContainsString('<script', $repeat->__toString());
     }
 
     public function testServerSideValidationErrors()
@@ -306,7 +306,7 @@ class HTML_QuickForm2_Container_RepeatTest extends PHPUnit\Framework\TestCase
         $renderer->getJavascriptBuilder()->setFormId('fake-repeat');
         $repeat->render($renderer);
 
-        $this->assertContains('new qf.Validator', $renderer->getJavascriptBuilder()->getValidator());
+        $this->assertStringContainsString('new qf.Validator', $renderer->getJavascriptBuilder()->getValidator());
     }
 }
 ?>

@@ -61,6 +61,7 @@ class HTML_QuickForm2_Element_InputHiddenTest extends PHPUnit\Framework\TestCase
      */
     public function testCannotSetError()
     {
+        $this->expectException('HTML_QuickForm2_Exception_InvalidArgument');
         $hidden = new HTML_QuickForm2_Element_InputHidden('noError');
         $hidden->setError('a message');
     }

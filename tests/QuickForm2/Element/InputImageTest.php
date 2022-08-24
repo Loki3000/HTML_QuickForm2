@@ -49,7 +49,7 @@ require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
  */
 class HTML_QuickForm2_Element_InputImageTest extends PHPUnit\Framework\TestCase
 {
-    public function setUp()
+    public function setUp() : void
     {
         $_POST = array(
             'foo_x' => '12',
@@ -70,14 +70,14 @@ class HTML_QuickForm2_Element_InputImageTest extends PHPUnit\Framework\TestCase
     public function testPhpBug745Workaround()
     {
         $image1 = new HTML_QuickForm2_Element_InputImage('foo');
-        $this->assertRegExp('/name="foo"/', $image1->__toString());
+        $this->assertMatchesRegularExpression('/name="foo"/', $image1->__toString());
 
         $image2 = new HTML_QuickForm2_Element_InputImage('foo[bar]');
-        $this->assertRegExp('/name="foo\\[bar\\]\\[\\]"/', $image2->__toString());
+        $this->assertMatchesRegularExpression('/name="foo\\[bar\\]\\[\\]"/', $image2->__toString());
         $this->assertEquals('foo[bar]', $image2->getName());
 
         $image3 = new HTML_QuickForm2_Element_InputImage('foo[bar][]');
-        $this->assertRegExp('/name="foo\\[bar\\]\\[\\]"/', $image3->__toString());
+        $this->assertMatchesRegularExpression('/name="foo\\[bar\\]\\[\\]"/', $image3->__toString());
         $this->assertEquals('foo[bar][]', $image3->getName());
     }
 

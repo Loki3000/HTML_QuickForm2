@@ -220,6 +220,6 @@ class HTML_QuickForm2_Rule_CompareTest extends PHPUnit\Framework\TestCase
         ->setConstructorArgs(array('bar', array('id' => 'bar')))
         ->getMock();
         $compare = new HTML_QuickForm2_Rule_Compare($foo, '...', $bar);
-        $this->assertContains('["foo","bar"]', $compare->getJavascript());
+        $this->assertStringContainsString('["foo","bar"]', $compare->getJavascript());
     }
 }

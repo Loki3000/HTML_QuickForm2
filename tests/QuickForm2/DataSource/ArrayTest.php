@@ -55,7 +55,7 @@ class HTML_QuickForm2_DataSource_ArrayTest extends PHPUnit\Framework\TestCase
     */
     protected $ds;
 
-    public function setUp()
+    public function setUp() : void
     {
         $this->ds = new HTML_QuickForm2_DataSource_Array(array(
             'foo' => 'some value',
