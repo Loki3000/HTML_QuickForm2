@@ -1,4 +1,5 @@
 {
+    "name": "loki3000/html_quickform2",
     "authors": [{
             "email": "avb@php.net",
             "name": "Alexey Borzov",
@@ -23,7 +24,6 @@
         "./"
     ],
     "license": "BSD",
-    "name": "pear/html_quickform2",
     "support": {
         "issues": "http://pear.php.net/bugs/search.php?cmd=display&package_name[]=HTML_QuickForm2",
         "source": "https://github.com/pear/HTML_QuickForm2"
