@@ -249,7 +249,7 @@ class HTML_QuickForm2_Element_Select_OptionIterator extends RecursiveArrayIterat
         return $this->current() instanceof HTML_QuickForm2_Element_Select_OptionContainer;
     }
 
-    public function getChildren(): null|RecursiveArrayIterator
+    public function getChildren(): ?RecursiveArrayIterator
     {
         return new HTML_QuickForm2_Element_Select_OptionIterator(
             $this->current()->getOptions()
