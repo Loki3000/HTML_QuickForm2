@@ -158,7 +158,7 @@ class HTML_QuickForm2_Element_Select_OptionContainer extends HTML_Common2
     *
     * @return   HTML_QuickForm2_Element_Select_OptionIterator
     */
-    public function getIterator()
+    public function getIterator(): Traversable
     {
         return new HTML_QuickForm2_Element_Select_OptionIterator($this->options);
     }
@@ -181,7 +181,7 @@ class HTML_QuickForm2_Element_Select_OptionContainer extends HTML_Common2
     *
     * @return   int
     */
-    public function count()
+    public function count(): int
     {
         return count($this->options);
     }
@@ -244,12 +244,12 @@ class HTML_QuickForm2_Element_Select_Optgroup
 class HTML_QuickForm2_Element_Select_OptionIterator extends RecursiveArrayIterator
     implements RecursiveIterator
 {
-    public function hasChildren()
+    public function hasChildren(): bool
     {
         return $this->current() instanceof HTML_QuickForm2_Element_Select_OptionContainer;
     }
 
-    public function getChildren()
+    public function getChildren(): null|RecursiveArrayIterator
     {
         return new HTML_QuickForm2_Element_Select_OptionIterator(
             $this->current()->getOptions()

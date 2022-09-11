@@ -18,6 +18,7 @@
  * @link       http://pear.php.net/package/HTML_QuickForm2
  */
 
+error_reporting(-1);
 // If running from SVN checkout, update include_path
 if ('@' . 'package_version@' == '@package_version@') {
     $classPath   = realpath(dirname(dirname(__FILE__)));

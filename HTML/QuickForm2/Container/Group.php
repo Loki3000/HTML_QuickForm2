@@ -54,7 +54,7 @@ class HTML_QuickForm2_Container_Group extends HTML_QuickForm2_Container
 
     protected function prependsName()
     {
-        return strlen($this->name) > 0;
+        return strlen((string)$this->name) > 0;
     }
 
     protected function getChildValues($filtered = false)
@@ -88,7 +88,7 @@ class HTML_QuickForm2_Container_Group extends HTML_QuickForm2_Container
 
         /* @var $child HTML_QuickForm2_Node */
         foreach ($this as $i => $child) {
-            $tokens = explode('[', str_replace(']', '', $child->getName()));
+            $tokens = explode('[', str_replace(']', '', (string)$child->getName()));
             if ($prefixLength) {
                 $tokens = array_slice($tokens, $prefixLength);
             }
@@ -190,7 +190,7 @@ class HTML_QuickForm2_Container_Group extends HTML_QuickForm2_Container
     */
     protected function renameChild(HTML_QuickForm2_Node $element)
     {
-        $tokens = explode('[', str_replace(']', '', $element->getName()));
+        $tokens = explode('[', str_replace(']', '', (string)$element->getName()));
         // Child has already been renamed by its group before
         if ($this === $element->getContainer() && strlen($this->previousName)) {
             $gtokens = explode('[', str_replace(']', '', $this->previousName));
@@ -199,9 +199,9 @@ class HTML_QuickForm2_Container_Group extends HTML_QuickForm2_Container
             }
         }
 
-        if (strlen($this->name)) {
+        if (strlen((string)$this->name)) {
             $element->setName($this->name . '[' . implode('][', $tokens) . ']');
-        } elseif (strlen($this->previousName)) {
+        } elseif (strlen((string)$this->previousName)) {
             $elname = array_shift($tokens);
             foreach ($tokens as $token) {
                 $elname .= '[' . $token . ']';

@@ -39,14 +39,6 @@
  * $password->addRule('eq', 'Passwords do not match', $passwordRepeat);
  * $orderQty->addRule('lte', 'Should not order more than 10 of these', 10);
  * </code>
- *
- * @category HTML
- * @package  HTML_QuickForm2
- * @author   Alexey Borzov <avb@php.net>
- * @author   Bertrand Mansion <golgote@mamasam.com>
- * @license  http://opensource.org/licenses/bsd-license.php New BSD License
- * @version  Release: @package_version@
- * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 class HTML_QuickForm2_Rule_Compare extends HTML_QuickForm2_Rule
 {

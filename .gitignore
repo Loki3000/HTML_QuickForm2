@@ -9,3 +9,5 @@ js/build/
 js/docs/
 
 .vscode
+
+.phpunit.result.cache

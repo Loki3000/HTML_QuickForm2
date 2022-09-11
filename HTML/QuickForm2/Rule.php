@@ -203,7 +203,7 @@ abstract class HTML_QuickForm2_Rule
             );
         }
         if ($owner instanceof HTML_QuickForm2_Element_InputHidden
-            && strlen($this->getMessage())
+            && strlen((string)$this->getMessage())
         ) {
             throw new HTML_QuickForm2_Exception_InvalidArgument(
                 "Hidden elements cannot have validation errors"

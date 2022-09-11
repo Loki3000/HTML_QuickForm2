@@ -62,7 +62,7 @@ class HTML_QuickForm2_Element_Textarea extends HTML_QuickForm2_Element
         } else {
             return $this->getIndent() . '<textarea' . $this->getAttributes(true) .
                    '>' . preg_replace("/(\r\n|\n|\r)/", '&#010;', htmlspecialchars(
-                        $this->value, ENT_QUOTES, self::getOption('charset')
+                        (string)$this->value, ENT_QUOTES, self::getOption('charset')
                    )) . '</textarea>';
         }
     }

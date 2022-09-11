@@ -169,7 +169,7 @@ class HTML_QuickForm2_Controller_Action_JumpTest extends PHPUnit\Framework\TestC
         ->setConstructorArgs(array(new HTML_QuickForm2('dest')))
         ->getMock());
         $controller->addHandler('jump', $this->mockJump);
-        $this->assertContains('mysessionid=', $controller->getPage('dest')->handle('jump'));
+        $this->assertStringContainsString('mysessionid=', $controller->getPage('dest')->handle('jump'));
 
         ini_set('session.use_only_cookies', true);
         $this->assertNotContains('mysessionid=', $controller->getPage('dest')->handle('jump'));

@@ -366,7 +366,7 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
     *
     * @return    HTML_QuickForm2_ContainerIterator
     */
-    public function getIterator()
+    public function getIterator(): Traversable
     {
         return new HTML_QuickForm2_ContainerIterator($this);
     }
@@ -390,7 +390,7 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
     *
     * @return    int
     */
-    public function count()
+    public function count(): int
     {
         return count($this->elements);
     }
@@ -427,7 +427,7 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
         // on contained elements, see HTML_QuickForm2Test::testFormRule()
         if ($valid) {
             foreach ($this->getRecursiveIterator() as $item) {
-                if (0 < strlen($item->getError())) {
+                if (0 < strlen((string)$item->getError())) {
                     return false;
                 }
             }
@@ -540,12 +540,12 @@ class HTML_QuickForm2_ContainerIterator extends RecursiveArrayIterator implement
         parent::__construct($container->getElements());
     }
 
-    public function hasChildren()
+    public function hasChildren(): bool
     {
         return $this->current() instanceof HTML_QuickForm2_Container;
     }
 
-    public function getChildren()
+    public function getChildren(): ?RecursiveArrayIterator
     {
         return new HTML_QuickForm2_ContainerIterator($this->current());
     }

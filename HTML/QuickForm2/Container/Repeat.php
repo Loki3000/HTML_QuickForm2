@@ -328,7 +328,7 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
         /* @var $child HTML_QuickForm2_Node */
         foreach ($this->getRecursiveIterator(RecursiveIteratorIterator::LEAVES_ONLY) as $child) {
             $name = $child->getName();
-            if (false === ($pos = strpos($name, '[' . self::INDEX_KEY . ']'))
+            if (false === ($pos = strpos((string)$name, '[' . self::INDEX_KEY . ']'))
                 || $child->getAttribute('disabled')
             ) {
                 continue;
@@ -445,7 +445,7 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
             $name = $child->getName();
             // checkboxes and radios can have index inside "value" attribute instead,
             // group names should not be touched
-            if (strlen($name) && false === strpos($name, self::INDEX_KEY)
+            if (strlen((string)$name) && false === strpos((string)$name, self::INDEX_KEY)
                 && (!$child instanceof HTML_QuickForm2_Container || !$child->prependsName())
                 && (!$child instanceof HTML_QuickForm2_Element_InputCheckable
                     || false === strpos($child->getAttribute('value'), self::INDEX_KEY))
@@ -505,7 +505,7 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
             if (array_key_exists('value', $backup[$key])) {
                 $child->setValue($backup[$key]['value']);
             }
-            if (false !== strpos($backup[$key]['name'], self::INDEX_KEY)) {
+            if (false !== strpos((string)$backup[$key]['name'], self::INDEX_KEY)) {
                 $child->setName($backup[$key]['name']);
             }
             if ($child instanceof HTML_QuickForm2_Element_InputCheckable
@@ -538,7 +538,7 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
         $key = 0;
         /* @var HTML_QuickForm2_Node $child */
         foreach ($this->getRecursiveIterator() as $child) {
-            if (false !== strpos($backup[$key]['name'], self::INDEX_KEY)) {
+            if (false !== strpos((string)$backup[$key]['name'], self::INDEX_KEY)) {
                 $child->setName(str_replace(self::INDEX_KEY, $index, $backup[$key]['name']));
             }
             if ($child instanceof HTML_QuickForm2_Element_InputCheckable
@@ -613,7 +613,7 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
                 $rule[0]->validate();
             }
         }
-        return !strlen($this->error) && $valid;
+        return !strlen((string)$this->error) && $valid;
     }
 
     /**

@@ -219,7 +219,7 @@ class HTML_QuickForm2_Element_InputFile extends HTML_QuickForm2_Element_Input
 
     protected function fileValidate($file)
     {
-        if (strlen($this->error)) {
+        if (strlen((string)$this->error)) {
             return false;
         }
         if (isset($file['error'])

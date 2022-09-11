@@ -53,12 +53,12 @@ class HTML_QuickForm2_MessageProvider_Strftime implements HTML_QuickForm2_Messag
     public function __construct()
     {
         for ($i = 1; $i <= 12; $i++) {
-            $names = explode("\n", strftime("%b\n%B", mktime(12, 0, 0, $i, 1, 2011)));
+            $names = explode("\n", date("M\nF", mktime(12, 0, 0, $i, 1, 2011)));
             $this->messages['months_short'][] = $names[0];
             $this->messages['months_long'][]  = $names[1];
         }
         for ($i = 0; $i < 7; $i++) {
-            $names = explode("\n", strftime("%a\n%A", mktime(12, 0, 0, 1, 2 + $i, 2011)));
+            $names = explode("\n", date("D\nl", mktime(12, 0, 0, 1, 2 + $i, 2011)));
             $this->messages['weekdays_short'][] = $names[0];
             $this->messages['weekdays_long'][]  = $names[1];
         }
@@ -91,4 +91,4 @@ class HTML_QuickForm2_MessageProvider_Strftime implements HTML_QuickForm2_Messag
         return $message;
     }
 }
-?>
+

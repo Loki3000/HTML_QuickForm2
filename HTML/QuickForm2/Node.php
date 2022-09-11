@@ -178,7 +178,7 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
     protected static function generateId($elementName)
     {
         $stop      =  !self::getOption('id_force_append_index');
-        $tokens    =  strlen($elementName)
+        $tokens    =  strlen((string)$elementName)
                       ? explode('[', str_replace(']', '', $elementName))
                       : ($stop? array('qfauto', ''): array('qfauto'));
         $container =& self::$ids;
@@ -607,14 +607,14 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
     protected function validate()
     {
         foreach ($this->rules as $rule) {
-            if (strlen($this->error)) {
+            if (strlen((string)$this->error)) {
                 break;
             }
             if ($rule[1] & HTML_QuickForm2_Rule::SERVER) {
                 $rule[0]->validate();
             }
         }
-        return !strlen($this->error);
+        return !strlen((string)$this->error);
     }
 
    /**
