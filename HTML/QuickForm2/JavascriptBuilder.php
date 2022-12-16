@@ -284,8 +284,13 @@ class HTML_QuickForm2_JavascriptBuilder
     protected function wrapScript($js)
     {
         if ('' != $js) {
-            $js = "<script type=\"text/javascript\">\n//<![CDATA[\n"
-                  . $js . "\n//]]>\n</script>";
+            $js = "<script type=\"text/javascript\">
+                document.addEventListener('DOMContentLoaded', function() {
+                //<![CDATA[\n"
+                  . $js
+                  . "\n//]]>
+                });
+                </script>";
         }
         return $js;
     }
