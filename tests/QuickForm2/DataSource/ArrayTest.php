@@ -71,6 +71,13 @@ class HTML_QuickForm2_DataSource_ArrayTest extends PHPUnit\Framework\TestCase
         $this->assertEquals('yet another value', $this->ds->getValue('baz[key1][key2]'));
     }
 
+    //null name is normal for 'static' type
+    public function testReutrnWithNullName()
+    {
+        $this->assertNull($this->ds->getValue(null));
+        $this->assertFalse($this->ds->hasValue(null));
+    }
+
    /**
     * See PEAR bugs #8414 and #8123
     */

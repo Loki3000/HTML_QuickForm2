@@ -53,7 +53,7 @@ class HTML_QuickForm2_DataSource_Array implements HTML_QuickForm2_DataSource_Nul
             return null;
         }
         
-        if (strpos($name, '[')) {
+        if (strpos((string)$name, '[')) {
             $tokens = explode('[', str_replace(']', '', $name));
             $value = $this->values;
             do {
@@ -76,10 +76,7 @@ class HTML_QuickForm2_DataSource_Array implements HTML_QuickForm2_DataSource_Nul
         if (empty($this->values)) {
             return false;
 
-        } elseif (!strpos($name, '[')) {
-            return array_key_exists($name, $this->values);
-
-        } else {
+        } elseif (strpos((string)$name, '[')) {
             $tokens = explode('[', str_replace(']', '', $name));
             $value  = $this->values;
             do {
@@ -90,6 +87,8 @@ class HTML_QuickForm2_DataSource_Array implements HTML_QuickForm2_DataSource_Nul
                 $value = $value[$token];
             } while (!empty($tokens));
             return true;
+        } else {
+            return array_key_exists($name, $this->values);
         }
     }
 }

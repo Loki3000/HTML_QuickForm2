@@ -80,7 +80,7 @@ class HTML_QuickForm2_DataSource_SuperGlobal extends HTML_QuickForm2_DataSource_
     /**
      * A recursive version of array_map() function
      *
-     * @param callback $callback Callback function to apply
+     * @param callable $callback Callback function to apply
      * @param mixed    $arr      Input array
      *
      * @return    array with callback applied

@@ -50,7 +50,7 @@ class HTML_QuickForm2_Element_Hierselect extends HTML_QuickForm2_Container_Group
     * PHP callback function for getting additional options
     *
     * @see  loadOptions()
-    * @var  callback
+    * @var  callable
     */
     protected $callback = null;
 
@@ -142,7 +142,7 @@ class HTML_QuickForm2_Element_Hierselect extends HTML_QuickForm2_Container_Group
      * </code>
      *
      * @param array    $options    Array of options defining each element
-     * @param callback $callback   Callback function to load additional options.
+     * @param callable $callback   Callback function to load additional options.
      *      It will receive an array of keys and should return associative
      *      array ('option value' => 'option text')
      * @param string   $jsCallback Javascript function to load additional options

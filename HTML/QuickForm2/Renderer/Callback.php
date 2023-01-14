@@ -697,9 +697,9 @@ class HTML_QuickForm2_Renderer_Callback extends HTML_QuickForm2_Renderer
     * When no callback is found, the provided default callback is returned.
     *
     * @param HTML_QuickForm2_Node $element Element being rendered
-    * @param callback|null        $default Default callback to use if not found
+    * @param callable|null        $default Default callback to use if not found
     *
-    * @return callback|null
+    * @return callable|null
     */
     public function findCallback(HTML_QuickForm2_Node $element, $default = null)
     {
