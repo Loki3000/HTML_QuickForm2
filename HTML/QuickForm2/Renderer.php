@@ -78,7 +78,7 @@ abstract class HTML_QuickForm2_Renderer
 
    /**
     * Javascript builder object
-    * @var  HTML_QuickForm2_JavascriptBuilder
+    * @var  HTML_QuickForm2_JavascriptBuilder|null
     */
     protected $jsBuilder;
 
@@ -290,7 +290,7 @@ abstract class HTML_QuickForm2_Renderer
     *
     * @return $this
     */
-    public function setJavascriptBuilder(HTML_QuickForm2_JavascriptBuilder $builder = null)
+    public function setJavascriptBuilder(?HTML_QuickForm2_JavascriptBuilder $builder = null)
     {
         $this->jsBuilder = $builder;
         return $this;
@@ -351,14 +351,14 @@ abstract class HTML_QuickForm2_Renderer
    /**
     * Starts rendering a group, called before processing grouped elements
     *
-    * @param HTML_QuickForm2_Node $group Group being rendered
+    * @param HTML_QuickForm2_Container_Group $group Group being rendered
     */
     abstract public function startGroup(HTML_QuickForm2_Node $group);
 
    /**
     * Finishes rendering a group, called after processing grouped elements
     *
-    * @param HTML_QuickForm2_Node $group Group being rendered
+    * @param HTML_QuickForm2_Container_Group $group Group being rendered
     */
     abstract public function finishGroup(HTML_QuickForm2_Node $group);
 }

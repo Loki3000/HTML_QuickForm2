@@ -141,11 +141,11 @@ class HTML_QuickForm2_Element_InputFileTest extends PHPUnit\Framework\TestCase
     public function testObjectMessageProvider()
     {
         $mockProvider = $this->getMockBuilder('HTML_QuickForm2_MessageProvider')
-        ->setMethods(array('get'))
+        ->onlyMethods(array('get'))
         ->getMock();
         
         $mockProvider->expects($this->once())->method('get')
-                     ->will($this->returnValue('A nasty error happened!'));
+                     ->willReturn('A nasty error happened!');
 
         $form   = new HTML_QuickForm2('upload', 'post', null, false);
         $upload = $form->addFile('local', array(), array(

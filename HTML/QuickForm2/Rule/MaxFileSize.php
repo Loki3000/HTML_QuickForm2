@@ -40,6 +40,8 @@
  * @license  http://opensource.org/licenses/bsd-license.php New BSD License
  * @version  Release: @package_version@
  * @link     http://pear.php.net/package/HTML_QuickForm2
+ *
+ * @extends HTML_QuickForm2_Rule<HTML_QuickForm2_Element_InputFile>
  */
 class HTML_QuickForm2_Rule_MaxFileSize extends HTML_QuickForm2_Rule
 {

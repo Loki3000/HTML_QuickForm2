@@ -77,8 +77,8 @@ class HTML_QuickForm2_Renderer_Callback extends HTML_QuickForm2_Renderer
     public $hiddenHtml = '';
 
    /**
-    * HTML for hidden elements if 'group_hiddens' option is on
-    * @var  string
+    * Hidden elements if 'group_hiddens' option is on
+    * @var  HTML_QuickForm2_Node[]
     */
     public $hidden = array();
 
@@ -168,6 +168,9 @@ class HTML_QuickForm2_Renderer_Callback extends HTML_QuickForm2_Renderer
         );
     }
 
+   /**
+    * @param HTML_QuickForm2_Renderer_Callback $renderer
+    */
     public static function _renderForm(
         HTML_QuickForm2_Renderer $renderer, HTML_QuickForm2 $form
     ) {
@@ -187,6 +190,9 @@ class HTML_QuickForm2_Renderer_Callback extends HTML_QuickForm2_Renderer
         return implode($break, $html) . $break;
     }
 
+   /**
+    * @param HTML_QuickForm2_Renderer_Callback $renderer
+    */
     public static function _renderElement(
         HTML_QuickForm2_Renderer $renderer, HTML_QuickForm2_Element $element
     ) {
@@ -215,15 +221,16 @@ class HTML_QuickForm2_Renderer_Callback extends HTML_QuickForm2_Renderer
         return $element->__toString();
     }
 
+   /**
+    * @param HTML_QuickForm2_Renderer_Callback $renderer
+    */
     public static function _renderErrorsGroup(
         HTML_QuickForm2_Renderer $renderer, HTML_QuickForm2 $form
     ) {
         $html = array();
         if (!empty($renderer->errors)) {
             $html[] = '<div class="errors">';
-            if (($prefix = $renderer->getOption('errors_prefix'))
-                && !empty($prefix)
-            ) {
+            if ($prefix = $renderer->getOption('errors_prefix')) {
                 $html[] = '<p>' . $prefix . '</p>';
             }
             $html[] = '<ul>';
@@ -231,9 +238,7 @@ class HTML_QuickForm2_Renderer_Callback extends HTML_QuickForm2_Renderer
                 $html[] = '<li>' . $error . '</li>';
             }
             $html[] = '</ul>';
-            if (($suffix = $renderer->getOption('errors_suffix'))
-                && !empty($suffix)
-            ) {
+            if ($suffix = $renderer->getOption('errors_suffix')) {
                 $html[] = '<p>' . $suffix . '</p>';
             }
             $html[] = '</div>';
@@ -248,6 +253,9 @@ class HTML_QuickForm2_Renderer_Callback extends HTML_QuickForm2_Renderer
         return '<div style="display: none;">'.$hidden->__toString().'</div>';
     }
 
+   /**
+    * @param HTML_QuickForm2_Renderer_Callback $renderer
+    */
     public static function _renderHiddenGroup(
         HTML_QuickForm2_Renderer $renderer, HTML_QuickForm2 $form
     ) {
@@ -261,16 +269,22 @@ class HTML_QuickForm2_Renderer_Callback extends HTML_QuickForm2_Renderer
         return '<div style="display: none;">'.implode('', $html).'</div>';
     }
 
+   /**
+    * @param HTML_QuickForm2_Renderer_Callback $renderer
+    */
     public static function _renderRequiredNote(
         HTML_QuickForm2_Renderer $renderer, HTML_QuickForm2 $form
     ) {
         if ($renderer->hasRequired && !$form->toggleFrozen(null)) {
-            if (($note = $renderer->getOption('required_note')) && !empty($note)) {
+            if ($note = $renderer->getOption('required_note')) {
                 return '<div class="reqnote">'.$note.'</div>';
             }
         }
     }
 
+   /**
+    * @param HTML_QuickForm2_Renderer_Callback $renderer
+    */
     public static function _renderContainer(
         HTML_QuickForm2_Renderer $renderer, HTML_QuickForm2_Container $container
     ) {
@@ -278,6 +292,9 @@ class HTML_QuickForm2_Renderer_Callback extends HTML_QuickForm2_Renderer
         return implode($break, array_pop($renderer->html));
     }
 
+   /**
+    * @param HTML_QuickForm2_Renderer_Callback $renderer
+    */
     public static function _renderGroup(
         HTML_QuickForm2_Renderer $renderer, HTML_QuickForm2_Container_Group $group
     ) {
@@ -315,6 +332,9 @@ class HTML_QuickForm2_Renderer_Callback extends HTML_QuickForm2_Renderer
         return implode($break, $html) . $break;
     }
 
+   /**
+    * @param HTML_QuickForm2_Renderer_Callback $renderer
+    */
     public static function _renderRepeat(
         HTML_QuickForm2_Renderer $renderer,
         HTML_QuickForm2_Container_Repeat $repeat
@@ -335,6 +355,9 @@ class HTML_QuickForm2_Renderer_Callback extends HTML_QuickForm2_Renderer
         return implode($break, $html) . $break;
     }
 
+   /**
+    * @param HTML_QuickForm2_Renderer_Callback $renderer
+    */
     public static function _renderFieldset(
         HTML_QuickForm2_Renderer $renderer,
         HTML_QuickForm2_Container_Fieldset $fieldset
@@ -354,6 +377,9 @@ class HTML_QuickForm2_Renderer_Callback extends HTML_QuickForm2_Renderer
         return implode($break, $html) . $break;
     }
 
+   /**
+    * @param HTML_QuickForm2_Renderer_Callback $renderer
+    */
     public static function _renderLabel(
         HTML_QuickForm2_Renderer $renderer, HTML_QuickForm2_Node $node
     ) {
@@ -512,7 +538,7 @@ class HTML_QuickForm2_Renderer_Callback extends HTML_QuickForm2_Renderer
     /**
     * Sets callback for rendering labels
     *
-    * @param callback|null $callback PHP callback
+    * @param callable|null $callback PHP callback
     *
     * @return $this
     */
@@ -527,7 +553,7 @@ class HTML_QuickForm2_Renderer_Callback extends HTML_QuickForm2_Renderer
    /**
     * Sets callback for rendering hidden elements if option group_hiddens is true
     *
-    * @param callback|null $callback PHP callback
+    * @param callable|null $callback PHP callback
     *
     * @return $this
     */
@@ -542,7 +568,7 @@ class HTML_QuickForm2_Renderer_Callback extends HTML_QuickForm2_Renderer
    /**
     * Sets callback for rendering required note
     *
-    * @param callback|null $callback PHP callback
+    * @param callable|null $callback PHP callback
     *
     * @return $this
     */
@@ -562,7 +588,7 @@ class HTML_QuickForm2_Renderer_Callback extends HTML_QuickForm2_Renderer
     * specific callbacks will override a more generic one.
     *
     * @param string        $className Class name
-    * @param callback|null $callback  Callback to use for elements of that class
+    * @param callable|null $callback  Callback to use for elements of that class
     *
     * @return $this
     */
@@ -582,7 +608,7 @@ class HTML_QuickForm2_Renderer_Callback extends HTML_QuickForm2_Renderer
     * or {@link setElementCallbackForGroupClass()} will be used.
     *
     * @param string        $id       Element's id
-    * @param callback|null $callback Callback to use for rendering of that element
+    * @param callable|null $callback Callback to use for rendering of that element
     *
     * @return $this
     */
@@ -599,7 +625,7 @@ class HTML_QuickForm2_Renderer_Callback extends HTML_QuickForm2_Renderer
     *
     * This callback will be used if 'group_errors' option is set to true.
     *
-    * @param callback|null $callback Callback for validation errors
+    * @param callable|null $callback Callback for validation errors
     *
     * @return $this
     */
@@ -621,7 +647,7 @@ class HTML_QuickForm2_Renderer_Callback extends HTML_QuickForm2_Renderer
     *
     * @param string        $groupClass   Group class name
     * @param string        $elementClass Element class name
-    * @param callback|null $callback     Callback
+    * @param callable|null $callback     Callback
     *
     * @return $this
     */
@@ -643,7 +669,7 @@ class HTML_QuickForm2_Renderer_Callback extends HTML_QuickForm2_Renderer
     *
     * @param string        $groupId      Group id
     * @param string        $elementClass Element class name
-    * @param callback|null $callback     Callback
+    * @param callable|null $callback     Callback
     *
     * @return $this
     */

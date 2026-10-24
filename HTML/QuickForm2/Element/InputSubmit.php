@@ -35,7 +35,7 @@ class HTML_QuickForm2_Element_InputSubmit extends HTML_QuickForm2_Element_Input
 
    /**
     * Element's submit value
-    * @var  string
+    * @var  string|null
     */
     protected $submitValue = null;
 

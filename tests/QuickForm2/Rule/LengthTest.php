@@ -28,7 +28,7 @@ class HTML_QuickForm2_Rule_LengthTest extends PHPUnit\Framework\TestCase
     public function testLimitsAreRequired()
     {
         $mockEl = $this->getMockBuilder('HTML_QuickForm2_Element')
-        ->setMethods(array('getType','getRawValue', 'setValue', '__toString'))
+        ->onlyMethods(array('getType','getRawValue', 'setValue', '__toString'))
         ->getMock();
         $this->expectException('HTML_QuickForm2_Exception_InvalidArgument');
         $length = new HTML_QuickForm2_Rule_Length($mockEl, 'an error');
@@ -40,7 +40,7 @@ class HTML_QuickForm2_Rule_LengthTest extends PHPUnit\Framework\TestCase
     public function testScalarLengthIsPositive()
     {
         $mockEl = $this->getMockBuilder('HTML_QuickForm2_Element')
-        ->setMethods(array('getType','getRawValue', 'setValue', '__toString'))
+        ->onlyMethods(array('getType','getRawValue', 'setValue', '__toString'))
         ->getMock();
         $this->expectException('HTML_QuickForm2_Exception_InvalidArgument');
         $lengthZero = new HTML_QuickForm2_Rule_Length($mockEl, 'an error', 0);
@@ -51,7 +51,7 @@ class HTML_QuickForm2_Rule_LengthTest extends PHPUnit\Framework\TestCase
     public function testMinMaxLengthIsNonnegative()
     {
         $mockEl = $this->getMockBuilder('HTML_QuickForm2_Element')
-        ->setMethods(array('getType','getRawValue', 'setValue', '__toString'))
+        ->onlyMethods(array('getType','getRawValue', 'setValue', '__toString'))
         ->getMock();
         $this->expectException('HTML_QuickForm2_Exception_InvalidArgument');
         $lengthZeros = new HTML_QuickForm2_Rule_Length(
@@ -71,10 +71,10 @@ class HTML_QuickForm2_Rule_LengthTest extends PHPUnit\Framework\TestCase
     public function testLimitsHandling()
     {
         $mockEl  = $this->getMockBuilder('HTML_QuickForm2_Element')
-        ->setMethods(array('getType','getValue','getRawValue', 'setValue', '__toString'))
+        ->onlyMethods(array('getType','getValue','getRawValue', 'setValue', '__toString'))
         ->getMock();
         $mockEl->expects($this->atLeastOnce())
-               ->method('getValue')->will($this->returnValue('абв'));
+               ->method('getValue')->willReturn('абв');
 
         $length3 = new HTML_QuickForm2_Rule_Length($mockEl, 'an error', 3);
         $this->assertTrue($length3->validate());
@@ -110,7 +110,7 @@ class HTML_QuickForm2_Rule_LengthTest extends PHPUnit\Framework\TestCase
     public function testConfigCanonicalForm()
     {
         $mockEl = $this->getMockBuilder('HTML_QuickForm2_Element')
-        ->setMethods(array('getType','getRawValue', 'setValue', '__toString'))
+        ->onlyMethods(array('getType','getRawValue', 'setValue', '__toString'))
         ->getMock();
         $length = new HTML_QuickForm2_Rule_Length($mockEl, 'an error', array('min' => 4, 'max' => 2));
         $this->assertEquals(array('min' => 2, 'max' => 4), $length->getConfig());
@@ -128,7 +128,7 @@ class HTML_QuickForm2_Rule_LengthTest extends PHPUnit\Framework\TestCase
     public function testGlobalConfigOverrides()
     {
         $mockEl = $this->getMockBuilder('HTML_QuickForm2_Element')
-        ->setMethods(array('getType','getRawValue', 'setValue', '__toString'))
+        ->onlyMethods(array('getType','getRawValue', 'setValue', '__toString'))
         ->getMock();
 
         $scalar = new HTML_QuickForm2_Rule_Length(
@@ -187,10 +187,10 @@ class HTML_QuickForm2_Rule_LengthTest extends PHPUnit\Framework\TestCase
     public function testEmptyFieldsAreSkipped()
     {
         $mockEmpty = $this->getMockBuilder('HTML_QuickForm2_Element')
-        ->setMethods(array('getType','getRawValue', 'setValue', '__toString'))
+        ->onlyMethods(array('getType','getRawValue', 'setValue', '__toString'))
         ->getMock();
         $mockEmpty->expects($this->once())->method('getRawValue')
-                  ->will($this->returnValue(''));
+                  ->willReturn('');
         $length = new HTML_QuickForm2_Rule_Length($mockEmpty, 'an error', array('min' => 5));
         $this->assertTrue($length->validate());
     }

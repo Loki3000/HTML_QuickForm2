@@ -39,7 +39,7 @@ class HTML_QuickForm2_Element_InputFile extends HTML_QuickForm2_Element_Input
 
     /**
      * Information on uploaded file, from submit data source
-     * @var array
+     * @var array|null
      */
     protected $value = null;
 

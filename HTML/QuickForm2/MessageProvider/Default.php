@@ -37,7 +37,7 @@ class HTML_QuickForm2_MessageProvider_Default implements HTML_QuickForm2_Message
 {
    /**
     * Singleton instance
-    * @var HTML_QuickForm2_MessageProvider_Default
+    * @var HTML_QuickForm2_MessageProvider_Default|null
     */
     protected static $instance;
 

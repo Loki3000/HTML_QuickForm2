@@ -64,8 +64,8 @@ class HTML_QuickForm2_DataSource_Array implements HTML_QuickForm2_DataSource_Nul
                 $value = $value[$token];
             } while (!empty($tokens));
             return $value;
-        } elseif (isset($this->values[$name])) {
-            return $this->values[$name];
+        } elseif (isset($this->values[$name ?? ''])) {
+            return $this->values[$name ?? ''];
         }
 
         return null;
@@ -88,7 +88,7 @@ class HTML_QuickForm2_DataSource_Array implements HTML_QuickForm2_DataSource_Nul
             } while (!empty($tokens));
             return true;
         } else {
-            return array_key_exists($name, $this->values);
+            return array_key_exists($name ?? '', $this->values);
         }
     }
 }

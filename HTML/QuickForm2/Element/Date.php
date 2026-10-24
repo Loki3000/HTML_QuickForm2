@@ -64,7 +64,7 @@ class HTML_QuickForm2_Element_Date extends HTML_QuickForm2_Container_Group
 
    /**
     * Message provider for option texts
-    * @var  callback|HTML_QuickForm2_MessageProvider
+    * @var  callable|HTML_QuickForm2_MessageProvider
     */
     protected $messageProvider;
 

@@ -50,7 +50,7 @@ class HTML_QuickForm2_Element_Hierselect extends HTML_QuickForm2_Container_Group
     * PHP callback function for getting additional options
     *
     * @see  loadOptions()
-    * @var  callable
+    * @var  callable|null
     */
     protected $callback = null;
 
@@ -180,7 +180,7 @@ class HTML_QuickForm2_Element_Hierselect extends HTML_QuickForm2_Container_Group
             $data = $this->getData();
             unset($data['label']);
             $this->appendChild(new HTML_QuickForm2_Element_Select(
-                $i, array('id' => self::generateId($this->getName() . "[{$i}]")) + $this->getAttributes(), $data
+                (string)$i, array('id' => self::generateId($this->getName() . "[{$i}]")) + $this->getAttributes(), $data
             ));
         }
     }
@@ -200,7 +200,7 @@ class HTML_QuickForm2_Element_Hierselect extends HTML_QuickForm2_Container_Group
             $keys  =  $this->_values;
             $array =& $this->options[$idx++];
             while (!empty($keys)) {
-                $key = array_shift($keys);
+                $key = array_shift($keys) ?? '';
                 if (!isset($array[$key])) {
                     if (!empty($keys)) {
                         $array[$key] = array();

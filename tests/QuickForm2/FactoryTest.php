@@ -116,6 +116,29 @@ class HTML_QuickForm2_FactoryTest extends PHPUnit\Framework\TestCase
         $this->assertEquals('attributes', $el->attributes);
     }
 
+   /**
+    * Class registered without include file must be loaded through autoloader,
+    * not by guessing a file name from the class name
+    */
+    public function testCreateElementAutoloadedClass()
+    {
+        $className = 'QuickForm2Fixture\\AutoloadedElement';
+        $autoload  = function ($class) use ($className) {
+            if ($className === $class) {
+                require dirname(__FILE__) . '/_files/AutoloadedElement.php';
+            }
+        };
+        HTML_QuickForm2_Factory::registerElement('autoloaded', $className);
+        spl_autoload_register($autoload);
+        try {
+            $el = HTML_QuickForm2_Factory::createElement('autoloaded', 'auto');
+        } finally {
+            spl_autoload_unregister($autoload);
+        }
+        $this->assertInstanceOf($className, $el);
+        $this->assertEquals('auto', $el->name);
+    }
+
     public function testNotRegisteredRule()
     {
         $this->assertFalse(HTML_QuickForm2_Factory::isRuleRegistered('foo_' . mt_rand()));
@@ -131,7 +154,7 @@ class HTML_QuickForm2_FactoryTest extends PHPUnit\Framework\TestCase
     public function testCreateNotRegisteredRule()
     {
         $mockNode = $this->getMockBuilder('HTML_QuickForm2_Node')
-        ->setMethods($this->nodeAbstractMethods)
+        ->onlyMethods($this->nodeAbstractMethods)
         ->getMock();
         $this->expectException('HTML_QuickForm2_Exception_InvalidArgument');
         $rule = HTML_QuickForm2_Factory::createRule('foo2', $mockNode);
@@ -140,7 +163,7 @@ class HTML_QuickForm2_FactoryTest extends PHPUnit\Framework\TestCase
     public function testCreateRuleNonExistingClass()
     {
         $mockNode = $this->getMockBuilder('HTML_QuickForm2_Node')
-        ->setMethods($this->nodeAbstractMethods)
+        ->onlyMethods($this->nodeAbstractMethods)
         ->getMock();
         HTML_QuickForm2_Factory::registerRule('foo3', 'NonexistentClass');
         $this->expectException('HTML_QuickForm2_Exception_NotFound');
@@ -151,7 +174,7 @@ class HTML_QuickForm2_FactoryTest extends PHPUnit\Framework\TestCase
     public function testCreateRuleNonExistingFile()
     {
         $mockNode = $this->getMockBuilder('HTML_QuickForm2_Node')
-        ->setMethods($this->nodeAbstractMethods)
+        ->onlyMethods($this->nodeAbstractMethods)
         ->getMock();
         HTML_QuickForm2_Factory::registerRule('foo4', 'NonexistentClass', 'NonexistentFile.php');
         $this->expectException('HTML_QuickForm2_Exception_NotFound');
@@ -162,7 +185,7 @@ class HTML_QuickForm2_FactoryTest extends PHPUnit\Framework\TestCase
     public function testCreateRuleInvalidFile()
     {
         $mockNode = $this->getMockBuilder('HTML_QuickForm2_Node')
-        ->setMethods($this->nodeAbstractMethods)
+        ->onlyMethods($this->nodeAbstractMethods)
         ->getMock();
         HTML_QuickForm2_Factory::registerRule('foo5', 'NonexistentClass', dirname(__FILE__) . '/_files/InvalidFile.php');
         $this->expectException('HTML_QuickForm2_Exception_NotFound');
@@ -172,7 +195,7 @@ class HTML_QuickForm2_FactoryTest extends PHPUnit\Framework\TestCase
     public function testCreateRuleValid()
     {
         $mockNode = $this->getMockBuilder('HTML_QuickForm2_Node')
-        ->setMethods($this->nodeAbstractMethods)
+        ->onlyMethods($this->nodeAbstractMethods)
         ->getMock();
         HTML_QuickForm2_Factory::registerRule(
             'fakerule',

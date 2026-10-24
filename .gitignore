@@ -11,3 +11,4 @@ js/docs/
 .vscode
 
 .phpunit.result.cache
+.phpunit.cache

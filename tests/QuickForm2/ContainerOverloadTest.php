@@ -54,6 +54,14 @@ class HTML_QuickForm2_ContainerOverloadTest extends PHPUnit\Framework\TestCase
         $c->addUnknown('uCOT1');
     }
 
+    public function testCallUndefinedMethod()
+    {
+        $c = new HTML_QuickForm2_ContainerImpl('cCOT4');
+        $this->expectException('Error');
+        $this->expectExceptionMessage('Call to undefined method HTML_QuickForm2_ContainerImpl::undefinedMethod()');
+        $c->undefinedMethod();
+    }
+
 
     public function testAddElementWithUnderscoreInType()
     {

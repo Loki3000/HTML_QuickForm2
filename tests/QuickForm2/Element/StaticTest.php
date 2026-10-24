@@ -77,7 +77,7 @@ class HTML_QuickForm2_Element_StaticTest extends PHPUnit\Framework\TestCase
         $static = new HTML_QuickForm2_Element_Static('novalidate');
         $this->expectException('HTML_QuickForm2_Exception_InvalidArgument');
         $rule = $this->getMockBuilder('HTML_QuickForm2_Rule')
-        ->setMethods(array('validateOwner'))
+        ->onlyMethods(array('validateOwner'))
         ->setConstructorArgs(array($static, 'a message'))
         ->getMock();
     }
@@ -109,9 +109,6 @@ class HTML_QuickForm2_Element_StaticTest extends PHPUnit\Framework\TestCase
         $this->assertMatchesRegularExpression('!<div[^<>]*class="foo"[^<>]*>bar</div>!', $div->__toString());
     }
 
-   /**
-    * @expectedException HTML_QuickForm2_Exception_InvalidArgument
-    */
     public function testDisallowedTagNames()
     {
         $this->expectException('HTML_QuickForm2_Exception_InvalidArgument');

@@ -126,5 +126,27 @@ class HTML_QuickForm2_RendererTest extends PHPUnit\Framework\TestCase
         $renderer = HTML_Quickform2_Renderer::factory($type);
         $renderer->sayHello();
     }
+
+    public function testCallUndefinedMethod()
+    {
+        $type = 'fake' . mt_rand();
+        HTML_QuickForm2_Renderer::register($type, 'HTML_QuickForm2_FakeRenderer');
+
+        $renderer = HTML_Quickform2_Renderer::factory($type);
+        $this->expectException('Error');
+        $this->expectExceptionMessage('Call to undefined method HTML_QuickForm2_FakeRenderer::sayGoodbye()');
+        $renderer->sayGoodbye();
+    }
+
+    public function testCannotConvertToString()
+    {
+        $type = 'fake' . mt_rand();
+        HTML_QuickForm2_Renderer::register($type, 'HTML_QuickForm2_FakeRenderer');
+
+        $renderer = HTML_Quickform2_Renderer::factory($type);
+        $this->expectException('Error');
+        $this->expectExceptionMessage('Object of class HTML_QuickForm2_FakeRenderer could not be converted to string');
+        $str = (string)$renderer;
+    }
 }
 ?>

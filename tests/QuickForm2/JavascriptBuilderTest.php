@@ -87,18 +87,18 @@ class HTML_QuickForm2_JavascriptBuilderTest extends PHPUnit\Framework\TestCase
         $element = new HTML_QuickForm2_Element_InputText();
 
         $mockRuleOne = $this->getMockBuilder('HTML_QuickForm2_Rule')
-        ->setMethods(array('validateOwner', 'getJavascriptCallback'))
+        ->onlyMethods(array('validateOwner', 'getJavascriptCallback'))
         ->setConstructorArgs(array($element))
         ->getMock();
         $mockRuleOne->expects($this->once())->method('getJavascriptCallback')
-            ->will($this->returnValue('jsRuleOne'));
+            ->willReturn('jsRuleOne');
 
         $mockRuleTwo = $this->getMockBuilder('HTML_QuickForm2_Rule')
-        ->setMethods(array('validateOwner', 'getJavascriptCallback'))
+        ->onlyMethods(array('validateOwner', 'getJavascriptCallback'))
         ->setConstructorArgs(array($element))
         ->getMock();
         $mockRuleTwo->expects($this->once())->method('getJavascriptCallback')
-            ->will($this->returnValue('jsRuleTwo'));
+            ->willReturn('jsRuleTwo');
 
         $this->assertEquals('', $builder->getFormJavascript());
 

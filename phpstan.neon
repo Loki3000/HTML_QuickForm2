@@ -1,0 +1,15 @@
+parameters:
+    level: 5
+    phpVersion:
+        min: 80200
+        max: 80500
+    paths:
+        - HTML
+    scanDirectories:
+        - vendor/pear
+    # No native types in the library: phpdoc describes intent, runtime checks
+    # of arguments against it are deliberate
+    treatPhpDocTypesAsCertain: false
+    # Defined by session extension at runtime, empty when cookies are used
+    dynamicConstantNames:
+        - SID

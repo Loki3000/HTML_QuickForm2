@@ -26,10 +26,10 @@ require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
 class HTML_QuickForm2_Rule_EmailTest extends PHPUnit\Framework\TestCase
 {
    /**
-    * @dataProvider emailProvider
     * @param string $address  "email address" being tested
     * @param bool   $expected whether given address should be valid
     */
+    #[PHPUnit\Framework\Attributes\DataProvider('emailProvider')]
     public function testValidate($address, $expected)
     {
         $element = new HTML_QuickForm2_Element_InputText('email');

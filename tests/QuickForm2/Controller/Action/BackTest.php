@@ -31,21 +31,21 @@ class HTML_QuickForm2_Controller_Action_BackTest
         $formOne = new HTML_QuickForm2('formOne');
         $formOne->addElement('text', 'foo')->setValue('foo value');
         $pageOne = $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-        ->setMethods(array('populateForm'))
+        ->onlyMethods(array('populateForm'))
         ->setConstructorArgs(array($formOne))
         ->getMock();
         
         $formTwo = new HTML_QuickForm2('formTwo');
         $formTwo->addElement('text', 'bar')->setValue('bar value');
         $pageTwo = $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-        ->setMethods( array('populateForm'))
+        ->onlyMethods( array('populateForm'))
         ->setConstructorArgs(array($formTwo))
         ->getMock();
         $mockJump = $this->getMockBuilder('HTML_QuickForm2_Controller_Action')
-        ->setMethods(array('perform'))
+        ->onlyMethods(array('perform'))
         ->getMock();
         $mockJump->expects($this->exactly(2))->method('perform')
-                 ->will($this->returnValue('jump to foo'));
+                 ->willReturn('jump to foo');
         $pageOne->addHandler('jump', $mockJump);
         $controller = new HTML_QuickForm2_Controller('testBackAction');
         $controller->addPage($pageOne);
@@ -62,17 +62,17 @@ class HTML_QuickForm2_Controller_Action_BackTest
     public function testNoValidationForWizards()
     {
         $mockForm = $this->getMockBuilder('HTML_QuickForm2')
-        ->setMethods( array('validate'))
+        ->onlyMethods( array('validate'))
         ->setConstructorArgs(array('eternallyValid'))
         ->getMock();
         $mockForm->expects($this->once())->method('validate')
-                 ->will($this->returnValue(true));
+                 ->willReturn(true);
         $mockPage = $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-        ->setMethods( array('populateForm'))
+        ->onlyMethods( array('populateForm'))
         ->setConstructorArgs(array($mockForm))
         ->getMock();
         $mockPage->addHandler('jump', $this->getMockBuilder('HTML_QuickForm2_Controller_Action')
-        ->setMethods(array('perform'))
+        ->onlyMethods(array('perform'))
         ->getMock());
 
         $wizard = new HTML_QuickForm2_Controller('wizard', true);

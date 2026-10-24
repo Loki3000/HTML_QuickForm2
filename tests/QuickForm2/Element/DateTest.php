@@ -22,9 +22,6 @@ require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
 
 class HTML_QuickForm2_Element_DateTest extends PHPUnit\Framework\TestCase
 {
-   /**
-    * @expectedException HTML_QuickForm2_Exception_InvalidArgument
-    */
     public function testInvalidMessageProvider()
     {
         $this->expectException('HTML_QuickForm2_Exception_InvalidArgument');
@@ -45,10 +42,10 @@ class HTML_QuickForm2_Element_DateTest extends PHPUnit\Framework\TestCase
     public function testObjectMessageProvider()
     {
         $mockProvider = $this->getMockBuilder('HTML_QuickForm2_MessageProvider')
-        ->setMethods(array('get'))
+        ->onlyMethods(array('get'))
         ->getMock();
         $mockProvider->expects($this->once())->method('get')
-                     ->will($this->returnValue(array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Caturday')));
+                     ->willReturn(array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Caturday'));
         $date = new HTML_QuickForm2_Element_Date('object', null, array(
             'format'          => 'l',
             'messageProvider' => $mockProvider

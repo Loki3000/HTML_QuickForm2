@@ -215,9 +215,10 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
     * If the element was previously added to the container or to another
     * container, it is first removed there.
     *
-    * @param HTML_QuickForm2_Node $element Element to add
+    * @template T of HTML_QuickForm2_Node
+    * @param T $element Element to add
     *
-    * @return   HTML_QuickForm2_Node     Added element
+    * @return   T     Added element
     * @throws   HTML_QuickForm2_Exception_InvalidArgument
     */
     public function appendChild(HTML_QuickForm2_Node $element)
@@ -339,7 +340,7 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
     *
     * @return   HTML_QuickForm2_Node     Inserted element
     */
-    public function insertBefore(HTML_QuickForm2_Node $element, HTML_QuickForm2_Node $reference = null)
+    public function insertBefore(HTML_QuickForm2_Node $element, ?HTML_QuickForm2_Node $reference = null)
     {
         if (null === $reference) {
             return $this->appendChild($element);
@@ -374,7 +375,7 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
    /**
     * Returns a recursive iterator iterator for the container elements
     *
-    * @param int $mode mode passed to RecursiveIteratorIterator
+    * @param RecursiveIteratorIterator::LEAVES_ONLY|RecursiveIteratorIterator::SELF_FIRST|RecursiveIteratorIterator::CHILD_FIRST $mode mode passed to RecursiveIteratorIterator
     *
     * @return   RecursiveIteratorIterator
     */
@@ -453,15 +454,13 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
     public function __call($m, $a)
     {
         if (preg_match('/^(add)([a-zA-Z0-9_]+)$/', $m, $match)) {
-            if ($match[1] == 'add') {
-                $type = strtolower($match[2]);
-                $name = isset($a[0]) ? $a[0] : null;
-                $attr = isset($a[1]) ? $a[1] : null;
-                $data = isset($a[2]) ? $a[2] : array();
-                return $this->addElement($type, $name, $attr, $data);
-            }
+            $type = strtolower($match[2]);
+            $name = isset($a[0]) ? $a[0] : null;
+            $attr = isset($a[1]) ? $a[1] : null;
+            $data = isset($a[2]) ? $a[2] : array();
+            return $this->addElement($type, $name, $attr, $data);
         }
-        trigger_error("Fatal error: Call to undefined method ".get_class($this)."::".$m."()", E_USER_ERROR);
+        throw new Error("Call to undefined method " . get_class($this) . "::" . $m . "()");
     }
 
    /**
@@ -486,7 +485,8 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
     {
         HTML_QuickForm2_Loader::loadClass('HTML_QuickForm2_Renderer');
 
-        $renderer = $this->render(HTML_QuickForm2_Renderer::factory('default'));
+        $renderer = HTML_QuickForm2_Renderer::factory('default');
+        $this->render($renderer);
         return $renderer->__toString()
                . $renderer->getJavascriptBuilder()->getSetupCode(null, true);
     }

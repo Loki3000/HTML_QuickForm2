@@ -65,6 +65,7 @@ class HTML_QuickForm2_Element_Script extends HTML_QuickForm2_Element_Static
     public function render(HTML_QuickForm2_Renderer $renderer)
     {
         $renderer->renderHidden($this);
+        return $renderer;
     }
 }
 ?>

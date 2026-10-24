@@ -28,7 +28,7 @@ class HTML_QuickForm2_Controller_PageTest extends PHPUnit\Framework\TestCase
     public function testPopulateFormOnce()
     {
         $mockPage = $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-        ->setMethods(array('populateForm'))
+        ->onlyMethods(array('populateForm'))
         ->setConstructorArgs(array(new HTML_QuickForm2('firstPage')))
         ->getMock();
             
@@ -42,7 +42,7 @@ class HTML_QuickForm2_Controller_PageTest extends PHPUnit\Framework\TestCase
     {
         $controller = new HTML_QuickForm2_Controller('precedence');
         $mockPage   = $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-        ->setMethods(array('populateForm'))
+        ->onlyMethods(array('populateForm'))
         ->setConstructorArgs(array(new HTML_QuickForm2('precedencePage')))
         ->getMock();
             
@@ -51,20 +51,20 @@ class HTML_QuickForm2_Controller_PageTest extends PHPUnit\Framework\TestCase
         $mockPage->handle('foo');
 
         $mockFoo1 = $this->getMockBuilder('HTML_QuickForm2_Controller_Action')
-        ->setMethods(array('perform'))
+        ->onlyMethods(array('perform'))
         ->getMock();
             
         $mockFoo1->expects($this->once())->method('perform')
-                 ->will($this->returnValue('foo common'));
+                 ->willReturn('foo common');
         $controller->addHandler('foo', $mockFoo1);
         $this->assertEquals('foo common', $mockPage->handle('foo'));
 
         $mockFoo2 = $this->getMockBuilder('HTML_QuickForm2_Controller_Action')
-        ->setMethods(array('perform'))
+        ->onlyMethods(array('perform'))
         ->getMock();
             
         $mockFoo2->expects($this->once())->method('perform')
-                 ->will($this->returnValue('foo specific'));
+                 ->willReturn('foo specific');
         $mockPage->addHandler('foo', $mockFoo2);
         $this->assertEquals('foo specific', $mockPage->handle('foo'));
     }
@@ -73,7 +73,7 @@ class HTML_QuickForm2_Controller_PageTest extends PHPUnit\Framework\TestCase
     {
         $controller = new HTML_QuickForm2_Controller('defaultDisplay');
         $mockPage   = $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-        ->setMethods(array('populateForm'))
+        ->onlyMethods(array('populateForm'))
         ->setConstructorArgs(array(new HTML_QuickForm2('defaultDisplayPage')))
         ->getMock();
             
@@ -88,7 +88,7 @@ class HTML_QuickForm2_Controller_PageTest extends PHPUnit\Framework\TestCase
     public function testSetDefaultAction()
     {
         $mockPage = $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-        ->setMethods(array('populateForm'))
+        ->onlyMethods(array('populateForm'))
         ->setConstructorArgs(array(new HTML_QuickForm2('defaultActionPage')))
         ->getMock();
             
@@ -107,7 +107,7 @@ class HTML_QuickForm2_Controller_PageTest extends PHPUnit\Framework\TestCase
     public function testDefaultActionIsFirstElement()
     {
         $mockPage = $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-        ->setMethods(array('populateForm'))
+        ->onlyMethods(array('populateForm'))
         ->setConstructorArgs(array(new HTML_QuickForm2('defaultActionPage')))
         ->getMock();
             
@@ -124,7 +124,7 @@ class HTML_QuickForm2_Controller_PageTest extends PHPUnit\Framework\TestCase
     public function testPropagateControllerId()
     {
         $noPropPage = $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-        ->setMethods(array('populateForm'))
+        ->onlyMethods(array('populateForm'))
         ->setConstructorArgs(array(new HTML_QuickForm2('noPropagateForm')))
         ->getMock();
             
@@ -135,7 +135,7 @@ class HTML_QuickForm2_Controller_PageTest extends PHPUnit\Framework\TestCase
         $this->assertEquals(0, count($hidden));
 
         $propPage = $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-        ->setMethods(array('populateForm'))
+        ->onlyMethods(array('populateForm'))
         ->setConstructorArgs(array(new HTML_QuickForm2('propagateForm')))
         ->getMock();
             

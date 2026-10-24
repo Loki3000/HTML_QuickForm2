@@ -304,19 +304,19 @@ class HTML_QuickForm2_Element_GroupTest extends PHPUnit\Framework\TestCase
         $element = $group->addElement('text', 'anElement');
 
         $ruleGroup = $this->getMockBuilder('HTML_QuickForm2_Rule')
-        ->setMethods(array('validateOwner', 'getJavascriptCallback'))
+        ->onlyMethods(array('validateOwner', 'getJavascriptCallback'))
         ->setConstructorArgs(array($group))
         ->getMock();
             
         $ruleGroup->expects($this->once())->method('getJavascriptCallback')
-                  ->will($this->returnValue('groupCallback'));
+                  ->willReturn('groupCallback');
         $ruleElement = $this->getMockBuilder('HTML_QuickForm2_Rule')
-        ->setMethods(array('validateOwner', 'getJavascriptCallback'))
+        ->onlyMethods(array('validateOwner', 'getJavascriptCallback'))
         ->setConstructorArgs(array($element))
         ->getMock();
             
         $ruleElement->expects($this->once())->method('getJavascriptCallback')
-                    ->will($this->returnValue('elementCallback'));
+                    ->willReturn('elementCallback');
 
         $group->addRule($ruleGroup, HTML_QuickForm2_Rule::CLIENT);
         $element->addRule($ruleElement, HTML_QuickForm2_Rule::CLIENT);
@@ -331,7 +331,7 @@ class HTML_QuickForm2_Element_GroupTest extends PHPUnit\Framework\TestCase
     {
         $group = new HTML_QuickForm2_Container_Group('aGroup');
         $ruleGroup = $this->getMockBuilder('HTML_QuickForm2_Rule')
-        ->setMethods(array('validateOwner', 'getJavascriptCallback'))
+        ->onlyMethods(array('validateOwner', 'getJavascriptCallback'))
         ->setConstructorArgs(array($group))
         ->getMock();
             

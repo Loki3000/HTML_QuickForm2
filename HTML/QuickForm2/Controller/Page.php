@@ -54,7 +54,7 @@ abstract class HTML_QuickForm2_Controller_Page
 
    /**
     * Controller this page belongs to
-    * @var  HTML_QuickForm2_Controller
+    * @var  HTML_QuickForm2_Controller|null
     */
     protected $controller = null;
 
@@ -157,7 +157,7 @@ abstract class HTML_QuickForm2_Controller_Page
     * @param string $actionName Default action name
     * @param string $imageSrc   Path to a 1x1 transparent GIF image
     *
-    * @return HTML_QuickForm2_Controller_DefaultAction Returns the image input used for default action
+    * @return HTML_QuickForm2_Controller_DefaultAction|HTML_QuickForm2_Node Returns the image input used for default action
     */
     public function setDefaultAction(
         $actionName,

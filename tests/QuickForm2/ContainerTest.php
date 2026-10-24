@@ -441,26 +441,26 @@ class HTML_QuickForm2_ContainerTest extends PHPUnit\Framework\TestCase
         $el2 = $cValidate->appendChild(new HTML_QuickForm2_ElementImpl2('bar'));
 
         $ruleTrue1 = $this->getMockBuilder('HTML_QuickForm2_Rule')
-        ->setMethods(array('validateOwner'))
+        ->onlyMethods(array('validateOwner'))
         ->setConstructorArgs(array($cValidate, 'irrelevant message'))
         ->getMock();
             
         $ruleTrue1->expects($this->once())->method('validateOwner')
-                  ->will($this->returnValue(true));
+                  ->willReturn(true);
         $ruleFalse = $this->getMockBuilder('HTML_QuickForm2_Rule')
-        ->setMethods(array('validateOwner'))
+        ->onlyMethods(array('validateOwner'))
         ->setConstructorArgs(array($el1, 'some error'))
         ->getMock();
             
         $ruleFalse->expects($this->once())->method('validateOwner')
-                  ->will($this->returnValue(false));
+                  ->willReturn(false);
         $ruleTrue2 = $this->getMockBuilder('HTML_QuickForm2_Rule')
-        ->setMethods(array('validateOwner'))
+        ->onlyMethods(array('validateOwner'))
         ->setConstructorArgs(array($el2, 'irrelevant message'))
         ->getMock();
             
         $ruleTrue2->expects($this->once())->method('validateOwner')
-                  ->will($this->returnValue(true));
+                  ->willReturn(true);
 
         $cValidate->addRule($ruleTrue1);
         $el1->addRule($ruleFalse);
@@ -480,12 +480,12 @@ class HTML_QuickForm2_ContainerTest extends PHPUnit\Framework\TestCase
         $element   = $container->appendChild(new HTML_QuickForm2_ElementImpl2('foo'));
 
         $ruleChange = $this->getMockBuilder('HTML_QuickForm2_Rule')
-        ->setMethods(array('validateOwner'))
+        ->onlyMethods(array('validateOwner'))
         ->setConstructorArgs(array($element, 'a message'))
         ->getMock();
             
         $ruleChange->expects($this->exactly(2))->method('validateOwner')
-                   ->will($this->onConsecutiveCalls(true, false));
+                   ->willReturnOnConsecutiveCalls(true, false);
         $element->addRule($ruleChange);
 
         $container->addRule(new RuleRequest17576(
@@ -509,19 +509,19 @@ class HTML_QuickForm2_ContainerTest extends PHPUnit\Framework\TestCase
         $element   = $container->appendChild(new HTML_QuickForm2_ElementImpl2('anElement'));
 
         $ruleContainer = $this->getMockBuilder('HTML_QuickForm2_Rule')
-        ->setMethods(array('validateOwner', 'getJavascriptCallback'))
+        ->onlyMethods(array('validateOwner', 'getJavascriptCallback'))
         ->setConstructorArgs(array($container))
         ->getMock();
             
         $ruleContainer->expects($this->once())->method('getJavascriptCallback')
-                      ->will($this->returnValue('containerCallback'));
+                      ->willReturn('containerCallback');
         $ruleElement = $this->getMockBuilder('HTML_QuickForm2_Rule')
-        ->setMethods(array('validateOwner', 'getJavascriptCallback'))
+        ->onlyMethods(array('validateOwner', 'getJavascriptCallback'))
         ->setConstructorArgs(array($element))
         ->getMock();
             
         $ruleElement->expects($this->once())->method('getJavascriptCallback')
-                    ->will($this->returnValue('elementCallback'));
+                    ->willReturn('elementCallback');
 
         $container->addRule($ruleContainer, HTML_QuickForm2_Rule::CLIENT);
         $element->addRule($ruleElement, HTML_QuickForm2_Rule::CLIENT);
@@ -536,7 +536,7 @@ class HTML_QuickForm2_ContainerTest extends PHPUnit\Framework\TestCase
     {
         $container = new HTML_QuickForm2_ContainerImpl('aContainer');
         $ruleContainer = $this->getMockBuilder('HTML_QuickForm2_Rule')
-        ->setMethods(array('validateOwner', 'getJavascriptCallback'))
+        ->onlyMethods(array('validateOwner', 'getJavascriptCallback'))
         ->setConstructorArgs(array($container))
         ->getMock();
             

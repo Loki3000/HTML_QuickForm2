@@ -28,27 +28,27 @@ class HTML_QuickForm2_Controller_Action_DirectTest extends PHPUnit\Framework\Tes
     public function testPerform()
     {
         $source = $this->getMockBuilder('HTML_QuickForm2')
-        ->setMethods(array('validate', 'getValue'))
+        ->onlyMethods(array('validate', 'getValue'))
         ->setConstructorArgs(array('source'))
         ->getMock();
         $source->expects($this->once())->method('validate')
-               ->will($this->returnValue(true));
+               ->willReturn(true);
         $source->expects($this->once())->method('getValue')
-               ->will($this->returnValue(array('foo' => 'bar')));
+               ->willReturn(array('foo' => 'bar'));
         $sourcePage = $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-        ->setMethods(array('populateForm'))
+        ->onlyMethods(array('populateForm'))
         ->setConstructorArgs(array($source))
         ->getMock();
         $sourcePage->addHandler('destination', new HTML_QuickForm2_Controller_Action_Direct());
         $destPage = $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-        ->setMethods(array('populateForm'))
+        ->onlyMethods(array('populateForm'))
         ->setConstructorArgs(array(new HTML_QuickForm2('destination')))
         ->getMock();
         $mockJump = $this->getMockBuilder('HTML_QuickForm2_Controller_Action')
-        ->setMethods(array('perform'))
+        ->onlyMethods(array('perform'))
         ->getMock();
         $mockJump->expects($this->once())->method('perform')
-                 ->will($this->returnValue('jump to destination'));
+                 ->willReturn('jump to destination');
         $destPage->addHandler('jump', $mockJump);
 
         $controller = new HTML_QuickForm2_Controller('testDirectAction');

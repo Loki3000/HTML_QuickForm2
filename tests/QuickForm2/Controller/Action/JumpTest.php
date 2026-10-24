@@ -30,10 +30,10 @@ class HTML_QuickForm2_Controller_Action_JumpTest extends PHPUnit\Framework\TestC
     public function setUp() : void
     {
         $this->mockJump = $this->getMockBuilder('HTML_QuickForm2_Controller_Action_Jump')
-        ->setMethods(array('doRedirect'))
+        ->onlyMethods(array('doRedirect'))
         ->getMock();
         $this->mockJump->expects($this->atLeastOnce())->method('doRedirect')
-             ->will($this->returnArgument(0));
+             ->willReturnArgument(0);
 
         // see RFC 3986, section 5.4
         $_SERVER['HTTP_HOST']   = 'a';
@@ -91,7 +91,7 @@ class HTML_QuickForm2_Controller_Action_JumpTest extends PHPUnit\Framework\TestC
 
         $controller = new HTML_QuickForm2_Controller('rfc3986', true);
         $mockPage = $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-        ->setMethods(array('populateForm'))
+        ->onlyMethods(array('populateForm'))
         ->setConstructorArgs(array(new HTML_QuickForm2('relative')))
         ->getMock();
         $mockPage->addHandler('jump', $this->mockJump);
@@ -107,11 +107,11 @@ class HTML_QuickForm2_Controller_Action_JumpTest extends PHPUnit\Framework\TestC
     {
         $controller = new HTML_QuickForm2_Controller('twopagewizard', true);
         $controller->addPage($this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-        ->setMethods(array('populateForm'))
+        ->onlyMethods(array('populateForm'))
         ->setConstructorArgs(array(new HTML_QuickForm2('first')))
         ->getMock());
         $controller->addPage($this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-        ->setMethods(array('populateForm'))
+        ->onlyMethods(array('populateForm'))
         ->setConstructorArgs(array(new HTML_QuickForm2('second')))
         ->getMock());
         $controller->addHandler('jump', $this->mockJump);
@@ -125,7 +125,7 @@ class HTML_QuickForm2_Controller_Action_JumpTest extends PHPUnit\Framework\TestC
     public function testPropagateControllerId()
     {
         $noPropPage = $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-        ->setMethods(array('populateForm'))
+        ->onlyMethods(array('populateForm'))
         ->setConstructorArgs(array(new HTML_QuickForm2('noPropagateForm')))
         ->getMock();
         $noPropController = new HTML_QuickForm2_Controller('foo', true, false);
@@ -137,7 +137,7 @@ class HTML_QuickForm2_Controller_Action_JumpTest extends PHPUnit\Framework\TestC
         );
 
         $propPage = $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-        ->setMethods(array('populateForm'))
+        ->onlyMethods(array('populateForm'))
         ->setConstructorArgs(array(new HTML_QuickForm2('propagateForm')))
         ->getMock();
         $propController = new HTML_QuickForm2_Controller('bar', true, true);
@@ -165,7 +165,7 @@ class HTML_QuickForm2_Controller_Action_JumpTest extends PHPUnit\Framework\TestC
 
         $controller = new HTML_QuickForm2_Controller('testBug3443');
         $controller->addPage($this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-        ->setMethods(array('populateForm'))
+        ->onlyMethods(array('populateForm'))
         ->setConstructorArgs(array(new HTML_QuickForm2('dest')))
         ->getMock());
         $controller->addHandler('jump', $this->mockJump);
@@ -188,7 +188,7 @@ class HTML_QuickForm2_Controller_Action_JumpTest extends PHPUnit\Framework\TestC
 
         $controller = new HTML_QuickForm2_Controller('bug16328');
         $mockPage   = $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-        ->setMethods(array('populateForm'))
+        ->onlyMethods(array('populateForm'))
         ->setConstructorArgs(array(new HTML_QuickForm2('unsecure')))
         ->getMock();
         $controller->addPage($mockPage);
@@ -207,7 +207,7 @@ class HTML_QuickForm2_Controller_Action_JumpTest extends PHPUnit\Framework\TestC
     {
         $controller = new HTML_QuickForm2_Controller('bug19216');
         $mockPage   = $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-        ->setMethods(array('populateForm'))
+        ->onlyMethods(array('populateForm'))
         ->setConstructorArgs(array(new HTML_QuickForm2('testhost')))
         ->getMock();
         $controller->addPage($mockPage);
@@ -230,7 +230,7 @@ class HTML_QuickForm2_Controller_Action_JumpTest extends PHPUnit\Framework\TestC
     {
         $controller = new HTML_QuickForm2_Controller('weirdhost');
         $mockPage   = $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-        ->setMethods(array('populateForm'))
+        ->onlyMethods(array('populateForm'))
         ->setConstructorArgs(array(new HTML_QuickForm2('weirdhost')))
         ->getMock();
         $controller->addPage($mockPage);
@@ -248,7 +248,7 @@ class HTML_QuickForm2_Controller_Action_JumpTest extends PHPUnit\Framework\TestC
 
         $controller = new HTML_QuickForm2_Controller('forwarded');
         $mockPage   = $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-        ->setMethods(array('populateForm'))
+        ->onlyMethods(array('populateForm'))
         ->setConstructorArgs(array(new HTML_QuickForm2('forwarded')))
         ->getMock();
         $controller->addPage($mockPage);
@@ -258,11 +258,11 @@ class HTML_QuickForm2_Controller_Action_JumpTest extends PHPUnit\Framework\TestC
         $this->assertStringStartsWith('http://localhost/foo?', $mockPage->handle('jump'));
 
         $trustingJump = $this->getMockBuilder('HTML_QuickForm2_Controller_Action_Jump')
-        ->setMethods(array('doRedirect'))
+        ->onlyMethods(array('doRedirect'))
         ->setConstructorArgs(array(true))
         ->getMock();
         $trustingJump->expects($this->atLeastOnce())->method('doRedirect')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
         $controller->addHandler('jump', $trustingJump);
 
         $this->assertStringStartsWith('http://example.com/foo?', $mockPage->handle('jump'));

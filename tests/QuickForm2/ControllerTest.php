@@ -68,7 +68,7 @@ class HTML_QuickForm2_ControllerTest extends PHPUnit\Framework\TestCase
     public function testAddPage()
     {
         $firstPage  = $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-        ->setMethods(['populateForm'])
+        ->onlyMethods(['populateForm'])
         ->setConstructorArgs(array(new HTML_QuickForm2('firstPage')))
         ->getMock();
 
@@ -84,7 +84,7 @@ class HTML_QuickForm2_ControllerTest extends PHPUnit\Framework\TestCase
         $this->expectException('HTML_QuickForm2_Exception_InvalidArgument');
         $controller->addPage(
             $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-            ->setMethods(array('populateForm'))
+            ->onlyMethods(array('populateForm'))
             ->setConstructorArgs(array(new HTML_QuickForm2('firstPage')))
             ->getMock()
         );
@@ -98,7 +98,7 @@ class HTML_QuickForm2_ControllerTest extends PHPUnit\Framework\TestCase
 
         $controller->addPage(
             $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-        ->setMethods(['populateForm'])
+        ->onlyMethods(['populateForm'])
         ->setConstructorArgs(array(new HTML_QuickForm2('aPage')))
         ->getMock());
         $this->assertEquals(array('aPage', 'display'), $controller->getActionName());
@@ -113,14 +113,14 @@ class HTML_QuickForm2_ControllerTest extends PHPUnit\Framework\TestCase
 
         $controller1 = new HTML_QuickForm2_Controller('first');
         $controller1->addPage($this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-        ->setMethods(array('populateForm'))
+        ->onlyMethods(array('populateForm'))
         ->setConstructorArgs(array(new HTML_QuickForm2('foo')))
         ->getMock());
         $this->assertEquals(array('foo', 'bar'), $controller1->getActionName());
 
         $controller2 = new HTML_QuickForm2_Controller('second');
         $controller2->addPage($this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-        ->setMethods(array('populateForm'))
+        ->onlyMethods(array('populateForm'))
         ->setConstructorArgs(array(new HTML_QuickForm2('baz')))
         ->getMock());
         $this->assertEquals(array('baz', 'quux'), $controller2->getActionName());
@@ -133,12 +133,12 @@ class HTML_QuickForm2_ControllerTest extends PHPUnit\Framework\TestCase
     {
         $controller = new HTML_QuickForm2_Controller('simpleIsValid');
         $controller->addPage($this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-        ->setMethods(['populateForm'])
+        ->onlyMethods(['populateForm'])
         ->setConstructorArgs(array(new HTML_QuickForm2('first')))
         ->getMock());
 
         $second = $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-        ->setMethods(['populateForm'])
+        ->onlyMethods(['populateForm'])
         ->setConstructorArgs(array(new HTML_QuickForm2('second')))
         ->getMock();
         
@@ -154,20 +154,20 @@ class HTML_QuickForm2_ControllerTest extends PHPUnit\Framework\TestCase
     {
         $controller = new HTML_QuickForm2_Controller('isValidUnseen', false);
         $controller->addPage($this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-        ->setMethods(['populateForm'])
+        ->onlyMethods(['populateForm'])
         ->setConstructorArgs(array(new HTML_QuickForm2('seen')))
         ->getMock());
         $mockUnseen = $this->getMockBuilder('HTML_QuickForm2')
-        ->setMethods(['validate', 'getValue'])
+        ->onlyMethods(['validate', 'getValue'])
         ->setConstructorArgs(array('unseen'))
         ->getMock();
         
         $mockUnseen->expects($this->once())->method('validate')
-                   ->will($this->returnValue(true));
+                   ->willReturn(true);
         $mockUnseen->expects($this->once())->method('getValue')
-                   ->will($this->returnValue(array('foo' => 'bar')));
+                   ->willReturn(array('foo' => 'bar'));
         $controller->addPage($this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-        ->setMethods(['populateForm'])
+        ->onlyMethods(['populateForm'])
         ->setConstructorArgs(array($mockUnseen))
         ->getMock());
 
@@ -186,17 +186,17 @@ class HTML_QuickForm2_ControllerTest extends PHPUnit\Framework\TestCase
     public function testBug8687()
     {
         $mockForm = $this->getMockBuilder('HTML_QuickForm2')
-        ->setMethods(['validate'])
+        ->onlyMethods(['validate'])
         ->setConstructorArgs(array('invalid'))
         ->getMock();
         
         $mockForm->expects($this->once())->method('validate')
-                 ->will($this->returnValue(false));
+                 ->willReturn(false);
         $select = $mockForm->addElement('select', 'foo', array('multiple'))
                            ->loadOptions(array('one' => 'First label', 'two' => 'Second label'));
         $box    = $mockForm->addElement('checkbox', 'bar');
         $mockPage = $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-        ->setMethods(['populateForm'])
+        ->onlyMethods(['populateForm'])
         ->setConstructorArgs(array($mockForm))
         ->getMock();
         

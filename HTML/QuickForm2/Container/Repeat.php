@@ -238,9 +238,10 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
      *
      * Elements are kept in the prototype rather than directly in repeat
      *
-     * @param HTML_QuickForm2_Node $element Element to add
+     * @template T of HTML_QuickForm2_Node
+     * @param T $element Element to add
      *
-     * @return   HTML_QuickForm2_Node     Added element
+     * @return   T     Added element
      * @throws   HTML_QuickForm2_Exception_InvalidArgument
      */
     public function appendChild(HTML_QuickForm2_Node $element)
@@ -275,7 +276,7 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
      * @return   HTML_QuickForm2_Node     Inserted element
      */
     public function insertBefore(
-        HTML_QuickForm2_Node $element, HTML_QuickForm2_Node $reference = null
+        HTML_QuickForm2_Node $element, ?HTML_QuickForm2_Node $reference = null
     ) {
         return $this->getPrototype()->insertBefore($element, $reference);
     }
@@ -539,17 +540,17 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
         /* @var HTML_QuickForm2_Node $child */
         foreach ($this->getRecursiveIterator() as $child) {
             if (false !== strpos((string)$backup[$key]['name'], self::INDEX_KEY)) {
-                $child->setName(str_replace(self::INDEX_KEY, $index, $backup[$key]['name']));
+                $child->setName(str_replace(self::INDEX_KEY, (string)$index, $backup[$key]['name']));
             }
             if ($child instanceof HTML_QuickForm2_Element_InputCheckable
                 && false !== strpos($backup[$key]['valueAttr'], self::INDEX_KEY)
             ) {
                 $child->setAttribute(
-                    'value', str_replace(self::INDEX_KEY, $index, $backup[$key]['valueAttr'])
+                    'value', str_replace(self::INDEX_KEY, (string)$index, $backup[$key]['valueAttr'])
                 );
             }
             if (array_key_exists('id', $backup[$key])) {
-                $child->setId(str_replace(self::INDEX_KEY, $index, $backup[$key]['id']));
+                $child->setId(str_replace(self::INDEX_KEY, (string)$index, $backup[$key]['id']));
             }
             if (array_key_exists('error', $backup[$key])) {
                 $child->setError();

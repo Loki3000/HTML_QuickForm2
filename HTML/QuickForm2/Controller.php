@@ -83,7 +83,7 @@ class HTML_QuickForm2_Controller implements IteratorAggregate
 
    /**
     * A wrapper around session variable used to store form data
-    * @var HTML_QuickForm2_Controller_SessionContainer
+    * @var HTML_QuickForm2_Controller_SessionContainer|null
     */
     protected $sessionContainer = null;
 
@@ -363,7 +363,7 @@ class HTML_QuickForm2_Controller implements IteratorAggregate
     *
     * @return bool
     */
-    public function isValid(HTML_QuickForm2_Controller_Page $reference = null)
+    public function isValid(?HTML_QuickForm2_Controller_Page $reference = null)
     {
         $container = $this->getSessionContainer();
         foreach ($this->pages as $id => $page) {

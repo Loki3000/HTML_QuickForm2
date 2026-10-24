@@ -33,22 +33,22 @@ class HTML_QuickForm2_Controller_Action_DisplayTest extends PHPUnit\Framework\Te
     public function testBug2323()
     {
         $pageFirst = $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-        ->setMethods(array('populateForm'))
+        ->onlyMethods(array('populateForm'))
         ->setConstructorArgs(array(new HTML_QuickForm2('first')))
         ->getMock();
         $mockJump = $this->getMockBuilder('HTML_QuickForm2_Controller_Action')
-        ->setMethods(array('perform'))
+        ->onlyMethods(array('perform'))
         ->getMock();
         $mockJump->expects($this->once())->method('perform')
-                 ->will($this->returnValue('jump to first'));
+                 ->willReturn('jump to first');
         $pageFirst->addHandler('jump', $mockJump);
 
         $pageSecond = $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-        ->setMethods(array('populateForm'))
+        ->onlyMethods(array('populateForm'))
         ->setConstructorArgs(array(new HTML_QuickForm2('second')))
         ->getMock();
         $mockDisplay = $this->getMockBuilder('HTML_QuickForm2_Controller_Action_Display')
-        ->setMethods(array('renderForm'))
+        ->onlyMethods(array('renderForm'))
         ->getMock();
         $mockDisplay->expects($this->never())->method('renderForm');
         $pageSecond->addHandler('display', $mockDisplay);
@@ -63,22 +63,22 @@ class HTML_QuickForm2_Controller_Action_DisplayTest extends PHPUnit\Framework\Te
     public function testLoadFromSessionContainerOnDisplay()
     {
         $mockForm = $this->getMockBuilder('HTML_QuickForm2')
-        ->setMethods(array('validate'))
+        ->onlyMethods(array('validate'))
         ->setConstructorArgs(array('load'))
         ->getMock();
         $foo = $mockForm->addElement('text', 'foo');
         $mockForm->expects($this->once())->method('validate')
-                 ->will($this->returnValue(false));
+                 ->willReturn(false);
         $mockPage = $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-        ->setMethods(array('populateForm'))
+        ->onlyMethods(array('populateForm'))
         ->setConstructorArgs(array($mockForm))
         ->getMock();
         $mockPage->expects($this->once())->method('populateForm');
         $mockDisplay = $this->getMockBuilder('HTML_QuickForm2_Controller_Action_Display')
-        ->setMethods(array('renderForm'))
+        ->onlyMethods(array('renderForm'))
         ->getMock();
         $mockDisplay->expects($this->once())->method('renderForm')
-                    ->will($this->returnValue('a form'));
+                    ->willReturn('a form');
         $mockPage->addHandler('display', $mockDisplay);
 
         $controller = new HTML_QuickForm2_Controller('loadValues');
@@ -95,20 +95,20 @@ class HTML_QuickForm2_Controller_Action_DisplayTest extends PHPUnit\Framework\Te
     public function testNoLoadFromSessionContainerOnOtherActions()
     {
         $mockForm = $this->getMockBuilder('HTML_QuickForm2')
-        ->setMethods(array('validate'))
+        ->onlyMethods(array('validate'))
         ->setConstructorArgs(array('noload'))
         ->getMock();
         $foo = $mockForm->addElement('text', 'foo');
         $mockForm->expects($this->never())->method('validate');
         $mockPage = $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-        ->setMethods(array('populateForm'))
+        ->onlyMethods(array('populateForm'))
         ->setConstructorArgs(array($mockForm))
         ->getMock();
         $mockDisplay = $this->getMockBuilder('HTML_QuickForm2_Controller_Action_Display')
-        ->setMethods(array('renderForm'))
+        ->onlyMethods(array('renderForm'))
         ->getMock();
         $mockDisplay->expects($this->once())->method('renderForm')
-                    ->will($this->returnValue('a form'));
+                    ->willReturn('a form');
         $mockPage->addHandler('display', $mockDisplay);
 
         $_REQUEST = array(

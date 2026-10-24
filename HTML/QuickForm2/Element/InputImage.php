@@ -35,7 +35,7 @@ class HTML_QuickForm2_Element_InputImage extends HTML_QuickForm2_Element_Input
 
    /**
     * Coordinates of user click within the image, array contains keys 'x' and 'y'
-    * @var  array
+    * @var  array|null
     */
     protected $coordinates = null;
 

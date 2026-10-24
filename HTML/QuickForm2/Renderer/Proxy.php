@@ -38,6 +38,13 @@
  * @license  http://opensource.org/licenses/bsd-license.php New BSD License
  * @version  Release: @package_version@
  * @link     http://pear.php.net/package/HTML_QuickForm2
+ *
+ * Methods exported by HTML_QuickForm2_Renderer_Default:
+ * @method $this setTemplateForClass(string $className, string $template)
+ * @method $this setTemplateForId(string $id, string $template)
+ * @method $this setErrorTemplate(array $template)
+ * @method $this setElementTemplateForGroupClass(string $groupClass, string $elementClass, string $template)
+ * @method $this setElementTemplateForGroupId(string $groupId, string $elementClass, string $template)
  */
 class HTML_QuickForm2_Renderer_Proxy extends HTML_QuickForm2_Renderer
 {
@@ -112,9 +119,9 @@ class HTML_QuickForm2_Renderer_Proxy extends HTML_QuickForm2_Renderer
                 $arguments
             );
         }
-        trigger_error(
-            "Fatal error: Call to undefined method " . get_class($this->_renderer)
-            . "::" . $name . "()", E_USER_ERROR
+        throw new Error(
+            "Call to undefined method " . get_class($this->_renderer)
+            . "::" . $name . "()"
         );
     }
 
@@ -204,7 +211,7 @@ class HTML_QuickForm2_Renderer_Proxy extends HTML_QuickForm2_Renderer
         return $this->_renderer->getJavascriptBuilder();
     }
 
-    public function setJavascriptBuilder(HTML_QuickForm2_JavascriptBuilder $builder = null)
+    public function setJavascriptBuilder(?HTML_QuickForm2_JavascriptBuilder $builder = null)
     {
         $this->_renderer->setJavascriptBuilder($builder);
         return $this;
@@ -262,9 +269,9 @@ class HTML_QuickForm2_Renderer_Proxy extends HTML_QuickForm2_Renderer
         if (method_exists($this->_renderer, '__toString')) {
             return $this->_renderer->__toString();
         }
-        trigger_error(
-            "Fatal error: Object of class " . get_class($this->_renderer)
-            . " could not be converted to string", E_USER_ERROR
+        throw new Error(
+            "Object of class " . get_class($this->_renderer)
+            . " could not be converted to string"
         );
     }
 }

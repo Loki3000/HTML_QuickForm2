@@ -218,9 +218,10 @@ class HTML_QuickForm2_Container_Group extends HTML_QuickForm2_Container
     * If the element was previously added to the container or to another
     * container, it is first removed there.
     *
-    * @param HTML_QuickForm2_Node $element Element to add
+    * @template T of HTML_QuickForm2_Node
+    * @param T $element Element to add
     *
-    * @return   HTML_QuickForm2_Node     Added element
+    * @return   T     Added element
     * @throws   HTML_QuickForm2_Exception_InvalidArgument
     */
     public function appendChild(HTML_QuickForm2_Node $element)
@@ -268,7 +269,7 @@ class HTML_QuickForm2_Container_Group extends HTML_QuickForm2_Container
     *
     * @return   HTML_QuickForm2_Node     Inserted element
     */
-    public function insertBefore(HTML_QuickForm2_Node $element, HTML_QuickForm2_Node $reference = null)
+    public function insertBefore(HTML_QuickForm2_Node $element, ?HTML_QuickForm2_Node $reference = null)
     {
         if (null === $reference) {
             return $this->appendChild($element);
@@ -322,10 +323,9 @@ class HTML_QuickForm2_Container_Group extends HTML_QuickForm2_Container
     {
         HTML_QuickForm2_Loader::loadClass('HTML_QuickForm2_Renderer');
 
-        $renderer = $this->render(
-            HTML_QuickForm2_Renderer::factory('default')
-                ->setTemplateForId($this->getId(), '{content}')
-        );
+        $renderer = HTML_QuickForm2_Renderer::factory('default')
+            ->setTemplateForId($this->getId(), '{content}');
+        $this->render($renderer);
         return $renderer->__toString()
                . $renderer->getJavascriptBuilder()->getSetupCode(null, true);
     }

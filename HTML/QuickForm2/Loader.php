@@ -45,7 +45,7 @@ class HTML_QuickForm2_Loader
     */
     public static function loadClass($className, $includeFile = null)
     {
-        if (class_exists($className, false) || interface_exists($className, false)) {
+        if (class_exists($className) || interface_exists($className)) {
             return;
         }
 

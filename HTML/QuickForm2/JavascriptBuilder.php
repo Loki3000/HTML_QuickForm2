@@ -76,7 +76,7 @@ class HTML_QuickForm2_JavascriptBuilder
     * Current form ID
     * @var string
     */
-    protected $formId = null;
+    protected $formId = '';
 
 
    /**
@@ -174,7 +174,7 @@ class HTML_QuickForm2_JavascriptBuilder
     */
     public function setFormId($formId)
     {
-        $this->formId = $formId;
+        $this->formId = $formId ?? '';
         $this->rules[$this->formId]          = array();
         $this->scripts[$this->formId]        = array();
         $this->forceValidator[$this->formId] = false;
@@ -185,7 +185,7 @@ class HTML_QuickForm2_JavascriptBuilder
     * Adds the Rule javascript to the list of current form Rules
     *
     * @param HTML_QuickForm2_Rule $rule     Rule instance
-    * @param bool                 $triggers Whether rule code should contain
+    * @param bool|int             $triggers Whether rule code should contain
     *                                       "triggers" for live validation
     */
     public function addRule(HTML_QuickForm2_Rule $rule, $triggers = false)
@@ -302,7 +302,7 @@ class HTML_QuickForm2_JavascriptBuilder
     *
     * @param mixed $value
     *
-    * @return   string  value as Javascript literal
+    * @return   string|int|float  value as Javascript literal
     */
     public static function encode($value)
     {

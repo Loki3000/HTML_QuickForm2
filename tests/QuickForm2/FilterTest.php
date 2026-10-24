@@ -69,16 +69,16 @@ class HTML_QuickForm2_FilterTest extends PHPUnit\Framework\TestCase
     public function testFiltersShouldPreserveNulls()
     {
         $mockElement = $this->getMockBuilder('HTML_QuickForm2_Element')
-        ->setMethods(array('getType','getRawValue', 'setValue', '__toString'))
+        ->onlyMethods(array('getType','getRawValue', 'setValue', '__toString'))
         ->getMock();
         
         $mockElement->expects($this->atLeastOnce())
-                    ->method('getRawValue')->will($this->returnValue(null));
+                    ->method('getRawValue')->willReturn(null);
         $mockElement->addFilter('trim');
         $this->assertNull($mockElement->getValue());
 
         $mockContainer = $this->getMockBuilder('HTML_QuickForm2_Container')
-        ->setMethods(array('getType', 'setValue', '__toString'))
+        ->onlyMethods(array('getType', 'setValue', '__toString'))
         ->getMock();
             
         $mockContainer->appendChild($mockElement);

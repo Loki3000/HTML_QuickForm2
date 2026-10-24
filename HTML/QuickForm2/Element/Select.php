@@ -409,7 +409,7 @@ class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
 
         $values = array();
         foreach ($this->values as $value) {
-            if (!$this->data['intrinsic_validation'] || !empty($this->possibleValues[$value])) {
+            if (!$this->data['intrinsic_validation'] || !empty($this->possibleValues[$value ?? ''])) {
                 $values[] = $value;
             }
         }

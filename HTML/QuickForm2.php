@@ -49,7 +49,7 @@ class HTML_QuickForm2 extends HTML_QuickForm2_Container
 
    /**
     * We do not allow setting "method" and "id" other than through constructor
-    * @var array
+    * @var string[]
     */
     protected $watchedAttributes = array('id', 'method');
 
@@ -80,9 +80,7 @@ class HTML_QuickForm2 extends HTML_QuickForm2_Container
             !$trackSubmit && ('get' == $method && !empty($_GET) ||
                               'post' == $method && (!empty($_POST) || !empty($_FILES)))
         ) {
-            $this->addDataSource(new HTML_QuickForm2_DataSource_SuperGlobal(
-                $method, (function_exists('get_magic_quotes_gpc')?get_magic_quotes_gpc():false)
-            ));
+            $this->addDataSource(new HTML_QuickForm2_DataSource_SuperGlobal($method));
         }
         if ($trackSubmit) {
             $this->appendChild(HTML_QuickForm2_Factory::createElement(
@@ -99,7 +97,7 @@ class HTML_QuickForm2 extends HTML_QuickForm2_Container
         );
     }
 
-    protected function setContainer(HTML_QuickForm2_Container $container = null)
+    protected function setContainer(?HTML_QuickForm2_Container $container = null)
     {
         throw new HTML_QuickForm2_Exception('Form cannot be added to container');
     }

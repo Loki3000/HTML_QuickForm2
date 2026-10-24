@@ -38,12 +38,6 @@ class HTML_QuickForm2_DataSource_SuperGlobal extends HTML_QuickForm2_DataSource_
     protected $files = array();
 
     /**
-     * Keys present in the $_FILES array
-     * @var array
-     */
-    private static $_fileKeys = array('name', 'type', 'size', 'tmp_name', 'error');
-
-    /**
      * magic quotes status
      * @var bool
      */

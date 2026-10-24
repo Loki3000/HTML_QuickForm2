@@ -42,6 +42,8 @@
  * @license  http://opensource.org/licenses/bsd-license.php New BSD License
  * @version  Release: @package_version@
  * @link     http://pear.php.net/package/HTML_QuickForm2
+ *
+ * @extends HTML_QuickForm2_Rule<HTML_QuickForm2_Container>
  */
 class HTML_QuickForm2_Rule_Each extends HTML_QuickForm2_Rule
 {

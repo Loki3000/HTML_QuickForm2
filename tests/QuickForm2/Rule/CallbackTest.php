@@ -33,7 +33,7 @@ class HTML_QuickForm2_Rule_CallbackTest extends PHPUnit\Framework\TestCase
     public function testValidCallbackRequired()
     {
         $mockEl  = $this->getMockBuilder('HTML_QuickForm2_Element')
-        ->setMethods(array('getType','getRawValue', 'setValue', '__toString'))
+        ->onlyMethods(array('getType','getRawValue', 'setValue', '__toString'))
         ->getMock();
         
         $this->expectException('HTML_QuickForm2_Exception_InvalidArgument');
@@ -50,11 +50,11 @@ class HTML_QuickForm2_Rule_CallbackTest extends PHPUnit\Framework\TestCase
     public function testOptionsHandling()
     {
         $mockEl  = $this->getMockBuilder('HTML_QuickForm2_Element')
-        ->setMethods(array('getType','getRawValue', 'setValue', '__toString'))
+        ->onlyMethods(array('getType','getRawValue', 'setValue', '__toString'))
         ->getMock();
         
         $mockEl->expects($this->atLeastOnce())
-               ->method('getRawValue')->will($this->returnValue('foo'));
+               ->method('getRawValue')->willReturn('foo');
 
         $strlen = new HTML_QuickForm2_Rule_Callback($mockEl, 'an error', 'strlen');
         $this->assertTrue($strlen->validate());
@@ -74,10 +74,10 @@ class HTML_QuickForm2_Rule_CallbackTest extends PHPUnit\Framework\TestCase
     public function testConfigHandling()
     {
         $mockEl  = $this->getMockBuilder('HTML_QuickForm2_Element')
-        ->setMethods(array('getType','getRawValue', 'setValue', '__toString'))
+        ->onlyMethods(array('getType','getRawValue', 'setValue', '__toString'))
         ->getMock();
         $mockEl->expects($this->atLeastOnce())
-               ->method('getRawValue')->will($this->returnValue('foo'));
+               ->method('getRawValue')->willReturn('foo');
 
         HTML_QuickForm2_Factory::registerRule('strlen', 'HTML_QuickForm2_Rule_Callback', null, 'strlen');
         $strlen = HTML_QuickForm2_Factory::createRule('strlen', $mockEl, 'an error');
@@ -106,11 +106,11 @@ class HTML_QuickForm2_Rule_CallbackTest extends PHPUnit\Framework\TestCase
     public function testConfigOverridesOptions()
     {
         $mockEl  = $this->getMockBuilder('HTML_QuickForm2_Element')
-        ->setMethods(array('getType','getRawValue', 'setValue', '__toString'))
+        ->onlyMethods(array('getType','getRawValue', 'setValue', '__toString'))
         ->getMock();
         
         $mockEl->expects($this->atLeastOnce())
-               ->method('getRawValue')->will($this->returnValue('foo'));
+               ->method('getRawValue')->willReturn('foo');
 
         HTML_QuickForm2_Factory::registerRule(
             'inarray-override',

@@ -31,6 +31,8 @@
  * @license  http://opensource.org/licenses/bsd-license.php New BSD License
  * @version  Release: @package_version@
  * @link     http://pear.php.net/package/HTML_QuickForm2
+ *
+ * @template TOwner of HTML_QuickForm2_Node
  */
 abstract class HTML_QuickForm2_Rule
 {
@@ -66,7 +68,7 @@ abstract class HTML_QuickForm2_Rule
 
    /**
     * An element whose value will be validated by this rule
-    * @var  HTML_QuickForm2_Node
+    * @var  TOwner
     */
     protected $owner;
 
@@ -97,7 +99,7 @@ abstract class HTML_QuickForm2_Rule
    /**
     * Class constructor
     *
-    * @param HTML_QuickForm2_Node $owner   Element to validate
+    * @param TOwner               $owner   Element to validate
     * @param string               $message Error message to display if validation fails
     * @param mixed                $config  Configuration data for the rule
     */
@@ -185,7 +187,7 @@ abstract class HTML_QuickForm2_Rule
    /**
     * Sets the element that will be validated by this rule
     *
-    * @param HTML_QuickForm2_Node $owner Element to validate
+    * @param TOwner $owner Element to validate
     *
     * @throws   HTML_QuickForm2_Exception_InvalidArgument    if trying to set
     *       an instance of HTML_QuickForm2_Element_Static as rule owner; if
@@ -282,7 +284,7 @@ abstract class HTML_QuickForm2_Rule
                     break;
                 }
             }
-            if ($globalValid = $globalValid || $localValid) {
+            if ($globalValid = (bool)$localValid) {
                 break;
             }
             $localValid = true;
@@ -371,7 +373,7 @@ abstract class HTML_QuickForm2_Rule
     *    qf.LiveRule when $outputTriggers is true)
     *  - chained rules, array of arrays like in $chainedRules property
     *
-    * @param bool $outputTriggers Whether the Rule will be run onblur / onchange
+    * @param bool|int $outputTriggers Whether the Rule will be run onblur / onchange
     *
     * @return   string
     * @throws   HTML_QuickForm2_Exception   if Rule or its chained Rules can only

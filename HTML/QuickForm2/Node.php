@@ -67,7 +67,7 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
 
    /**
     * Element containing current
-    * @var HTML_QuickForm2_Container
+    * @var HTML_QuickForm2_Container|null
     */
     protected $container = null;
 
@@ -107,7 +107,7 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
 
    /**
     * Changing 'name' and 'id' attributes requires some special handling
-    * @var array
+    * @var string[]
     */
     protected $watchedAttributes = array('id', 'name');
 
@@ -263,7 +263,7 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
    /**
     * Returns the element's name
     *
-    * @return   string
+    * @return   string|null
     */
     public function getName()
     {
@@ -354,7 +354,7 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
    /**
     * Returns the element's label(s)
     *
-    * @return   string|array
+    * @return   string|array|null
     */
     public function getLabel()
     {
@@ -430,7 +430,7 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
     * @throws   HTML_QuickForm2_Exception_InvalidArgument   If trying to set a
     *                               child of an element as its container
     */
-    protected function setContainer(HTML_QuickForm2_Container $container = null)
+    protected function setContainer(?HTML_QuickForm2_Container $container = null)
     {
         if (null !== $container) {
             $check = $container;
@@ -666,7 +666,7 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
      * A filter is simply a PHP callback which will be applied to the element value
      * when getValue() is called.
      *
-     * @param callback $callback The PHP callback used for filter
+     * @param callable $callback The PHP callback used for filter
      * @param array    $options  Optional arguments for the callback. The first parameter
      *                       will always be the element value, then these options will
      *                       be used as parameters for the callback.
@@ -697,7 +697,7 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
      * If the element is not a container and its value is not an array the behaviour
      * will be identical to filters added via addFilter().
      *
-     * @param callback $callback The PHP callback used for filter
+     * @param callable $callback The PHP callback used for filter
      * @param array    $options  Optional arguments for the callback. The first parameter
      *                       will always be the element value, then these options will
      *                       be used as parameters for the callback.
